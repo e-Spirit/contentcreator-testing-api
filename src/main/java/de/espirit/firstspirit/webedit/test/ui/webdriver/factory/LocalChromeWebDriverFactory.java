@@ -17,7 +17,7 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.env;
 public class LocalChromeWebDriverFactory implements WebDriverFactory {
 
     private static final String DEFAULT_WEBDRIVER_EXECUTABLE = "D:\\Programme\\Chromedriver\\chromedriver.exe";
-    private static final String DEFAULT_VERBOSITY = "true";
+    private static final String DEFAULT_VERBOSITY = "false";
 
     @Override
     public RemoteWebDriver createWebDriver() throws IOException {
