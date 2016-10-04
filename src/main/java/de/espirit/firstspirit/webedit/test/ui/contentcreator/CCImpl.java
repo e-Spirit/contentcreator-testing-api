@@ -1,12 +1,14 @@
-package de.espirit.firstspirit.webedit.test.ui;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
 import de.espirit.firstspirit.access.project.Project;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.menu.MenuBar;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.menu.MenuBarImpl;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.preview.Preview;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.preview.PreviewImpl;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.report.Reports;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.report.ReportsImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogsImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBarImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.PreviewImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Reports;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.ReportsImpl;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -24,7 +26,7 @@ public class CCImpl implements CC {
     private final org.openqa.selenium.WebDriver _driver;
     private final Project _project;
 
-    CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket) {
+    public CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket) {
         this(project, driver, url + "&login.ticket=" + ssoTicket);
     }
 
@@ -70,6 +72,11 @@ public class CCImpl implements CC {
     @Override
     public Project project() {
         return _project;
+    }
+
+    @Override
+    public CCDialogs dialogs() {
+        return new CCDialogsImpl(_driver);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.espirit.firstspirit.webedit.test.ui.webedit.component.menu;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;

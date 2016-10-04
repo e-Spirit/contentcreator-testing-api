@@ -1,0 +1,59 @@
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
+
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputComponent;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputTextImpl;
+import org.apache.commons.lang.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CCDialogImpl implements CCDialog {
+    private WebElement dialog;
+
+    public CCDialogImpl(WebElement dialog) {
+        this.dialog = dialog;
+    }
+
+    /**
+     * Match webElement to an input component
+     * @param webElement The web element to match
+     * @return Returns
+     */
+    public CCInputComponent match(@NotNull final WebElement webElement) {
+        if(CCInputTextImpl.isComponent(webElement))
+        {
+            return new CCInputTextImpl(webElement);
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<CCInputComponent> inputComponents() {
+        List<WebElement> elements = dialog.findElements(By.className("fs-gadget"));
+        List<CCInputComponent> ccInputComponents = new ArrayList<>();
+
+        for (WebElement element : elements) {
+            CCInputComponent ccInputComponent = match(element);
+
+            if(ccInputComponent != null)
+                ccInputComponents.add(ccInputComponent);
+        }
+
+        return ccInputComponents;
+    }
+
+    @Override
+    public CCInputComponent inputComponentByName(@NotNull String name) {
+        throw new NotImplementedException();
+    }
+
+    @NotNull
+    @Override
+    public WebElement html() {
+        return dialog;
+    }
+}

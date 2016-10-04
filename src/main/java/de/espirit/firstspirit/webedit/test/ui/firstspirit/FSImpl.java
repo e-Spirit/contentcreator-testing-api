@@ -1,15 +1,15 @@
-package de.espirit.firstspirit.webedit.test.ui;
+package de.espirit.firstspirit.webedit.test.ui.firstspirit;
 
 import de.espirit.firstspirit.io.ServerConnection;
 
 /**
  * Implementation of the {@link FS FirstSpirit server adapter}.
  */
-class FSImpl implements FS {
+public class FSImpl implements FS {
 
     private final ServerConnection _connection;
 
-    FSImpl(final ServerConnection connection) {
+    public FSImpl(final ServerConnection connection) {
         _connection = connection;
     }
 

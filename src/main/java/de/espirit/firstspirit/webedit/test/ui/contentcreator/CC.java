@@ -1,11 +1,10 @@
-package de.espirit.firstspirit.webedit.test.ui;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
 import de.espirit.firstspirit.access.project.Project;
-
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.menu.MenuBar;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.preview.Preview;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.report.Reports;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.Web;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Reports;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -59,6 +58,12 @@ public interface CC extends Web {
      * @return initial project.
      */
     Project project();
+
+    /**
+     * Returns the current dialogs
+     * @return current dialogs
+     */
+    CCDialogs dialogs();
 
     /**
      * Logs out current session.

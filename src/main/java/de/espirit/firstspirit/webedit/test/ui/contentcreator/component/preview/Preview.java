@@ -1,9 +1,9 @@
-package de.espirit.firstspirit.webedit.test.ui.webedit.component.preview;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview;
 
 import de.espirit.firstspirit.client.EditorIdentifier;
 
-import de.espirit.firstspirit.webedit.test.ui.CC;
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.Web;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

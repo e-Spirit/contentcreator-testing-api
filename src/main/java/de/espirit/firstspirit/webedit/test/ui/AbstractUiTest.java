@@ -8,7 +8,9 @@ import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.access.store.sitestore.SiteStoreFolder;
 import de.espirit.firstspirit.store.access.AccessImplUtil;
 
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.preview.Preview;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
+import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
 import junit.framework.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.RunWith;

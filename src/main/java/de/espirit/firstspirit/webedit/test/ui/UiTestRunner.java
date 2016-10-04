@@ -21,6 +21,10 @@ import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalChromeWebDr
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteChromeWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteFirefoxWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.WebDriverFactory;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.CCImpl;
+import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
+import de.espirit.firstspirit.webedit.test.ui.firstspirit.FSImpl;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;

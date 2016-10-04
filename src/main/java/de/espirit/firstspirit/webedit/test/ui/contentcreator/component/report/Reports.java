@@ -1,6 +1,6 @@
-package de.espirit.firstspirit.webedit.test.ui.webedit.component.report;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.Web;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import org.jetbrains.annotations.NotNull;
 
 /**

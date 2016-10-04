@@ -1,4 +1,4 @@
-package de.espirit.firstspirit.webedit.test.ui;
+package de.espirit.firstspirit.webedit.test.ui.firstspirit;
 
 import de.espirit.firstspirit.io.ServerConnection;
 

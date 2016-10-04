@@ -1,6 +1,6 @@
-package de.espirit.firstspirit.webedit.test.ui.webedit.component.menu;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
-import de.espirit.firstspirit.webedit.test.ui.webedit.component.Web;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import org.jetbrains.annotations.NotNull;
 
 /**

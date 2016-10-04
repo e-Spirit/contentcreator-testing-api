@@ -1,4 +1,4 @@
-package de.espirit.firstspirit.webedit.test.ui.webedit.component.report;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.WebElement;
