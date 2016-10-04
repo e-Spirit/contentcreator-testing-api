@@ -5,6 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 
 public class ReportsImpl implements Reports {
@@ -65,6 +67,30 @@ public class ReportsImpl implements Reports {
             @Override
             public WebElement button() {
                 return find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
+            }
+        };
+    }
+
+    @NotNull
+    @Override
+    public Report customByName(String displayName) {
+        return new AbstractReport(webDriver) {
+            @Override
+            public WebElement html() {
+                List<WebElement> reportElements = webDriver.findElements(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div"));
+
+                for (WebElement reportElement : reportElements) {
+                    WebElement displayTextElement = reportElement.findElement(By.cssSelector("div.text"));
+                    if(displayTextElement.getAttribute("textContent").equals(displayName))
+                        return reportElement;
+                }
+
+                return null;
+            }
+
+            @Override
+            public WebElement button() {
+                return html();
             }
         };
     }

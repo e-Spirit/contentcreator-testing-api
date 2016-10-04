@@ -64,4 +64,12 @@ public interface Reports extends Web {
      */
     @NotNull
     Report custom(final int no);
+
+    /**
+     * Returns the custom report by given display name
+     * @param displayName The display name of the report
+     * @return Returns the report
+     */
+    @NotNull
+    Report customByName(final String displayName);
 }
