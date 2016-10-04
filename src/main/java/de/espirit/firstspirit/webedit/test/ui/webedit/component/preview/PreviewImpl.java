@@ -1,8 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.webedit.component.preview;
 
-import de.espirit.common.base.Logging;
 import de.espirit.firstspirit.client.EditorIdentifier;
-import de.espirit.firstspirit.webedit.test.ui.WEImpl;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
@@ -17,6 +16,7 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
 
 public class PreviewImpl implements Preview {
+    private static final Logger LOGGER = Logger.getLogger(PreviewImpl.class);
 
     @NotNull
     private WebDriver _webDriver;
@@ -53,7 +53,7 @@ public class PreviewImpl implements Preview {
             url = oldUrl.substring(0, oldPos) + url.substring(newPos); // use sub-session of existing url
         }
 
-        if (Logging.isDebugEnabled(WEImpl.class)) Logging.logDebug("set url: " + url, WEImpl.class);
+        if (LOGGER.isDebugEnabled()) LOGGER.debug("set url: " + url);
 
         final JavascriptExecutor executor = (JavascriptExecutor) _webDriver;
         executor.executeScript("arguments[0].setAttribute('src', '" + url + "')", _iframe);
@@ -76,7 +76,7 @@ public class PreviewImpl implements Preview {
     @Nullable
     public Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier) {
         try {
-            // we have to select the iframe, first
+            // cc have to select the iframe, first
             _webDriver.switchTo().frame(html());
 
             // move the mouse to the given store-element to load the actions
@@ -139,7 +139,7 @@ public class PreviewImpl implements Preview {
         @Override
         public void execute() {
             try {
-                // we have to select the iframe, first
+                // cc have to select the iframe, first
                 _webDriver.switchTo().frame(PreviewImpl.this.html());
                 _action.click();
             } finally {

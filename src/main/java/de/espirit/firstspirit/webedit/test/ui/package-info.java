@@ -5,7 +5,7 @@
  * <b>Write an UI test</b>
  * <ul>
  * <li>Create a sub-class of {@link de.espirit.firstspirit.webedit.test.ui.AbstractUiTest}.</li>
- * <li>Use {@link de.espirit.firstspirit.webedit.test.ui.WE} to access ContentCreator UI elements (html).</li>
+ * <li>Use {@link de.espirit.firstspirit.webedit.test.ui.CC} to access ContentCreator UI elements (html).</li>
  * <li>Use {@link de.espirit.firstspirit.webedit.test.ui.FS} to access FirstSpirit server.</li>
  * </ul>
  * <p>
@@ -14,7 +14,7 @@
  * <li>Create a new or extend an existing UI interfaces like {@link de.espirit.firstspirit.webedit.test.ui.webedit.component.menu.MenuBar},
  * {@link de.espirit.firstspirit.webedit.test.ui.webedit.component.preview.Preview}, {@link de.espirit.firstspirit.webedit.test.ui.webedit.component.report.Reports}, ...</li>
  * <li>Access the html by using Selenium's {@link org.openqa.selenium.WebElement WebElement} interface.</li>
- * <li>Extend {@link de.espirit.firstspirit.webedit.test.ui.WE} to access the new interface.</li>
+ * <li>Extend {@link de.espirit.firstspirit.webedit.test.ui.CC} to access the new interface.</li>
  * </ul>
  * <p>
  * <p>

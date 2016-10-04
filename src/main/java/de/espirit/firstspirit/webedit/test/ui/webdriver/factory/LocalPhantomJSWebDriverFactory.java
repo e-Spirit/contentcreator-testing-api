@@ -11,7 +11,6 @@ import java.util.logging.LogManager;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.env;
 
 public class LocalPhantomJSWebDriverFactory implements WebDriverFactory {
-
     private static final String DEFAULT_WEBDRIVER_EXECUTABLE = "C:\\phantomjs\\bin\\phantomjs.exe";
 
     @Override
@@ -32,5 +31,4 @@ public class LocalPhantomJSWebDriverFactory implements WebDriverFactory {
     public String getName() {
         return "Google Chrome";
     }
-
 }

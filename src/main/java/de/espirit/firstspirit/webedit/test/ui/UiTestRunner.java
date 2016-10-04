@@ -1,6 +1,5 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
-import de.espirit.common.base.Logging;
 import de.espirit.common.io.FileUtilities;
 import de.espirit.firstspirit.access.AdminService;
 import de.espirit.firstspirit.access.Connection;
@@ -22,6 +21,7 @@ import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalChromeWebDr
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteChromeWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteFirefoxWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.WebDriverFactory;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -103,6 +103,8 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private static final String DEFAULT_USERNAME = "Admin";
     private static final String DEFAULT_PASSWORD = "Admin";
     private static final String DEFAULT_LANGUAGE = Locale.ENGLISH.getLanguage();
+
+    private static final Logger LOGGER = Logger.getLogger(UiTestRunner.class);
 
     private final Class<?> _parentClass;
 
@@ -307,7 +309,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         if (mySession != null) {
             for (final Session session : sessionMgr.getSessions()) {
                 if (session.isBoundToProject() && session.getID() != mySessionId) {
-                    Logging.logInfo("closes other session, id: " + session.getID(), UiTestRunner.class);
+                    LOGGER.info("closes other session, id: " + session.getID());
                     closeSession(session);
                 }
             }
@@ -323,7 +325,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         try {
             _fs.connection().getManager(SessionManager.class).logout(session.getID());
         } catch (final Exception e) {
-            Logging.logDebug("Closing session failed: " + e, UiTestRunner.class);
+           LOGGER.debug("Closing session failed: " + e);
         }
     }
 
@@ -339,7 +341,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         private final WebDriverFactory _browser;
         private final Class<?>[] _testClasses;
 
-        private WE _we;
+        private CC _CC;
 
         private BrowserRunner(final WebDriverFactory browser, final Class<?>[] testClasses) throws InitializationError {
             super(browser.getClass());
@@ -384,7 +386,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
                 disableTourHints(_fs.connection());
 
-                _we = new WEImpl(project, webDriver, url, _fs.connection().createTicket());
+                _CC = new CCImpl(project, webDriver, url, _fs.connection().createTicket());
             } catch (final IOException e) {
                 throw new RuntimeException("IO error occurred!", e);
             }
@@ -407,9 +409,9 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
          * {@link org.openqa.selenium.WebDriver#quit() Quits} the {@code WebDriver} instance.
          */
         private void tearDownBrowser() {
-            if (_we != null) {
-                _we.logout();
-                _we.driver().quit();
+            if (_CC != null) {
+                _CC.logout();
+                _CC.driver().quit();
             }
         }
 
@@ -463,7 +465,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 final Object test = super.createTest();
                 if (test instanceof AbstractUiTest) {
                     ((AbstractUiTest) test).setFS(_fs);
-                    ((AbstractUiTest) test).setWE(_we);
+                    ((AbstractUiTest) test).setWE(_CC);
                 }
                 return test;
             }
@@ -478,7 +480,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
-                        final long projectId = _we.project().getId();
+                        final long projectId = _CC.project().getId();
                         Revision oldRevision = null;
                         try {
                             oldRevision = _fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);    // after the test restore this revision
@@ -490,16 +492,16 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                             if (annotation != null) {
                                 locale = annotation.value();
                             }
-                            String url = _we.driver().getCurrentUrl();
+                            String url = _CC.driver().getCurrentUrl();
                             if (url.contains("&locale=")) {
                                 url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
                             } else {
                                 url += "&locale=" + locale;
                             }
-                            _we.driver().navigate().to(url);
+                            _CC.driver().navigate().to(url);
                             s.evaluate();                                                                                       // execute test method
                         } catch (final Throwable throwable) {
-                            final File screenshot = ((RemoteWebDriver) _we.driver()).getScreenshotAs(OutputType.FILE);
+                            final File screenshot = ((RemoteWebDriver) _CC.driver()).getScreenshotAs(OutputType.FILE);
                             FileUtilities.move(screenshot, new File("FAIL-" + System.currentTimeMillis() + '-' + FilenameCleaner.makeCleanWithoutCaseChange(throwable.getClass().getSimpleName() + '-' + throwable.getMessage()) + ".png"));
                             throw throwable;
                         } finally {

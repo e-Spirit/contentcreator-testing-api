@@ -18,17 +18,17 @@ import static de.espirit.firstspirit.access.store.Previewable.PREVIEWMODE_WEBEDI
 
 /**
  * Abstract super class for <b>all</b> WebEdit UI tests. The {@link UiTestRunner UI test runner} ensures that the connection to
- * the FirstSpirit server {@link #fs()} and WebEdit client {@link #we()} are properly initialized.
+ * the FirstSpirit server {@link #fs()} and WebEdit client {@link #cc()} are properly initialized.
  *
  * @see FS
- * @see WE
+ * @see CC
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 @RunWith(UiTestRunner.class)
 public abstract class AbstractUiTest extends Assert {
 
     private FS _fs;
-    private WE _we;
+    private CC _CC;
 
     //--- public methods ---//
 
@@ -44,8 +44,8 @@ public abstract class AbstractUiTest extends Assert {
      * Returns the connection to the WebEdit client.
      */
     @NotNull
-    public WE we() {
-        return _we;
+    public CC cc() {
+        return _CC;
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class AbstractUiTest extends Assert {
      */
     @NotNull
     public PageRef getStartNode() {
-        final PageRef startNode = (PageRef) ((SiteStoreFolder) we().project().getUserService().getStore(Store.Type.SITESTORE, false)).findStartNode();
+        final PageRef startNode = (PageRef) ((SiteStoreFolder) cc().project().getUserService().getStore(Store.Type.SITESTORE, false)).findStartNode();
         assertNotNull("pre-condition: no start-node found!", startNode);
         return startNode;
     }
@@ -78,8 +78,8 @@ public abstract class AbstractUiTest extends Assert {
         _fs = fs;
     }
 
-    void setWE(final WE we) {
-        _we = we;
+    void setWE(final CC CC) {
+        _CC = CC;
     }
 
 }

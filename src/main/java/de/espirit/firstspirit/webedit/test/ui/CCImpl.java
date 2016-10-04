@@ -1,6 +1,5 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
-import de.espirit.common.base.Logging;
 import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.webedit.test.ui.webedit.component.menu.MenuBar;
 import de.espirit.firstspirit.webedit.test.ui.webedit.component.menu.MenuBarImpl;
@@ -8,28 +7,28 @@ import de.espirit.firstspirit.webedit.test.ui.webedit.component.preview.Preview;
 import de.espirit.firstspirit.webedit.test.ui.webedit.component.preview.PreviewImpl;
 import de.espirit.firstspirit.webedit.test.ui.webedit.component.report.Reports;
 import de.espirit.firstspirit.webedit.test.ui.webedit.component.report.ReportsImpl;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
+import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 
 /**
- * Implementation of the {@link WE WebEdit-UI-adapter} and all it's depending interfaces.
+ * Implementation of the {@link CC WebEdit-UI-adapter} and all it's depending interfaces.
  */
-public class WEImpl implements WE {
+public class CCImpl implements CC {
+    private static final Logger LOGGER = Logger.getLogger(CCImpl.class);
 
     private final org.openqa.selenium.WebDriver _driver;
     private final Project _project;
 
-    WEImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket) {
+    CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket) {
         this(project, driver, url + "&login.ticket=" + ssoTicket);
     }
 
-    WEImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String webEditUrl) {
+    CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String webEditUrl) {
         _project = project;
         _driver = driver;
         _driver.get(webEditUrl);
@@ -38,13 +37,13 @@ public class WEImpl implements WE {
     @NotNull
     @Override
     public WebElement html() {
-        return find(By.tagName("html"));
+        return find(_driver, By.tagName("html"));
     }
 
     @Override
     public Preview preview() {
-        final WebElement body = find(By.tagName("body"));
-        final WebElement iframe = find(By.id("previewContent"));
+        final WebElement body = find(_driver, By.tagName("body"));
+        final WebElement iframe = find(_driver, By.id("previewContent"));
         return new PreviewImpl(_driver, body, iframe);
     }
 
@@ -78,19 +77,7 @@ public class WEImpl implements WE {
         try {
             ((RemoteWebDriver) driver()).executeScript("location.href='logout.jsp';");
         } catch (final Exception e) {
-            Logging.logWarning("exception during logout", e, WEImpl.class);
+            LOGGER.warn("exception during logout", e);
         }
     }
-
-    @NotNull
-    private WebElement find(@NotNull final By by) {
-        return find(null, by);
-    }
-
-    @NotNull
-    private WebElement find(@Nullable final SearchContext webElement, @NotNull final By by) {
-        idle();
-        return webElement != null ? webElement.findElement(by) : _driver.findElement(by);
-    }
-
 }

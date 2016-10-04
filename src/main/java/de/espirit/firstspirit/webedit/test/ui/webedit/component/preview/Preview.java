@@ -2,7 +2,7 @@ package de.espirit.firstspirit.webedit.test.ui.webedit.component.preview;
 
 import de.espirit.firstspirit.client.EditorIdentifier;
 
-import de.espirit.firstspirit.webedit.test.ui.WE;
+import de.espirit.firstspirit.webedit.test.ui.CC;
 import de.espirit.firstspirit.webedit.test.ui.webedit.component.Web;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ public interface Preview extends Web {
     /**
      * Reloads only WebEdit's preview pane (like pressing &lt;Ctrl&gt;+R).
      *
-     * @see WE#reload()
+     * @see CC#reload()
      */
     void reload();
 

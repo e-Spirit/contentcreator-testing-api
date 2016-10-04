@@ -16,7 +16,7 @@ import org.openqa.selenium.WebDriver;
  * @see Preview
  * @see Reports
  */
-public interface WE extends Web {
+public interface CC extends Web {
 
     /**
      * Returns access to WebEdit's menu bar and search field.
