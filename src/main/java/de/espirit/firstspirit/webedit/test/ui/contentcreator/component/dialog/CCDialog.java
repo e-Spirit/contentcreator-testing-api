@@ -1,8 +1,8 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputButton;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputComponent;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

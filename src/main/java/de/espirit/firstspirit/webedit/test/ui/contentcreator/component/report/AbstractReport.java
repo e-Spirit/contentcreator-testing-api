@@ -48,4 +48,5 @@ public abstract class AbstractReport implements Report {
      */
     @NotNull
     protected abstract WebElement button();
+
 }

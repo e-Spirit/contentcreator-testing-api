@@ -30,4 +30,6 @@ public interface Report extends Web {
      * Restarts a report.
      */
     void reload();
+
+
 }

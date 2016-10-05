@@ -1,6 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.*;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.*;
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;

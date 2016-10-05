@@ -1,4 +1,4 @@
-package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
 import org.jetbrains.annotations.NotNull;
 

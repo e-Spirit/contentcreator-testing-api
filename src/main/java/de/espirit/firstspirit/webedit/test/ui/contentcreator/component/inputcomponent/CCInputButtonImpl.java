@@ -1,6 +1,6 @@
-package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.util.ComponentUtils;
+import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +15,6 @@ public class CCInputButtonImpl implements CCInputButton {
         else
             this.buttonElement = webElement.findElement(By.className("fs-button"));
     }
-
 
     @Override
     public String label() {

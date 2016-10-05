@@ -1,4 +1,4 @@
-package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.util;
+package de.espirit.firstspirit.webedit.test.ui.util;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
