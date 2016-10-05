@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,10 +9,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CCDialogsImpl implements CCDialogs {
-    private WebDriver driver;
+    private WebDriver webDriver;
 
-    public CCDialogsImpl(WebDriver driver) {
-        this.driver = driver;
+    public CCDialogsImpl(@NotNull final WebDriver webDriver) {
+        this.webDriver = webDriver;
     }
 
     @Override
@@ -21,8 +22,8 @@ public class CCDialogsImpl implements CCDialogs {
 
     @Override
     public CCDialog dialog() {
-        WebElement dialog = new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
+        WebElement dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
 
-        return new CCDialogImpl(dialog);
+        return new CCDialogImpl(dialog, webDriver);
     }
 }

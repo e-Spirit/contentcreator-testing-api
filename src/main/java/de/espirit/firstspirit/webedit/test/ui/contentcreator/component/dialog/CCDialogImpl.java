@@ -5,6 +5,7 @@ import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.in
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -12,9 +13,11 @@ import java.util.List;
 
 public class CCDialogImpl implements CCDialog {
     private WebElement dialog;
+    private WebDriver webDriver;
 
-    public CCDialogImpl(WebElement dialog) {
+    public CCDialogImpl(@NotNull final WebElement dialog, @NotNull final WebDriver webDriver) {
         this.dialog = dialog;
+        this.webDriver = webDriver;
     }
 
     /**
@@ -23,7 +26,7 @@ public class CCDialogImpl implements CCDialog {
      * @return Returns
      */
     public CCInputComponent match(@NotNull final WebElement webElement) {
-        if(CCInputTextImpl.isComponent(webElement))
+        if(CCInputTextImpl.isComponent(webElement, webDriver))
         {
             return new CCInputTextImpl(webElement);
         }

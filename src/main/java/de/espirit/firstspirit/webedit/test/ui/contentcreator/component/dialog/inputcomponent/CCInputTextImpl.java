@@ -5,8 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.concurrent.TimeUnit;
 
 public class CCInputTextImpl implements CCInputText {
     private final WebElement inputElement;
@@ -33,15 +33,16 @@ public class CCInputTextImpl implements CCInputText {
     }
 
     public static boolean isComponent(WebElement webElement, WebDriver webDriver) {
-
+        //TODO: transfer this implementation to a method
+        webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
         try {
-            new WebDriverWait(webDriver, 0).until(ExpectedConditions.presenceOfElementLocated(By.className("gwt-TextBox")));
-        }
-        catch(NoSuchElementException exception) {
+            webElement.findElement(By.className("gwt-TextBox"));
+            return true;
+        } catch(NoSuchElementException exception) {
             return false;
+        } finally {
+            webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         }
-
-        return true;
     }
 
     @NotNull
