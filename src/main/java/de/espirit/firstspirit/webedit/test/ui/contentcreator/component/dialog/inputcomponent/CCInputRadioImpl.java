@@ -59,7 +59,7 @@ public class CCInputRadioImpl implements CCInputRadio {
         return null;
     }
 
-    public static boolean isComponent(WebElement webElement, WebDriver webDriver) {
+    public static boolean isComponent(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
         return ComponentUtils.hasElement(webElement, webDriver, By.className("fs-radiobutton"));
     }
 

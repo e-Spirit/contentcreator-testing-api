@@ -6,13 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class CCInputTextImpl implements CCInputText {
+public class CCInputTextAreaImpl implements CCInputTextArea {
     private final WebElement inputElement;
     private WebElement webElement;
 
-    public CCInputTextImpl(@NotNull final WebElement webElement) {
+    public CCInputTextAreaImpl(@NotNull final WebElement webElement) {
         this.webElement = webElement;
-        this.inputElement = webElement.findElement(By.className("gwt-TextBox"));
+        this.inputElement = webElement.findElement(By.className("gwt-TextArea"));
     }
 
     @Override
@@ -32,7 +32,8 @@ public class CCInputTextImpl implements CCInputText {
     }
 
     public static boolean isComponent(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
-        return ComponentUtils.hasElement(webElement, webDriver, By.className("gwt-TextBox"));
+        return ComponentUtils.hasElement(webElement, webDriver, By.className("gwt-TextArea")) &&
+                !ComponentUtils.hasElement(webElement, webDriver, By.tagName("iframe"));
     }
 
     @NotNull

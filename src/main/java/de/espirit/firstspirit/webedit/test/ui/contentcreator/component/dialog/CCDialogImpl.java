@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CCDialogImpl implements CCDialog {
-    private WebElement dialog;
+    private WebElement dialogElement;
     private WebDriver webDriver;
 
-    public CCDialogImpl(@NotNull final WebElement dialog, @NotNull final WebDriver webDriver) {
-        this.dialog = dialog;
+    public CCDialogImpl(@NotNull final WebElement dialogElement, @NotNull final WebDriver webDriver) {
+        this.dialogElement = dialogElement;
         this.webDriver = webDriver;
     }
 
@@ -33,6 +33,12 @@ public class CCDialogImpl implements CCDialog {
             return new CCInputRadioImpl(webElement);
         } else if(CCInputComboBoxImpl.isComponent(webElement,webDriver)){
             return new CCInputComboBoxImpl(webElement, webDriver);
+        } else if(CCInputTextAreaImpl.isComponent(webElement,webDriver)){
+            return new CCInputTextAreaImpl(webElement);
+        } else if(CCInputDomImpl.isComponent(webElement,webDriver)){
+            return new CCInputDomImpl(webElement, webDriver);
+        } else if(CCInputButtonImpl.isComponent(webElement,webDriver)){
+            return new CCInputButtonImpl(webElement);
         }
 
         return null;
@@ -40,7 +46,7 @@ public class CCDialogImpl implements CCDialog {
 
     @Override
     public List<CCInputComponent> inputComponents() {
-        List<WebElement> elements = dialog.findElements(By.className("fs-gadget"));
+        List<WebElement> elements = dialogElement.findElements(By.className("fs-gadget"));
         List<CCInputComponent> ccInputComponents = new ArrayList<>();
 
         for (WebElement element : elements) {
@@ -54,13 +60,44 @@ public class CCDialogImpl implements CCDialog {
     }
 
     @Override
-    public CCInputComponent inputComponentByName(@NotNull String name) {
+    public CCInputComponent inputComponentByName(@NotNull String displayName) {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public void ok() {
+        clickButton(0);
+    }
+
+    @Override
+    public void cancel() {
+        clickButton(1);
+    }
+
+    private void clickButton(final int buttonIndex) {
+        WebElement dialogFooterElement = dialogElement.findElement(By.className("fs-DialogBox-Footer"));
+        List<WebElement> elements = dialogFooterElement.findElements(By.className("fs-button"));
+
+        if(elements.size()>buttonIndex)
+            elements.get(buttonIndex).click();
+    }
+
+    @Override
+    public List<CCInputButton> buttons() {
+        WebElement dialogFooterElement = dialogElement.findElement(By.className("fs-DialogBox-Footer"));
+        List<WebElement> elements = dialogFooterElement.findElements(By.className("fs-button"));
+        List<CCInputButton> ccInputButtons = new ArrayList<>();
+
+        for (WebElement element : elements) {
+            ccInputButtons.add(new CCInputButtonImpl(element));
+        }
+
+        return ccInputButtons;
     }
 
     @NotNull
     @Override
     public WebElement html() {
-        return dialog;
+        return dialogElement;
     }
 }
