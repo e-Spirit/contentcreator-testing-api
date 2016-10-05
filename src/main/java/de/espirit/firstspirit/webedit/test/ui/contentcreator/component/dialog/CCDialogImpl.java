@@ -31,6 +31,8 @@ public class CCDialogImpl implements CCDialog {
             return new CCInputCheckboxImpl(webElement);
         } else if(CCInputRadioImpl.isComponent(webElement,webDriver)){
             return new CCInputRadioImpl(webElement);
+        } else if(CCInputComboBoxImpl.isComponent(webElement,webDriver)){
+            return new CCInputComboBoxImpl(webElement, webDriver);
         }
 
         return null;
