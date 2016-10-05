@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputCheckboxImpl;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputComponent;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputTextImpl;
 import org.apache.commons.lang.NotImplementedException;
@@ -26,9 +27,10 @@ public class CCDialogImpl implements CCDialog {
      * @return Returns
      */
     public CCInputComponent match(@NotNull final WebElement webElement) {
-        if(CCInputTextImpl.isComponent(webElement, webDriver))
-        {
+        if(CCInputTextImpl.isComponent(webElement, webDriver)){
             return new CCInputTextImpl(webElement);
+        }else if(CCInputCheckboxImpl.isComponent(webElement,webDriver)){
+            return new CCInputCheckboxImpl(webElement);
         }
 
         return null;
