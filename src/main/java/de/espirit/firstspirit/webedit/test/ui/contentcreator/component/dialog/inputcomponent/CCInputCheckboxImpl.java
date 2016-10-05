@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CCInputCheckboxImpl implements CCInputCheckbox {
-
-
     private WebElement webElement;
+    private final List<WebElement> items;
 
-    public CCInputCheckboxImpl(WebElement webElement) {
+    public CCInputCheckboxImpl(@NotNull final WebElement webElement) {
         this.webElement = webElement;
+        this.items = webElement.findElements(By.className("fs-checkbox"));
     }
 
     @Override
@@ -24,13 +24,21 @@ public class CCInputCheckboxImpl implements CCInputCheckbox {
     }
 
     @Override
-    public List<CCInputCheckboxItem> values() {
-        final List<WebElement> elements = webElement.findElements(By.cssSelector("fs-checkbox"));
+    public List<CCInputCheckboxItem> items() {
         final List<CCInputCheckboxItem> resultList= new ArrayList<>();
-        for (WebElement element : elements) {
+        for (WebElement element : items) {
             resultList.add(new CCInputCheckboxItemImpl(element));
         }
         return resultList;
+    }
+
+    @Override
+    public CCInputCheckboxItem itemByName(@NotNull String displayName) {
+        for (WebElement element : items) {
+            if(webElement.findElement(By.className("fs-checkbox-label")).getText().equals(displayName))
+                return new CCInputCheckboxItemImpl(element);
+        }
+        return null;
     }
 
     @NotNull
@@ -52,8 +60,8 @@ public class CCInputCheckboxImpl implements CCInputCheckbox {
         }
 
         @Override
-        public String value() {
-            return webElement.findElement(By.cssSelector("fs-checkbox-label")).getText();
+        public String label() {
+            return webElement.findElement(By.className("fs-checkbox-label")).getText();
         }
 
         @Override

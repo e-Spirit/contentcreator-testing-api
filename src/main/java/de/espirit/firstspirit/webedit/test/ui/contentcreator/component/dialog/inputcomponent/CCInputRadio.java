@@ -6,28 +6,34 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Provides access to an input checkbox component
+ * Provides access to an input radio component
  */
-public interface CCInputCheckbox extends CCInputComponent {
-
+public interface CCInputRadio extends CCInputComponent {
     /**
-     * Returns the check box items
+     * Returns the radio items
      *
-     * @return checkbox items
+     * @return radio items
      */
-    List<CCInputCheckboxItem> items();
+    List<CCInputRadioItem> items();
 
     /**
-     * Returns a checkbox item by given displayname
+     * Returns a radio item by given displayname
      * @param displayName the displayname of the item
      * @return the item if found, otherwise null
      */
-    CCInputCheckboxItem itemByName(@NotNull final String displayName);
+    CCInputRadioItem itemByName(@NotNull final String displayName);
 
     /**
-     * Provides access to an input checkbox item
+     * Returns the currently selected item
+     *
+     * @return currently selected item
      */
-    interface CCInputCheckboxItem extends Web{
+    CCInputRadioItem selectedItem();
+
+    /**
+     * Provides access to an input radio item
+     */
+    interface CCInputRadioItem extends Web{
 
         /**
          * Returns the label of the item
@@ -43,8 +49,8 @@ public interface CCInputCheckbox extends CCInputComponent {
         boolean checked();
 
         /**
-         * Toggles the checked status of the item
+         * Selects the item
          */
-        void toggle();
+        void select();
     }
 }

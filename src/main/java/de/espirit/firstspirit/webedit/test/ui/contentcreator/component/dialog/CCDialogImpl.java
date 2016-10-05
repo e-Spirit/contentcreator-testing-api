@@ -1,8 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputCheckboxImpl;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputComponent;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputTextImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.*;
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -31,6 +29,8 @@ public class CCDialogImpl implements CCDialog {
             return new CCInputTextImpl(webElement);
         }else if(CCInputCheckboxImpl.isComponent(webElement,webDriver)){
             return new CCInputCheckboxImpl(webElement);
+        } else if(CCInputRadioImpl.isComponent(webElement,webDriver)){
+            return new CCInputRadioImpl(webElement);
         }
 
         return null;

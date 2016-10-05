@@ -10,7 +10,7 @@ public class CCInputTextImpl implements CCInputText {
     private final WebElement inputElement;
     private WebElement webElement;
 
-    public CCInputTextImpl(WebElement webElement) {
+    public CCInputTextImpl(@NotNull final WebElement webElement) {
         this.webElement = webElement;
         this.inputElement = webElement.findElement(By.className("gwt-TextBox"));
     }
