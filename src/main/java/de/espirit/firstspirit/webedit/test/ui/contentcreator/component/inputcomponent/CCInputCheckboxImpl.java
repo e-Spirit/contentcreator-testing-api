@@ -50,34 +50,4 @@ public class CCInputCheckboxImpl implements CCInputCheckbox {
     public static boolean isComponent(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
         return ComponentUtils.hasElement(webElement, webDriver, By.className("fs-checkbox"));
     }
-
-    private class CCInputCheckboxItemImpl implements CCInputCheckbox.CCInputCheckboxItem{
-
-        private WebElement webElement;
-
-        public CCInputCheckboxItemImpl(WebElement webElement) {
-            this.webElement = webElement;
-        }
-
-        @Override
-        public String label() {
-            return webElement.findElement(By.className("fs-checkbox-label")).getText();
-        }
-
-        @Override
-        public boolean checked() {
-            return webElement.getAttribute("class").contains("fs-checkbox-checked");
-        }
-
-        @Override
-        public void toggle() {
-            webElement.click();
-        }
-
-        @NotNull
-        @Override
-        public WebElement html() {
-            return webElement;
-        }
-    }
 }

@@ -27,7 +27,7 @@ public interface CCInputCheckbox extends CCInputComponent {
     /**
      * Provides access to an input checkbox item
      */
-    interface CCInputCheckboxItem extends Web{
+    interface CCInputCheckboxItem extends Web {
 
         /**
          * Returns the label of the item

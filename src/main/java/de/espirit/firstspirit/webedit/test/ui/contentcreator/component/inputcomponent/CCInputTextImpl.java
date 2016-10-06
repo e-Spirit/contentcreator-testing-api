@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class CCInputTextImpl implements CCInputText {
-    private final WebElement inputElement;
+    protected final WebElement inputElement;
     private WebElement webElement;
 
     public CCInputTextImpl(@NotNull final WebElement webElement) {

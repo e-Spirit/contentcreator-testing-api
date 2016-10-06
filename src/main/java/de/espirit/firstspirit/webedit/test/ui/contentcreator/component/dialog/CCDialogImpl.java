@@ -1,7 +1,9 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.*;
-import org.apache.commons.lang.NotImplementedException;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButtonImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComponent;
+import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,38 +21,13 @@ public class CCDialogImpl implements CCDialog {
         this.webDriver = webDriver;
     }
 
-    /**
-     * Match webElement to an input component
-     * @param webElement The web element to match
-     * @return Returns
-     */
-    public CCInputComponent match(@NotNull final WebElement webElement) {
-        if(CCInputTextImpl.isComponent(webElement, webDriver)){
-            return new CCInputTextImpl(webElement);
-        }else if(CCInputCheckboxImpl.isComponent(webElement,webDriver)){
-            return new CCInputCheckboxImpl(webElement);
-        } else if(CCInputRadioImpl.isComponent(webElement,webDriver)){
-            return new CCInputRadioImpl(webElement);
-        } else if(CCInputComboBoxImpl.isComponent(webElement,webDriver)){
-            return new CCInputComboBoxImpl(webElement, webDriver);
-        } else if(CCInputTextAreaImpl.isComponent(webElement,webDriver)){
-            return new CCInputTextAreaImpl(webElement);
-        } else if(CCInputDomImpl.isComponent(webElement,webDriver)){
-            return new CCInputDomImpl(webElement, webDriver);
-        } else if(CCInputButtonImpl.isComponent(webElement,webDriver)){
-            return new CCInputButtonImpl(webElement);
-        }
-
-        return null;
-    }
-
     @Override
     public List<CCInputComponent> inputComponents() {
         List<WebElement> elements = dialogElement.findElements(By.className("fs-gadget"));
         List<CCInputComponent> ccInputComponents = new ArrayList<>();
 
         for (WebElement element : elements) {
-            CCInputComponent ccInputComponent = match(element);
+            CCInputComponent ccInputComponent = ComponentUtils.matchComponent(element, webDriver);
 
             if(ccInputComponent != null)
                 ccInputComponents.add(ccInputComponent);
@@ -61,7 +38,18 @@ public class CCDialogImpl implements CCDialog {
 
     @Override
     public CCInputComponent inputComponentByName(@NotNull String displayName) {
-        throw new NotImplementedException();
+        List<WebElement> elements = dialogElement.findElements(By.className("fs-gadget"));
+        for (WebElement element : elements) {
+            CCInputComponent ccInputComponent = ComponentUtils.matchComponent(element, webDriver);
+
+            if(ccInputComponent != null)
+            {
+                if(ccInputComponent.label().equals(displayName))
+                    return ccInputComponent;
+            }
+        }
+
+        return null;
     }
 
     @Override

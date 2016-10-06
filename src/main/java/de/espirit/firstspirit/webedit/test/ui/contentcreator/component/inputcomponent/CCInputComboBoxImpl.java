@@ -18,7 +18,7 @@ import java.util.List;
  * TODO: use javascript to fire the specific event
  **/
 public class CCInputComboBoxImpl implements CCInputComboBox {
-    private WebElement webElement;
+    protected WebElement webElement;
     private WebDriver webDriver;
 
     public CCInputComboBoxImpl(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {

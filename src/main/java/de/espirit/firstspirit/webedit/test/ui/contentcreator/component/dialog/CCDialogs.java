@@ -16,4 +16,10 @@ public interface CCDialogs {
      * @return Returns the current dialog if available, otherwise null
      */
     CCDialog dialog();
+
+    /**
+     * Gets the current message dialog if available
+     * @return Returns the current message dialog if available, otherwise null
+     */
+    CCMessageDialog messageDialog();
 }

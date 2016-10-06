@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
+import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -24,6 +25,19 @@ public class CCDialogsImpl implements CCDialogs {
     public CCDialog dialog() {
         WebElement dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
 
-        return new CCDialogImpl(dialog, webDriver);
+        if(!ComponentUtils.hasElement(dialog, webDriver, By.className("fs-MessageDialogBox-Container")))
+            return new CCDialogImpl(dialog, webDriver);
+
+        return null;
+    }
+
+    @Override
+    public CCMessageDialog messageDialog() {
+        WebElement dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
+
+        if(ComponentUtils.hasElement(dialog, webDriver, By.className("fs-MessageDialogBox-Container")))
+            return new CCMessageDialogImpl(dialog);
+
+        return null;
     }
 }
