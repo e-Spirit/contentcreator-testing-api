@@ -81,10 +81,11 @@ public abstract class AbstractReport implements Report {
     @NotNull
     @Override
     public WebElement html() {
-        if(ComponentUtils.hasElement(webDriver, By.className("fs-sidebar-content")))
-            return webDriver.findElement(By.className("fs-sidebar-content"));
+        if(!isVisible) {
+            toggle();
+        }
 
-        return null;
+        return webDriver.findElement(By.className("fs-sidebar-content"));
     }
 
     /**
