@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
 import de.espirit.firstspirit.access.project.Project;
+import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogsImpl;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
@@ -12,6 +13,7 @@ import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Re
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -77,6 +79,11 @@ public class CCImpl implements CC {
     @Override
     public CCDialogs dialogs() {
         return new CCDialogsImpl(_driver);
+    }
+
+    @Override
+    public void navigateTo(@NotNull PageRef pageRef) {
+        ((JavascriptExecutor)_driver).executeScript("top.WE_API.Common.jumpTo({\"id\":"+pageRef.getId()+", \"store\":\"SITESTORE\"});");
     }
 
     @Override

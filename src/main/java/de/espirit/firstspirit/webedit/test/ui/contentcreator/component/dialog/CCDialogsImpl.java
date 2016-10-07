@@ -1,7 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
-import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,7 +17,9 @@ public class CCDialogsImpl implements CCDialogs {
 
     @Override
     public CCWizardDialog wizardDialog() {
-        throw new NotImplementedException();
+        WebElement dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-WizardDialogBox")));
+
+        return new CCWizardDialogImpl(dialog, webDriver);
     }
 
     @Override
