@@ -12,7 +12,7 @@ public interface CCInputDom extends CCInputComponent{
 
     /**
      * Clears the text and adds a p-template with the text within the input dom
-     * @param text
+     * @param text text to set
      */
     void setText(String text);
 }

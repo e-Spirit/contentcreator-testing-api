@@ -36,6 +36,7 @@ public abstract class AbstractUiTest extends Assert {
 
     /**
      * Returns the connection to the FirstSpirit server.
+     * @return FS
      */
     @NotNull
     public FS fs() {
@@ -44,6 +45,7 @@ public abstract class AbstractUiTest extends Assert {
 
     /**
      * Returns the connection to the WebEdit client.
+     * @return CC
      */
     @NotNull
     public CC cc() {

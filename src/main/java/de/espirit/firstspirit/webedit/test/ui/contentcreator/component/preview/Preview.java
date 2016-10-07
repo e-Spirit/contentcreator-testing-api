@@ -23,10 +23,11 @@ public interface Preview extends Web {
     String getUrl();
 
     /**
-     * Loads the given {@code url} into the preview iframe. <br/>
+     * Loads the given {@code url} into the preview iframe. <br>
      * <b>Important: </b> Loading an external url could break the WebEdit instance.
      *
      * @param url to load.
+     * @throws IOException IOException
      */
     void setUrl(final String url) throws IOException;
 

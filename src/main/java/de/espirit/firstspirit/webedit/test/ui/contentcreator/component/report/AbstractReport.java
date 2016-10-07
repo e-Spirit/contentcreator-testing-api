@@ -16,10 +16,12 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 
 public abstract class AbstractReport implements Report {
     private WebDriver webDriver;
+    protected WebElement reportButton;
     private boolean isVisible = false;
 
-    public AbstractReport(@NotNull final WebDriver webDriver) {
+    public AbstractReport(@NotNull final WebDriver webDriver, @NotNull final WebElement reportButton) {
         this.webDriver = webDriver;
+        this.reportButton = reportButton;
     }
 
     @Override
@@ -45,8 +47,8 @@ public abstract class AbstractReport implements Report {
 
     @Override
     public void toggle() {
-        isVisible = !isVisible;
-        button().click();
+        this.isVisible = !isVisible;
+        reportButton.click();
     }
 
     @Override
@@ -76,12 +78,22 @@ public abstract class AbstractReport implements Report {
         return result;
     }
 
+    @NotNull
+    @Override
+    public WebElement html() {
+        if(ComponentUtils.hasElement(webDriver, By.className("fs-sidebar-content")))
+            return webDriver.findElement(By.className("fs-sidebar-content"));
+
+        return null;
+    }
+
     /**
-     * Returns the report's button.
+     * Returns the report's reportButton.
      *
-     * @return report's button.
+     * @return report's reportButton.
      */
     @NotNull
-    protected abstract WebElement button();
-
+    public WebElement button() {
+        return reportButton;
+    }
 }

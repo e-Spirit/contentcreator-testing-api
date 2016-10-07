@@ -59,7 +59,7 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.env;
  * JUnit4 {@link Runner} for WebEdit {@link AbstractUiTest UI tests}. A test class can be parametrized with
  * {@link ClassPattern ClassPattern}, concrete {@link Classes Classes} and/or different
  * {@link WebDriver browsers}.
- * <p/>
+ * <p>
  * Single test: <pre>
  * {@literal @}RunWith(UiTestRunner.class)                                 <i>// not necessary, {@link AbstractUiTest} is already annotated</i>
  * {@literal @}UiTestRunner.{@link ClassPattern Classes}({MyUiTest.class})                      <i>// not necessary, default value is the annotated class</i>
@@ -115,7 +115,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private FS _fs;
 
     /**
-     * The annotation defines which UI tests should be executed, by specifying a classname pattern.<br/>
+     * The annotation defines which UI tests should be executed, by specifying a classname pattern.<br>
      * For example: de.espirit.firstspirit.webedit.*.UiTest*
      */
     @Retention(RetentionPolicy.RUNTIME)
@@ -335,7 +335,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
     /**
      * JUnit4 {@link Runner} for WebEdit UI tests that run inside a single browser instance.
-     * <p/>
+     * <p>
      * {@link #withBeforeClasses(Statement) Before} and {@link #withAfterClasses(Statement) after} a test class the
      * browser will be {@link #setUpBrowser() opened} and {@link #tearDownBrowser() closed}. For every test
      * method the {@link SingleUiTestRunner SingleUiTestRunner} is used.

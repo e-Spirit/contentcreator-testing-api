@@ -13,6 +13,7 @@ public interface Report extends Web {
 
     /**
      * Returns how many results the report has found.
+     * @return the result count
      */
     int getResultCount();
 

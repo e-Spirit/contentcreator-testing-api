@@ -12,7 +12,7 @@ public interface CCInputText extends CCInputComponent{
 
     /**
      * Sets the text of the input text component
-     * @param text
+     * @param text text to set
      */
     void setText(String text);
 }

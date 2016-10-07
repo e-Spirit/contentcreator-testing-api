@@ -20,7 +20,8 @@ public class ReportsImpl implements Reports {
     @NotNull
     @Override
     public SearchReport search() {
-        return new SearchReportImpl(webDriver);
+        WebElement searchReportButton = webDriver.findElement(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(1)"));
+        return new SearchReportImpl(webDriver, searchReportButton);
     }
 
     @NotNull
@@ -56,43 +57,22 @@ public class ReportsImpl implements Reports {
     @NotNull
     @Override
     public Report custom(final int no) {
-        return new AbstractReport(webDriver) {
-            @NotNull
-            @Override
-            public WebElement html() {
-                return find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
-            }
-
-            @NotNull
-            @Override
-            public WebElement button() {
-                return find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
-            }
-        };
+        WebElement button = find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
+        return new CustomReport(webDriver, button);
     }
 
     @NotNull
     @Override
     public Report customByName(String displayName) {
-        return new AbstractReport(webDriver) {
-            @Override
-            public WebElement html() {
-                List<WebElement> reportElements = webDriver.findElements(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div"));
+        List<WebElement> reportElements = webDriver.findElements(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div"));
 
-                for (WebElement reportElement : reportElements) {
-                    WebElement displayTextElement = reportElement.findElement(By.cssSelector("div.text"));
-                    if(displayTextElement.getAttribute("textContent").equals(displayName))
-                        return reportElement;
-                }
+        for (WebElement reportElement : reportElements) {
+            WebElement displayTextElement = reportElement.findElement(By.cssSelector("div.text"));
+            if(displayTextElement.getAttribute("textContent").equals(displayName))
+                return new CustomReport(webDriver, reportElement);
+        }
 
-                return null;
-            }
-
-            @Override
-            public WebElement button() {
-                return html();
-            }
-        };
+        return null;
     }
 
     @NotNull

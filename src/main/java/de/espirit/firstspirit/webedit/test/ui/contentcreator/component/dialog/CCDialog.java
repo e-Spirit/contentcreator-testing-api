@@ -19,8 +19,8 @@ public interface CCDialog extends Web {
 
     /**
      * Returns a specific input component by the given display name
-     * @param displayName
-     * @return
+     * @param displayName display name of the input component
+     * @return input component if found, otherwise null
      */
     CCInputComponent inputComponentByName(@NotNull final String displayName);
 

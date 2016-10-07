@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
+import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
@@ -9,11 +10,10 @@ import org.openqa.selenium.WebElement;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 
 public class SearchReportImpl extends AbstractReport implements SearchReport {
-
     private WebDriver webDriver;
 
-    public SearchReportImpl(@NotNull WebDriver webDriver) {
-        super(webDriver);
+    public SearchReportImpl(@NotNull WebDriver webDriver, @NotNull WebElement button) {
+        super(webDriver, button);
         this.webDriver = webDriver;
     }
 
@@ -35,12 +35,15 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
     @NotNull
     @Override
     public WebElement html() {
-        return find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(1)"));
+        if(ComponentUtils.hasElement(webDriver, By.className("fs-sidebar-content")))
+            return webDriver.findElement(By.className("fs-sidebar-content"));
+
+        return null;
     }
 
     @NotNull
     @Override
     public WebElement button() {
-        return find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(1)"));
+        return reportButton;
     }
 }

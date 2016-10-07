@@ -25,10 +25,23 @@ public class ComponentUtils {
         }
     }
 
+    public static boolean hasElement(WebDriver webDriver, By by) {
+        webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        try {
+            webDriver.findElement(by);
+            return true;
+        } catch(NoSuchElementException exception) {
+            return false;
+        } finally {
+            webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        }
+    }
+
     /**
      * Match webElement to an input component
      * @param webElement The web element to match
-     * @return Returns
+     * @param webDriver The webdriver to use
+     * @return Returns the matched component, otherwise null
      */
     public static CCInputComponent matchComponent(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
         if(CCInputTextImpl.isComponent(webElement, webDriver)){
@@ -53,7 +66,8 @@ public class ComponentUtils {
     /**
      * Match webElement to a parameter component
      * @param webElement The web element to match
-     * @return Returns
+     * @param webDriver The webdriver to use
+     * @return Returns the matched component, otherwise null
      */
     public static CCInputComponent matchParameter(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
         if(InputTextParameter.isComponent(webElement, webDriver))
