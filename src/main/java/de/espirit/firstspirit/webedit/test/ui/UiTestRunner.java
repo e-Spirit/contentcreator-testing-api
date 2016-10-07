@@ -281,7 +281,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         try {
             final ServerConnection connection = (ServerConnection) ConnectionManager.getConnection(host, Integer.parseInt(port), ConnectionManager.HTTP_MODE, username, password);
             connection.connect();
-            _fs = new FSImpl(connection);
+            _fs = new FSImpl(connection, env(PARAM_PROJECT, DEFAULT_PROJECT_NAME));
         } catch (final Exception e) {
             throw new RuntimeException("connecting FirstSpirit server failed (" + host + ':' + port + ") !", e);
         }
