@@ -82,7 +82,7 @@ public abstract class AbstractUiTest extends Assert {
         _fs = fs;
     }
 
-    void setWE(final CC CC) {
+    void setCC(final CC CC) {
         _CC = CC;
     }
 

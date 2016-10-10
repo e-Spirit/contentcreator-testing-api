@@ -68,7 +68,7 @@ public interface CC extends Web {
     CCDialogs dialogs();
 
     /**
-     * Navigtes to a page
+     * Navigates to a page
      * @param pageRef The page ref to navigate to
      */
     void navigateTo(@NotNull final PageRef pageRef);

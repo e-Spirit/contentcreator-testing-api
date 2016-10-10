@@ -1,5 +1,9 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.messagedialog.CCMessageDialog;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.messagedialog.CCMessageDialogImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.wizarddialog.CCWizardDialog;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.wizarddialog.CCWizardDialogImpl;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -19,7 +23,7 @@ public class CCDialogsImpl implements CCDialogs {
     public CCWizardDialog wizardDialog() {
         WebElement dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-WizardDialogBox")));
 
-        return new CCWizardDialogImpl(dialog, webDriver);
+        return new CCWizardDialogImpl(dialog);
     }
 
     @Override

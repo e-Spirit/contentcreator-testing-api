@@ -390,7 +390,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
                 disableTourHints(_fs.connection());
 
-                _CC = new CCImpl(project, webDriver, url, _fs.connection().createTicket());
+                _CC = new CCImpl(project, webDriver, url, _fs.connection().createTicket(), _fs);
             } catch (final IOException e) {
                 throw new RuntimeException("IO error occurred!", e);
             }
@@ -469,7 +469,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 final Object test = super.createTest();
                 if (test instanceof AbstractUiTest) {
                     ((AbstractUiTest) test).setFS(_fs);
-                    ((AbstractUiTest) test).setWE(_CC);
+                    ((AbstractUiTest) test).setCC(_CC);
                 }
                 return test;
             }

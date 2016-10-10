@@ -1,4 +1,4 @@
-package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.messagedialog;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;

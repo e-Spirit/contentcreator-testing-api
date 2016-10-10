@@ -1,10 +1,9 @@
-package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.wizarddialog;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButtonImpl;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -12,11 +11,9 @@ import java.util.stream.Collectors;
 
 public class CCWizardDialogImpl implements CCWizardDialog {
     private WebElement dialogElement;
-    private WebDriver webDriver;
 
-    public CCWizardDialogImpl(WebElement dialogElement, WebDriver webDriver) {
+    public CCWizardDialogImpl(@NotNull final WebElement dialogElement) {
         this.dialogElement = dialogElement;
-        this.webDriver = webDriver;
     }
 
     @NotNull
@@ -49,5 +46,15 @@ public class CCWizardDialogImpl implements CCWizardDialog {
         return elements.stream()
                 .map(CCInputButtonImpl::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CCInputButton buttonByName(@NotNull String displayName) {
+        for (CCInputButton button : buttons()) {
+            if(button.label().equals(displayName))
+                return button;
+        }
+
+        return null;
     }
 }

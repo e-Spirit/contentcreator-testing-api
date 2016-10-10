@@ -1,4 +1,4 @@
-package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
+package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.wizarddialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
