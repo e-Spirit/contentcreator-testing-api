@@ -26,6 +26,11 @@ public class CCInputButtonImpl implements CCInputButton {
         buttonElement.click();
     }
 
+    @Override
+    public boolean enabled() {
+        return !buttonElement.getAttribute("class").contains("fs-button-disabled");
+    }
+
     public static boolean isComponent(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
         return ComponentUtils.hasElement(webElement, webDriver, By.className("fs-button"));
     }

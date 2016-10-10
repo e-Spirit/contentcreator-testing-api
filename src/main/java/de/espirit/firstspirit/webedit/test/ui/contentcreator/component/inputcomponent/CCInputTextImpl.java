@@ -27,6 +27,11 @@ public class CCInputTextImpl implements CCInputText {
     }
 
     @Override
+    public String errorMessage() {
+        return webElement.findElement(By.className("gwt-HTML")).getText();
+    }
+
+    @Override
     public String label() {
         return webElement.findElement(By.className("gwt-Label")).getText();
     }

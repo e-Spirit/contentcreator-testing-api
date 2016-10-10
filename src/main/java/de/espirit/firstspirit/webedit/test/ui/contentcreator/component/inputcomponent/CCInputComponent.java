@@ -12,4 +12,12 @@ public interface CCInputComponent extends Web {
      * @return label
      */
     String label();
+
+    /**
+     * Returns the displayed error message
+     * @return the error message if there is any
+     */
+    default String errorMessage(){
+        return "";
+    }
 }

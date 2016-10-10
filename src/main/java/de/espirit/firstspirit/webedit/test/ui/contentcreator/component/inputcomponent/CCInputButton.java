@@ -14,4 +14,10 @@ public interface CCInputButton extends CCInputComponent{
      * Clicks the input button
      */
     void click();
+
+    /**
+     * Returns the status of the button
+     * @return true if enabled, false if disables
+     */
+    boolean enabled();
 }
