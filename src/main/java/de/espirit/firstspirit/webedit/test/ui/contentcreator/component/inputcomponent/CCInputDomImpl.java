@@ -1,11 +1,9 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.List;
 
@@ -20,11 +18,12 @@ public class CCInputDomImpl implements CCInputDom {
 
     @Override
     public String text() {
+        String result;
         WebElement iframe = webElement.findElement(By.tagName("iframe"));
         webDriver.switchTo().frame(iframe);
         WebElement tinymce = webDriver.findElement(By.id("tinymce"));
         List<WebElement> custom = tinymce.findElements(By.className("custom"));
-        String result = custom.get(0).getText();
+        result = custom.get(0).getText();
         webDriver.switchTo().defaultContent();
         return result;
     }
@@ -36,7 +35,7 @@ public class CCInputDomImpl implements CCInputDom {
 
         WebElement tinymce = webDriver.findElement(By.id("tinymce"));
         List<WebElement> custom = tinymce.findElements(By.className("custom"));
-        ((JavascriptExecutor)webDriver).executeScript("arguments[0].innerHTML='" + text +"'", custom.get(0));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].innerHTML='" + text + "'", custom.get(0));
 
         webDriver.switchTo().defaultContent();
     }

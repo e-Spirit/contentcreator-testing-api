@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -18,7 +19,7 @@ public class MenuBarImpl implements MenuBar {
 
     @NotNull
     @Override
-    public ElementStatus getElementStatus() {
+    public ElementStatus getElementStatus() throws CCAPIException {
         int max = 5;
         do {
             final String cssClass = html().getAttribute("class");
@@ -61,7 +62,7 @@ public class MenuBarImpl implements MenuBar {
     }
 
     @Override
-    public void search(final String query) {
+    public void search(final String query) throws CCAPIException {
         final WebElement element = find(_webDriver, By.className("fs-searchtextbox-field"));
         element.click();
         element.sendKeys(query + '\n');
@@ -69,7 +70,7 @@ public class MenuBarImpl implements MenuBar {
 
     @NotNull
     @Override
-    public WebElement html() {
+    public WebElement html() throws CCAPIException {
         return find(_webDriver, By.className("fs-toolbar-state"));
     }
 

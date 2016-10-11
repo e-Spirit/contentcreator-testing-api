@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComponent;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -25,7 +26,7 @@ public abstract class AbstractReport implements Report {
     }
 
     @Override
-    public int getResultCount() {
+    public int getResultCount() throws CCAPIException {
         if(isVisible) {
             final WebElement element = find(webDriver, By.className("fs-sidebar-report-status-count"));
             final String text = element.getText(); // text = "Ergebnisse: 47"
@@ -37,7 +38,7 @@ public abstract class AbstractReport implements Report {
     }
 
     @Override
-    public WebElement getEntry(final int pos) {
+    public WebElement getEntry(final int pos) throws CCAPIException {
         if(isVisible) {
             return find(webDriver, By.cssSelector("div.report-entry-container > div > div > div:nth-child(1) > div:nth-child(" + (pos + 1) + ") > div > a"));
         }
@@ -52,7 +53,7 @@ public abstract class AbstractReport implements Report {
     }
 
     @Override
-    public void reload() {
+    public void reload() throws CCAPIException {
         if(isVisible) {
             find(webDriver, By.className("fs-sidebar-report-status-refresh")).click();
         }

@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,7 +22,7 @@ public interface MenuBar extends Web {
      * @return element status.
      */
     @NotNull
-    ElementStatus getElementStatus();
+    ElementStatus getElementStatus() throws CCAPIException;
 
     /**
      * Returns the workflow menu
@@ -51,6 +52,6 @@ public interface MenuBar extends Web {
      *
      * @param query text to search.
      */
-    void search(final String query);
+    void search(final String query) throws CCAPIException;
 
 }

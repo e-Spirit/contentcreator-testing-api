@@ -31,12 +31,18 @@ public class CCDialogsImpl implements CCDialogs {
             throw new CCAPIException(exception.getMessage(), webDriver);
         }
 
-        return new CCWizardDialogImpl(dialog);
+        return new CCWizardDialogImpl(dialog, webDriver);
     }
 
     @Override
-    public CCDialog dialog() {
-        WebElement dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
+    public CCDialog dialog() throws CCAPIException {
+        WebElement dialog;
+
+        try {
+           dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
+        } catch (WebDriverException exception) {
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
 
         if(!ComponentUtils.hasElement(dialog, webDriver, By.className("fs-MessageDialogBox-Container")))
             return new CCDialogImpl(dialog, webDriver);
@@ -45,11 +51,17 @@ public class CCDialogsImpl implements CCDialogs {
     }
 
     @Override
-    public CCMessageDialog messageDialog() {
-        WebElement dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
+    public CCMessageDialog messageDialog() throws CCAPIException {
+        WebElement dialog;
+
+        try {
+            dialog = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-DialogBox")));
+        } catch (WebDriverException exception) {
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
 
         if(ComponentUtils.hasElement(dialog, webDriver, By.className("fs-MessageDialogBox-Container")))
-            return new CCMessageDialogImpl(dialog);
+            return new CCMessageDialogImpl(dialog, webDriver);
 
         return null;
     }

@@ -1,10 +1,8 @@
 package de.espirit.firstspirit.webedit.test.ui.util;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -28,13 +26,17 @@ public class Utils {
     /**
      * Finds element by the given condition
      *
-     * @param driver The webdriver instance
+     * @param webDriver The webdriver instance
      * @param by     The condition
      * @return Returns the web element if found
      */
-    public static WebElement find(@NotNull final WebDriver driver, @NotNull final By by) {
+    public static WebElement find(@NotNull final WebDriver webDriver, @NotNull final By by) throws CCAPIException {
         idle();
-        return driver.findElement(by);
+        try {
+            return webDriver.findElement(by);
+        } catch (WebDriverException exception) {
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
     }
 
     /**

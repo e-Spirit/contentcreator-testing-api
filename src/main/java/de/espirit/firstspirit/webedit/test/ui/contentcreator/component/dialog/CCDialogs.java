@@ -19,11 +19,11 @@ public interface CCDialogs {
      * Gets the current dialog if available
      * @return Returns the current dialog if available, otherwise null
      */
-    CCDialog dialog();
+    CCDialog dialog() throws CCAPIException;
 
     /**
      * Gets the current message dialog if available
      * @return Returns the current message dialog if available, otherwise null
      */
-    CCMessageDialog messageDialog();
+    CCMessageDialog messageDialog() throws CCAPIException;
 }

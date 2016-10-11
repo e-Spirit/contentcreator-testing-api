@@ -1,16 +1,20 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 public class CCInputButtonImpl implements CCInputButton {
+    private final WebDriver webDriver;
     private WebElement buttonElement;
 
-    public CCInputButtonImpl(@NotNull final WebElement webElement) {
-        if(webElement.getAttribute("class").contains("fs-button"))
+    public CCInputButtonImpl(WebDriver webDriver, @NotNull final WebElement webElement) {
+        this.webDriver = webDriver;
+        if (webElement.getAttribute("class").contains("fs-button"))
             this.buttonElement = webElement;
         else
             this.buttonElement = webElement.findElement(By.className("fs-button"));

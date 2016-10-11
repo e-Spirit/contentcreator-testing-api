@@ -4,6 +4,7 @@ import de.espirit.firstspirit.client.EditorIdentifier;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,7 +46,7 @@ public interface Preview extends Web {
      * @return {@code null} if the identifier couldn't be found, otherwise returns a maybe empty list of actions.
      */
     @Nullable
-    Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier);
+    Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier) throws CCAPIException;
 
     /**
      * Action, returned by {@link #actionsOf(EditorIdentifier)}.

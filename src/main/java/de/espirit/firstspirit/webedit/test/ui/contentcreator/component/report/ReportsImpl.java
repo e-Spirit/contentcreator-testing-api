@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -26,37 +27,37 @@ public class ReportsImpl implements Reports {
 
     @NotNull
     @Override
-    public Report bookmarks() {
+    public Report bookmarks() throws CCAPIException {
         return custom(-5);
     }
 
     @NotNull
     @Override
-    public Report workflows() {
+    public Report workflows() throws CCAPIException {
         return custom(-4);
     }
 
     @NotNull
     @Override
-    public Report history() {
+    public Report history() throws CCAPIException {
         return custom(-3);
     }
 
     @NotNull
     @Override
-    public Report relations() {
+    public Report relations() throws CCAPIException {
         return custom(-2);
     }
 
     @NotNull
     @Override
-    public Report messages() {
+    public Report messages() throws CCAPIException {
         return custom(-1);
     }
 
     @NotNull
     @Override
-    public Report custom(final int no) {
+    public Report custom(final int no) throws CCAPIException {
         WebElement button = find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
         return new CustomReport(webDriver, button);
     }
@@ -77,7 +78,7 @@ public class ReportsImpl implements Reports {
 
     @NotNull
     @Override
-    public WebElement html() {
+    public WebElement html() throws CCAPIException {
         return find(webDriver, By.cssSelector(".fs-sidebar"));
     }
 }

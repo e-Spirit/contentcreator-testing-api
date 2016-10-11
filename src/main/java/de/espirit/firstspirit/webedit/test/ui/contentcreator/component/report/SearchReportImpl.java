@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +19,7 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
     }
 
     @Override
-    public void setParamMyElements(final boolean onlyMyElements) {
+    public void setParamMyElements(final boolean onlyMyElements) throws CCAPIException {
         final WebElement webElement = find(webDriver, By.className("fs-checkbox-label"));
         if (webElement.getAttribute("class").contains("fs-checkbox-checked") != onlyMyElements) {
             webElement.click();
@@ -27,7 +28,7 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
 
     @Nullable
     @Override
-    public String reportMessage() {
+    public String reportMessage() throws CCAPIException {
         final WebElement reportMsg = find(webDriver, By.className("report-message"));
         return reportMsg.isDisplayed() ? reportMsg.getText() : null;
     }

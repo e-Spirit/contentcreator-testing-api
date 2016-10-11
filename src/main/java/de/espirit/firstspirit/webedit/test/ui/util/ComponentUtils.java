@@ -47,17 +47,17 @@ public class ComponentUtils {
         if(CCInputTextImpl.isComponent(webElement, webDriver)){
             return new CCInputTextImpl(webElement);
         }else if(CCInputCheckboxImpl.isComponent(webElement,webDriver)){
-            return new CCInputCheckboxImpl(webElement);
+            return new CCInputCheckboxImpl(webElement, webDriver);
         } else if(CCInputRadioImpl.isComponent(webElement,webDriver)){
-            return new CCInputRadioImpl(webElement);
+            return new CCInputRadioImpl(webDriver, webElement);
         } else if(CCInputComboBoxImpl.isComponent(webElement,webDriver)){
             return new CCInputComboBoxImpl(webElement, webDriver);
         } else if(CCInputTextAreaImpl.isComponent(webElement,webDriver)){
-            return new CCInputTextAreaImpl(webElement);
+            return new CCInputTextAreaImpl(webDriver, webElement);
         } else if(CCInputDomImpl.isComponent(webElement,webDriver)){
             return new CCInputDomImpl(webElement, webDriver);
         } else if(CCInputButtonImpl.isComponent(webElement,webDriver)){
-            return new CCInputButtonImpl(webElement);
+            return new CCInputButtonImpl(webDriver, webElement);
         }
 
         return null;

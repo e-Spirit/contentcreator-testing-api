@@ -11,6 +11,7 @@ import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.P
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.PreviewImpl;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Reports;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.ReportsImpl;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.log4j.Logger;
@@ -48,12 +49,12 @@ public class CCImpl implements CC {
 
     @NotNull
     @Override
-    public WebElement html() {
+    public WebElement html() throws CCAPIException {
         return find(driver, By.tagName("html"));
     }
 
     @Override
-    public Preview preview() {
+    public Preview preview() throws CCAPIException {
         final WebElement body = find(driver, By.tagName("body"));
         final WebElement iframe = find(driver, By.id("previewContent"));
         return new PreviewImpl(driver, body, iframe);

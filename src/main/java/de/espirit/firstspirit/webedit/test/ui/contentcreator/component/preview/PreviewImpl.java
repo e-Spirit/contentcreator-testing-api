@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview;
 
 import de.espirit.firstspirit.client.EditorIdentifier;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,7 +75,7 @@ public class PreviewImpl implements Preview {
 
     @Override
     @Nullable
-    public Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier) {
+    public Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier) throws CCAPIException {
         try {
             // cc have to select the iframe, first
             _webDriver.switchTo().frame(html());

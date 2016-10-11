@@ -1,16 +1,18 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 public class CCInputTextAreaImpl implements CCInputTextArea {
     private final WebElement inputElement;
     private WebElement webElement;
 
-    public CCInputTextAreaImpl(@NotNull final WebElement webElement) {
+    public CCInputTextAreaImpl(WebDriver webDriver, @NotNull final WebElement webElement) {
         this.webElement = webElement;
         this.inputElement = webElement.findElement(By.className("gwt-TextArea"));
     }
