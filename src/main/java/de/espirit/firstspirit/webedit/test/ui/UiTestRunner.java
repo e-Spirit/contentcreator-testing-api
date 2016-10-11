@@ -313,7 +313,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         if (mySession != null) {
             for (final Session session : sessionMgr.getSessions()) {
                 if (session.isBoundToProject() && session.getID() != mySessionId) {
-                    LOGGER.info("closes other session, id: " + session.getID());
+                    LOGGER.debug("closes other session, id: " + session.getID());
                     closeSession(session);
                 }
             }
