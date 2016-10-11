@@ -114,7 +114,6 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         @Override
         public void select(){
             listBoxElement.click();
-            System.out.println(webDriver.getPageSource());
             WebElement listBoxPopup = new WebDriverWait(webDriver, 10).until(ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
             List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
 
