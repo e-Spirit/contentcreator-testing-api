@@ -74,6 +74,12 @@ public interface CC extends Web {
     void navigateTo(@NotNull final PageRef pageRef);
 
     /**
+     * Returns the current id of the preview element
+     * @return id of the preview element
+     */
+    long previewElementId();
+
+    /**
      * Logs out current session.
      */
     void logout();

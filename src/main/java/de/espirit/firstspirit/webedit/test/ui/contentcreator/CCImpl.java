@@ -16,11 +16,13 @@ import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
+import static de.espirit.firstspirit.webedit.test.ui.util.Utils.waitForCC;
 
 /**
  * Implementation of the {@link CC WebEdit-UI-adapter} and all it's depending interfaces.
@@ -92,6 +94,14 @@ public class CCImpl implements CC {
         final String url = fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(project).element(pageRef).createUrl();
         driver.get(url);
         Utils.waitForCC(driver);
+    }
+
+    @Override
+    public long previewElementId() {
+        waitForCC(driver);
+        Long id = (Long) ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API.Common.getPreviewElement().getId()");
+
+        return id;
     }
 
     @Override

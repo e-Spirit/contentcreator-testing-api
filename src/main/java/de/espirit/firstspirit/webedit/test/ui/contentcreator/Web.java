@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebElement;
 
@@ -14,6 +15,6 @@ public interface Web {
      * @return low level html access.
      */
     @NotNull
-    WebElement html();
+    WebElement html() throws CCAPIException;
 
 }

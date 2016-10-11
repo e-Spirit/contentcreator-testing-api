@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -16,7 +17,7 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
-    public void click() {
+    public void click() throws CCAPIException {
         WebElement item = html();
 
         if (item != null)
@@ -25,7 +26,7 @@ public class MenuItemImpl implements MenuItem {
 
     @NotNull
     @Override
-    public WebElement html() {
+    public WebElement html() throws CCAPIException {
         WebElement menuElement = menu.html();
         List<WebElement> items = menuElement.findElements(By.tagName("li"));
 

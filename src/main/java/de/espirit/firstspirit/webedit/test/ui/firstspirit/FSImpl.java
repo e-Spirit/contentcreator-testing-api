@@ -8,7 +8,9 @@ import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.access.store.sitestore.PageRefFolder;
 import de.espirit.firstspirit.access.store.sitestore.SiteStoreFolder;
 import de.espirit.firstspirit.access.store.templatestore.PageTemplate;
-import de.espirit.firstspirit.agency.*;
+import de.espirit.firstspirit.agency.BrokerAgent;
+import de.espirit.firstspirit.agency.SpecialistsBroker;
+import de.espirit.firstspirit.agency.StoreElementAgent;
 import de.espirit.firstspirit.io.ServerConnection;
 import org.apache.log4j.Logger;
 
@@ -32,25 +34,31 @@ public class FSImpl implements FS {
     }
 
     @Override
-    public PageRef createPage(String name, PageTemplate pageTemplate, String targetPageFolder) {
+    public PageRef createPage(String name, String pageTemplateUid, String targetPageFolder) {
         SpecialistsBroker projectSpecialistBroker = connection.getBroker().requireSpecialist(BrokerAgent.TYPE).getBrokerByProjectName(projectName);
         StoreElementAgent storeElementAgent = projectSpecialistBroker.requireSpecialist(StoreElementAgent.TYPE);
         PageFolder existingPageFolder = (PageFolder) storeElementAgent.loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false);
 
-        if (existingPageFolder != null) try {
-            PageFolder pageFolder = existingPageFolder.createPageFolder(name);
-            Page page = pageFolder.createPage(name + "_1", pageTemplate);
+        PageTemplate pageTemplate = (PageTemplate) storeElementAgent.loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false);
 
-            SiteStoreFolder existingSiteStoreFolder = (SiteStoreFolder) storeElementAgent.loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false);
+        if (existingPageFolder != null && pageTemplate != null)
+        {
+            try {
+                PageFolder pageFolder = existingPageFolder.createPageFolder(name);
+                Page page = pageFolder.createPage(name, pageTemplate, true);
 
-            if (existingSiteStoreFolder != null) {
-                PageRefFolder pageRefFolder = existingSiteStoreFolder.createPageRefFolder(name);
-                return pageRefFolder.createPageRef(name + "_1", page);
+                SiteStoreFolder existingSiteStoreFolder = (SiteStoreFolder) storeElementAgent.loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false);
+
+                if (existingSiteStoreFolder != null) {
+                    PageRefFolder pageRefFolder = existingSiteStoreFolder.createPageRefFolder(name);
+                    return pageRefFolder.createPageRef(name, page, true);
+                }
+
+            } catch (ElementDeletedException | LockException e) {
+                LOGGER.error(e);
             }
-
-        } catch (ElementDeletedException | LockException e) {
-            LOGGER.error(e);
         }
+
         return null;
     }
 }

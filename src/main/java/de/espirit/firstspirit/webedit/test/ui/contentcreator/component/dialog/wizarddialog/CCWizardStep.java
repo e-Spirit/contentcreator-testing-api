@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.wizarddialog;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebElement;
 
@@ -13,5 +14,5 @@ public interface CCWizardStep {
      * @return WebElement
      */
     @NotNull
-    WebElement content();
+    WebElement content() throws CCAPIException;
 }

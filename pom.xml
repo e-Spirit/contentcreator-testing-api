@@ -26,6 +26,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.6.2</version>
@@ -38,11 +43,6 @@
         <dependency>
             <groupId>de.espirit.firstspirit</groupId>
             <artifactId>fs-access</artifactId>
-            <version>${firstspirit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.espirit.firstspirit</groupId>
-            <artifactId>client</artifactId>
             <version>${firstspirit.version}</version>
         </dependency>
         <dependency>

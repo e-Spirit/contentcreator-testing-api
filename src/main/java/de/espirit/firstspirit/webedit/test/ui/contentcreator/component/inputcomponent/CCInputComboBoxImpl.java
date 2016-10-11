@@ -43,7 +43,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         WebElement listBoxElement = webElement.findElement(By.className("fs-listbox-text"));
 
         listBoxElement.click();
-        WebElement listBoxPopup = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-listbox-popup")));
+        WebElement listBoxPopup = new WebDriverWait(webDriver, 30).until(ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
         List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
 
         for (WebElement option : options) {
@@ -56,15 +56,15 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
     @Override
     public CCInputComboBox.CCInputComboBoxItem itemByName(@NotNull String displayName) {
         WebElement listBoxElement = webElement.findElement(By.className("fs-listbox-text"));
-
         listBoxElement.click();
-        WebElement listBoxPopup = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-listbox-popup")));
+
+        WebElement listBoxPopup = new WebDriverWait(webDriver, 30).until(ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
         List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
 
         for (WebElement option : options) {
             if(option.getText().equals(displayName))
             {
-                CCInputComboBoxItemImpl inputComboBoxItem = new CCInputComboBoxItemImpl(webDriver, webElement, option.getText(), option.getAttribute("value"));
+                CCInputComboBoxItemImpl inputComboBoxItem = new CCInputComboBoxItemImpl(webDriver, listBoxElement, option.getText(), option.getAttribute("value"));
                 listBoxElement.click();
                 return inputComboBoxItem;
             }
@@ -78,7 +78,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         WebElement listBoxElement = webElement.findElement(By.className("fs-listbox-text"));
 
         listBoxElement.click();
-        WebElement listBoxPopup = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-listbox-popup")));
+        WebElement listBoxPopup = new WebDriverWait(webDriver, 30).until(ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
         List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
         String value = listBoxElement.getAttribute("value");
 
@@ -114,7 +114,8 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         @Override
         public void select(){
             listBoxElement.click();
-            WebElement listBoxPopup = new WebDriverWait(webDriver, 30).until(ExpectedConditions.visibilityOfElementLocated(By.className("fs-listbox-popup")));
+            System.out.println(webDriver.getPageSource());
+            WebElement listBoxPopup = new WebDriverWait(webDriver, 10).until(ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
             List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
 
             for (WebElement option : options) {

@@ -1,8 +1,10 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,15 +14,15 @@ import java.util.List;
 
 public class MenuImpl implements Menu {
     private WebDriver webDriver;
-    private WebElement button;
+    private By selector;
 
-    public MenuImpl(@NotNull final WebDriver webDriver, @NotNull final WebElement button) {
+    public MenuImpl(@NotNull final WebDriver webDriver, By selector) {
         this.webDriver = webDriver;
-        this.button = button;
+        this.selector = selector;
     }
 
     @Override
-    public MenuItem menuItem(@NotNull final String displayName) {
+    public MenuItem menuItem(@NotNull final String displayName) throws CCAPIException {
         WebElement menuElement = open();
         List<WebElement> items = menuElement.findElements(By.tagName("li"));
 
@@ -33,14 +35,19 @@ public class MenuImpl implements Menu {
     }
 
     @Override
-    public WebElement open() {
-        new Actions(webDriver).moveToElement(button).perform();
-        return new WebDriverWait(webDriver, 30).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body > div.gwt-PopupPanel.fs-toolbar-flyout")));
+    public WebElement open() throws CCAPIException {
+        try {
+            WebElement button = new WebDriverWait(webDriver, 30).until(ExpectedConditions.elementToBeClickable(selector));
+            new Actions(webDriver).moveToElement(button).perform();
+            return new WebDriverWait(webDriver, 30).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body > div.gwt-PopupPanel.fs-toolbar-flyout")));
+        } catch(WebDriverException exception) {
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
     }
 
     @NotNull
     @Override
-    public WebElement html() {
+    public WebElement html() throws CCAPIException {
         return open();
     }
 }

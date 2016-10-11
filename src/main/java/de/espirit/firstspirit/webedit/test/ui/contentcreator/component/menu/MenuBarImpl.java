@@ -5,8 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
@@ -47,15 +45,13 @@ public class MenuBarImpl implements MenuBar {
     @NotNull
     @Override
     public Menu workflowMenu() {
-        WebElement button = new WebDriverWait(_webDriver, 30).until(ExpectedConditions.elementToBeClickable(By.className("fs-toolbar-state")));
-        return new MenuImpl(_webDriver, button);
+        return new MenuImpl(_webDriver, By.className("fs-toolbar-state"));
     }
 
     @NotNull
     @Override
     public Menu actionMenu() {
-        WebElement button = new WebDriverWait(_webDriver, 30).until(ExpectedConditions.elementToBeClickable(By.cssSelector("#fs-toolbar > div.fs-toolbar-content.fs-toolbar-content-main > div:nth-child(5) > div > div:nth-child(3)")));
-        return new MenuImpl(_webDriver, button);
+        return new MenuImpl(_webDriver, By.cssSelector("#fs-toolbar > div.fs-toolbar-content.fs-toolbar-content-main > div:nth-child(5) > div > div:nth-child(3)"));
     }
 
     @NotNull

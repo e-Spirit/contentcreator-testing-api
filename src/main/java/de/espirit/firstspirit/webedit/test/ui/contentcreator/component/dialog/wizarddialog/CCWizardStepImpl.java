@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.wizarddialog;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -15,7 +16,7 @@ public class CCWizardStepImpl implements CCWizardStep {
 
     @NotNull
     @Override
-    public WebElement content() {
+    public WebElement content() throws CCAPIException {
         stepButton.click();
 
         return dialog.html().findElement(By.className("fs-WizardDialogBox-Content"));
