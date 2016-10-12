@@ -15,7 +15,7 @@ public interface Reports extends Web {
      * @return Search report.
      */
     @NotNull
-    SearchReport search();
+    SearchReport search() throws CCAPIException;
 
     /**
      * Returns the bookmarks report.
@@ -72,5 +72,5 @@ public interface Reports extends Web {
      * @return Returns the report
      */
     @NotNull
-    Report customByName(final String displayName);
+    Report customByName(final String displayName) throws CCAPIException;
 }

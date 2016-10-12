@@ -40,5 +40,5 @@ public interface Report extends Web {
      * Returns a list of all parameters within the report
      * @return the parameters within the report
      */
-    List<CCInputComponent> parameters();
+    List<CCInputComponent> parameters() throws CCAPIException;
 }

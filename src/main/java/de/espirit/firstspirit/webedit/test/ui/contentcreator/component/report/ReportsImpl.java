@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,11 +9,9 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
-
 public class ReportsImpl implements Reports {
 
-    private WebDriver webDriver;
+    private final WebDriver webDriver;
 
     public ReportsImpl(@NotNull final WebDriver webDriver) {
         this.webDriver = webDriver;
@@ -20,8 +19,9 @@ public class ReportsImpl implements Reports {
 
     @NotNull
     @Override
-    public SearchReport search() {
-        WebElement searchReportButton = webDriver.findElement(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(1)"));
+    public SearchReport search() throws CCAPIException {
+        WebElement searchReportButton = Utils.findElement(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(1)"));
+        //WebElement searchReportButton = webDriver.findElement(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(1)"));
         return new SearchReportImpl(webDriver, searchReportButton);
     }
 
@@ -58,18 +58,21 @@ public class ReportsImpl implements Reports {
     @NotNull
     @Override
     public Report custom(final int no) throws CCAPIException {
-        WebElement button = find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
+        WebElement button = Utils.findElement(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
+        //WebElement button = find(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div:nth-child(" + (7 + no) + ')'));
         return new CustomReport(webDriver, button);
     }
 
     @NotNull
     @Override
-    public Report customByName(String displayName) {
-        List<WebElement> reportElements = webDriver.findElements(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div"));
+    public Report customByName(String displayName) throws CCAPIException {
+        List<WebElement> reportElements = Utils.findElements(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div"));
+        //List<WebElement> reportElements = webDriver.findElements(By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div"));
 
         for (WebElement reportElement : reportElements) {
-            WebElement displayTextElement = reportElement.findElement(By.cssSelector("div.text"));
-            if(displayTextElement.getAttribute("textContent").equals(displayName))
+            WebElement displayTextElement = Utils.findElement(webDriver, By.cssSelector("div.text"));
+            //WebElement displayTextElement = reportElement.findElement(By.cssSelector("div.text"));
+            if (displayTextElement.getAttribute("textContent").equals(displayName))
                 return new CustomReport(webDriver, reportElement);
         }
 
@@ -79,6 +82,7 @@ public class ReportsImpl implements Reports {
     @NotNull
     @Override
     public WebElement html() throws CCAPIException {
-        return find(webDriver, By.cssSelector(".fs-sidebar"));
+        return Utils.findElement(webDriver, By.cssSelector(".fs-sidebar"));
+        //return find(webDriver, By.cssSelector(".fs-sidebar"));
     }
 }

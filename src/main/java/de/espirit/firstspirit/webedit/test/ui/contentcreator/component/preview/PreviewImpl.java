@@ -2,6 +2,7 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview;
 
 import de.espirit.firstspirit.client.EditorIdentifier;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
 
 public class PreviewImpl implements Preview {
@@ -81,7 +81,8 @@ public class PreviewImpl implements Preview {
             _webDriver.switchTo().frame(html());
 
             // move the mouse to the given store-element to load the actions
-            final WebElement element = find(_webDriver, By.cssSelector("[data-fs-id=\"" + identifier.getId() + "\"]")); // eyJpZCI6MTA5NTcxOTgsInN0b3JlIjoiUEFHRVNUT1JFIn0=
+            final WebElement element = Utils.findElement(_webDriver, By.cssSelector("[data-fs-id=\"" + identifier.getId() + "\"]"));
+            //final WebElement element = find(_webDriver, By.cssSelector("[data-fs-id=\"" + identifier.getId() + "\"]")); // eyJpZCI6MTA5NTcxOTgsInN0b3JlIjoiUEFHRVNUT1JFIn0=
             new Actions(_webDriver).moveToElement(element, 10, 10).build().perform();
 
             idle();
@@ -98,8 +99,9 @@ public class PreviewImpl implements Preview {
     }
 
     @NotNull
-    private List<Action> findActions(final WebElement toolbar) {
-        final List<WebElement> actionIcons = toolbar.findElements(By.tagName("span"));
+    private List<Action> findActions(final WebElement toolbar) throws CCAPIException {
+        final List<WebElement> actionIcons = Utils.findMultipleItemsInElement(_webDriver, toolbar, By.tagName("span"));
+        //final List<WebElement> actionIcons = toolbar.findElements(By.tagName("span"));
         final List<Action> actions = new ArrayList<>(actionIcons.size());
         for (final WebElement actionIcon : actionIcons) {
             final String tooltip = actionIcon.getAttribute("fs-tooltip");
@@ -112,10 +114,11 @@ public class PreviewImpl implements Preview {
     }
 
     @Nullable
-    private WebElement findToolbar() {
+    private WebElement findToolbar() throws CCAPIException {
         int i = 5;
         do {
-            final List<WebElement> elements = _webDriver.findElements(By.cssSelector(".fs-element-toolbar-actions"));
+            final List<WebElement> elements = Utils.findElements(_webDriver, By.cssSelector(".fs-element-toolbar-actions"));
+            //final List<WebElement> elements = _webDriver.findElements(By.cssSelector(".fs-element-toolbar-actions"));
             for (final WebElement entry : elements) {
                 if (entry.isDisplayed()) {
                     return entry;

@@ -29,7 +29,7 @@ public class MenuImpl implements Menu {
         WebElement item = items.stream().filter(i -> i.getText().equals(displayName)).findFirst().orElse(null);
 
         if (item != null)
-            return new MenuItemImpl(this, item.getText());
+            return new MenuItemImpl(this, item.getText(), webDriver);
         else
             return null;
     }
@@ -43,7 +43,7 @@ public class MenuImpl implements Menu {
         final List<MenuItem> menuItems = new ArrayList<>();
 
         for (WebElement menuItem : menuWebElements) {
-            menuItems.add(new MenuItemImpl(this, menuItem.getText()));
+            menuItems.add(new MenuItemImpl(this, menuItem.getText(), webDriver));
         }
 
         return menuItems;

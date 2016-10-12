@@ -22,7 +22,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.waitForCC;
 
 /**
@@ -50,13 +49,16 @@ public class CCImpl implements CC {
     @NotNull
     @Override
     public WebElement html() throws CCAPIException {
-        return find(driver, By.tagName("html"));
+        return Utils.findElement(driver, By.tagName("html"));
+        //return find(driver, By.tagName("html"));
     }
 
     @Override
     public Preview preview() throws CCAPIException {
-        final WebElement body = find(driver, By.tagName("body"));
-        final WebElement iframe = find(driver, By.id("previewContent"));
+        final WebElement body = Utils.findElement(driver, By.tagName("body"));
+        //final WebElement body = find(driver, By.tagName("body"));
+        final WebElement iframe = Utils.findElement(driver, By.id("previewContent"));
+        //final WebElement iframe = find(driver, By.id("previewContent"));
         return new PreviewImpl(driver, body, iframe);
     }
 
