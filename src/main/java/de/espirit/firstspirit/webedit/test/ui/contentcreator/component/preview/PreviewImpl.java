@@ -82,7 +82,6 @@ public class PreviewImpl implements Preview {
 
             // move the mouse to the given store-element to load the actions
             final WebElement element = Utils.findElement(_webDriver, By.cssSelector("[data-fs-id=\"" + identifier.getId() + "\"]"));
-            //final WebElement element = find(_webDriver, By.cssSelector("[data-fs-id=\"" + identifier.getId() + "\"]")); // eyJpZCI6MTA5NTcxOTgsInN0b3JlIjoiUEFHRVNUT1JFIn0=
             new Actions(_webDriver).moveToElement(element, 10, 10).build().perform();
 
             idle();

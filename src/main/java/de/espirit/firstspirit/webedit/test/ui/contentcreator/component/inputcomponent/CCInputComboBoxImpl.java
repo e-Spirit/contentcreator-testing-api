@@ -20,7 +20,7 @@ import java.util.List;
  **/
 public class CCInputComboBoxImpl implements CCInputComboBox {
     protected WebElement webElement;
-    private WebDriver webDriver;
+    protected WebDriver webDriver;
 
     public CCInputComboBoxImpl(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
         this.webElement = webElement;
@@ -44,7 +44,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         listBoxElement.click();
 
         WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
-        List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
+        List<WebElement> options =  Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
 
         List<CCInputComboBox.CCInputComboBoxItem> resultList = new ArrayList<>();
         for (WebElement option : options) {
@@ -60,7 +60,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         listBoxElement.click();
 
         WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
-        List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
+        List<WebElement> options =  Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
 
         for (WebElement option : options) {
             if (option.getText().equals(displayName)) {
@@ -79,7 +79,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         listBoxElement.click();
 
         WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
-        List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
+        List<WebElement> options =  Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
 
         String value = listBoxElement.getAttribute("value");
 
@@ -116,7 +116,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         public void select() throws CCAPIException {
             listBoxElement.click();
             WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
-            List<WebElement> options = listBoxPopup.findElements(By.tagName("option"));
+            List<WebElement> options =  Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
 
             for (WebElement option : options) {
                 if (option.getAttribute("value").equals(value)) {

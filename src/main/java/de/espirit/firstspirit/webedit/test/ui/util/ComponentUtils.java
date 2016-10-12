@@ -72,9 +72,9 @@ public class ComponentUtils {
      */
     public static CCInputComponent matchParameter(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
         if(InputTextParameter.isComponent(webElement, webDriver))
-            return new InputTextParameter(webElement);
+            return new InputTextParameter(webElement, webDriver);
         else if(CCInputCheckboxImpl.isComponent(webElement, webDriver))
-            return new InputCheckBoxParameter(webElement);
+            return new InputCheckBoxParameter(webElement, webDriver);
         else if(InputComboBoxParameter.isComponent(webElement, webDriver))
             return new InputComboBoxParameter(webElement, webDriver);
 

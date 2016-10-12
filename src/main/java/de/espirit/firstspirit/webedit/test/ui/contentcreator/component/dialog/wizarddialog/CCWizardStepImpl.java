@@ -1,10 +1,10 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.wizarddialog;
 
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 public class CCWizardStepImpl implements CCWizardStep {
@@ -22,11 +22,6 @@ public class CCWizardStepImpl implements CCWizardStep {
     @Override
     public WebElement content() throws CCAPIException {
         stepButton.click();
-        try {
-            return dialog.html().findElement(By.className("fs-WizardDialogBox-Content"));
-        } catch (WebDriverException exception) {
-            throw new CCAPIException(exception.getMessage(), webDriver);
-        }
-
+        return Utils.findItemInElement(webDriver, dialog.html(), By.className("fs-WizardDialogBox-Content"));
     }
 }

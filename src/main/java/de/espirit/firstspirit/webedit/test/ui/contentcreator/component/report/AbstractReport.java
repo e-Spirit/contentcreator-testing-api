@@ -9,12 +9,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 
 public abstract class AbstractReport implements Report {
     private WebDriver webDriver;
@@ -67,7 +64,7 @@ public abstract class AbstractReport implements Report {
         }
 
         WebElement reportContent = Utils.find(webDriver, ExpectedConditions.visibilityOfElementLocated(By.className("fs-sidebar-content")));
-        WebElement parametersDiv = Utils.findElement(webDriver, By.className("fs-sidebar-report-parameter"));
+        WebElement parametersDiv = Utils.findItemInElement(webDriver, reportContent, By.className("fs-sidebar-report-parameter"));
         List<WebElement> elements = Utils.findMultipleItemsInElement(webDriver, parametersDiv, By.cssSelector("div > table > tbody > tr"));
         List<CCInputComponent> result = new ArrayList<>();
 
