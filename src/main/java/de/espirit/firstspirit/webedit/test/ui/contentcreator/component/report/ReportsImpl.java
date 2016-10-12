@@ -67,7 +67,7 @@ public class ReportsImpl implements Reports {
         List<WebElement> reportElements = Utils.findElements(webDriver, By.cssSelector(".fs-sidebar-buttons:nth-child(2) > div"));
 
         for (WebElement reportElement : reportElements) {
-            WebElement displayTextElement = Utils.findElement(webDriver, By.cssSelector("div.text"));
+            WebElement displayTextElement = Utils.findItemInElement(webDriver, reportElement, By.cssSelector("div.text"));
             if (displayTextElement.getAttribute("textContent").equals(displayName))
                 return new CustomReport(webDriver, reportElement);
         }
