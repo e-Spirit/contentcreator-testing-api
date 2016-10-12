@@ -8,10 +8,12 @@ import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalPhantomJSWe
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+@Ignore
 @UiTestRunner.WebDriver({
 		LocalPhantomJSWebDriverFactory.class
 })
