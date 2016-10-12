@@ -24,6 +24,13 @@ public interface MenuBar extends Web {
     ElementStatus getElementStatus();
 
     /**
+     * Returns the workflow menu
+     * @return WorkflowMenu
+     */
+    @NotNull
+    Menu workflowMenu();
+
+    /**
      * Returns the action menu shown in WebEdit.
      *
      * @return action menu

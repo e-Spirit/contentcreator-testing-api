@@ -1,8 +1,9 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputComponent;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.inputcomponent.CCInputTextImpl;
-import org.apache.commons.lang.NotImplementedException;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButtonImpl;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComponent;
+import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,35 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CCDialogImpl implements CCDialog {
-    private WebElement dialog;
+    private WebElement dialogElement;
     private WebDriver webDriver;
 
-    public CCDialogImpl(@NotNull final WebElement dialog, @NotNull final WebDriver webDriver) {
-        this.dialog = dialog;
+    public CCDialogImpl(@NotNull final WebElement dialogElement, @NotNull final WebDriver webDriver) {
+        this.dialogElement = dialogElement;
         this.webDriver = webDriver;
-    }
-
-    /**
-     * Match webElement to an input component
-     * @param webElement The web element to match
-     * @return Returns
-     */
-    public CCInputComponent match(@NotNull final WebElement webElement) {
-        if(CCInputTextImpl.isComponent(webElement, webDriver))
-        {
-            return new CCInputTextImpl(webElement);
-        }
-
-        return null;
     }
 
     @Override
     public List<CCInputComponent> inputComponents() {
-        List<WebElement> elements = dialog.findElements(By.className("fs-gadget"));
+        List<WebElement> elements = dialogElement.findElements(By.className("fs-gadget"));
         List<CCInputComponent> ccInputComponents = new ArrayList<>();
 
         for (WebElement element : elements) {
-            CCInputComponent ccInputComponent = match(element);
+            CCInputComponent ccInputComponent = ComponentUtils.matchComponent(element, webDriver);
 
             if(ccInputComponent != null)
                 ccInputComponents.add(ccInputComponent);
@@ -50,13 +37,55 @@ public class CCDialogImpl implements CCDialog {
     }
 
     @Override
-    public CCInputComponent inputComponentByName(@NotNull String name) {
-        throw new NotImplementedException();
+    public CCInputComponent inputComponentByName(@NotNull String displayName) {
+        List<WebElement> elements = dialogElement.findElements(By.className("fs-gadget"));
+        for (WebElement element : elements) {
+            CCInputComponent ccInputComponent = ComponentUtils.matchComponent(element, webDriver);
+
+            if(ccInputComponent != null)
+            {
+                if(ccInputComponent.label().equals(displayName))
+                    return ccInputComponent;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public void ok() {
+        clickButton(0);
+    }
+
+    @Override
+    public void cancel() {
+        clickButton(1);
+    }
+
+    private void clickButton(final int buttonIndex) {
+        WebElement dialogFooterElement = dialogElement.findElement(By.className("fs-DialogBox-Footer"));
+        List<WebElement> elements = dialogFooterElement.findElements(By.className("fs-button"));
+
+        if(elements.size()>buttonIndex)
+            elements.get(buttonIndex).click();
+    }
+
+    @Override
+    public List<CCInputButton> buttons() {
+        WebElement dialogFooterElement = dialogElement.findElement(By.className("fs-DialogBox-Footer"));
+        List<WebElement> elements = dialogFooterElement.findElements(By.className("fs-button"));
+        List<CCInputButton> ccInputButtons = new ArrayList<>();
+
+        for (WebElement element : elements) {
+            ccInputButtons.add(new CCInputButtonImpl(element));
+        }
+
+        return ccInputButtons;
     }
 
     @NotNull
     @Override
     public WebElement html() {
-        return dialog;
+        return dialogElement;
     }
 }

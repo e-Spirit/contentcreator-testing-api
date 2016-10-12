@@ -1,7 +1,6 @@
 /**
  * UI test framework for FirstSpirit ContentCreator.
  * <p>
- * <p>
  * <b>Write an UI test</b>
  * <ul>
  * <li>Create a sub-class of {@link de.espirit.firstspirit.webedit.test.ui.AbstractUiTest}.</li>
@@ -16,8 +15,6 @@
  * <li>Access the html by using Selenium's {@link org.openqa.selenium.WebElement WebElement} interface.</li>
  * <li>Extend {@link de.espirit.firstspirit.webedit.test.ui.contentcreator.CC} to access the new interface.</li>
  * </ul>
- * <p>
- * <p>
  * <p>
  * <b>See also:</b>
  * <ul>

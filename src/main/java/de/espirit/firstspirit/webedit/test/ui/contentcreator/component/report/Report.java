@@ -1,7 +1,10 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComponent;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 /**
  * Accesses common actions and properties provides by every report.
@@ -10,6 +13,7 @@ public interface Report extends Web {
 
     /**
      * Returns how many results the report has found.
+     * @return the result count
      */
     int getResultCount();
 
@@ -30,4 +34,10 @@ public interface Report extends Web {
      * Restarts a report.
      */
     void reload();
+
+    /**
+     * Returns a list of all parameters within the report
+     * @return the parameters within the report
+     */
+    List<CCInputComponent> parameters();
 }
