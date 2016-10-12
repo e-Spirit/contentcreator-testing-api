@@ -6,6 +6,7 @@ import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CC
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Reports;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebDriver;
 
@@ -31,7 +32,7 @@ public interface CC extends Web {
      *
      * @return preview pane.
      */
-    Preview preview();
+    Preview preview() throws CCAPIException;
 
     /**
      * Returns access to the report area.

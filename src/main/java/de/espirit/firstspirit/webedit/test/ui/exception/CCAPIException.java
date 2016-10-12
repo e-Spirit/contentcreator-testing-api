@@ -1,5 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.exception;
 
+import de.espirit.common.UncheckedException;
+import de.espirit.firstspirit.webedit.test.ui.Constants;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.OutputType;
@@ -10,10 +12,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-public class CCAPIException extends Exception {
+import static de.espirit.firstspirit.webedit.test.ui.util.Utils.env;
+
+public class CCAPIException extends UncheckedException {
     private static final Logger LOGGER = Logger.getLogger(CCAPIException.class);
     private final WebDriver webDriver;
-    private static String errorFilePath = System.getenv("errorFilePath");
+    private static String errorFilePath = env(Constants.PARAM_ERROR_FILE_PATH, Constants.DEFAULT_ERROR_FILE_PATH);
 
     public CCAPIException(String message, WebDriver webDriver) {
         super(message);
@@ -27,10 +31,11 @@ public class CCAPIException extends Exception {
     }
 
     private void printPageSource(long timestamp) {
-        File pageSource = new File(errorFilePath +"\\pageSource-"+timestamp+".html");
-
         try {
+            String fileName = errorFilePath +"\\pageSource-"+timestamp+".html";
+            File pageSource = new File(fileName);
             FileUtils.write(pageSource, webDriver.getPageSource());
+            LOGGER.error("Page source saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,11 +44,11 @@ public class CCAPIException extends Exception {
     private void takeScreenshot(long timestamp) {
         final java.io.File screenshot = ((PhantomJSDriver) webDriver).getScreenshotAs(OutputType.FILE);
         try {
-            FileUtils.copyFile(screenshot, new File(errorFilePath +"\\screenshot-"+timestamp+".png"));
+            String fileName = errorFilePath +"\\screenshot-"+timestamp+".png";
+            FileUtils.copyFile(screenshot, new File(fileName));
+            LOGGER.error("Screenshot saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        LOGGER.error("Screenshot saved to " + errorFilePath);
     }
 }

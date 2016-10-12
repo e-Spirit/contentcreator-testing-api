@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,21 +14,21 @@ public interface CCInputComboBox extends CCInputComponent{
      *
      * @return combobox items
      */
-    List<CCInputComboBoxItem> items();
+    List<CCInputComboBoxItem> items() throws CCAPIException;
 
     /**
      * Returns a combobox item by given displayname
      * @param displayName the displayname of the item
      * @return the item if found, otherwise null
      */
-    CCInputComboBoxItem itemByName(@NotNull final String displayName);
+    CCInputComboBoxItem itemByName(@NotNull final String displayName) throws CCAPIException;
 
     /**
      * Returns the currently selected item
      *
      * @return currently selected item
      */
-    CCInputComboBoxItem selectedItem();
+    CCInputComboBoxItem selectedItem() throws CCAPIException;
 
     /**
      * Provides access to a combobox item
@@ -43,6 +44,6 @@ public interface CCInputComboBox extends CCInputComponent{
         /**
          * Select the item
          */
-        void select();
+        void select() throws CCAPIException;
     }
 }

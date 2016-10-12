@@ -1,47 +1,51 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview;
 
 import de.espirit.firstspirit.client.EditorIdentifier;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
 
 public class PreviewImpl implements Preview {
     private static final Logger LOGGER = Logger.getLogger(PreviewImpl.class);
 
     @NotNull
-    private WebDriver _webDriver;
+    private WebDriver webDriver;
 
     @NotNull
-    private final WebElement _body;
+    private final WebElement body;
 
     @NotNull
-    private final WebElement _iframe;
+    private final WebElement iframe;
 
     public PreviewImpl(@NotNull final WebDriver webDriver, @NotNull final WebElement body, @NotNull final WebElement iframe) {
-        this._webDriver = webDriver;
-        _body = body;
-        _iframe = iframe;
+        this.webDriver = webDriver;
+        this.body = body;
+        this.iframe = iframe;
     }
 
     @NotNull
     @Override
     public WebElement html() {
-        return _iframe;
+        return iframe;
     }
 
     @Override
     public String getUrl() {
-        return _iframe.getAttribute("src");
+        return iframe.getAttribute("src");
     }
 
     @Override
@@ -55,12 +59,12 @@ public class PreviewImpl implements Preview {
 
         if (LOGGER.isDebugEnabled()) LOGGER.debug("set url: " + url);
 
-        final JavascriptExecutor executor = (JavascriptExecutor) _webDriver;
-        executor.executeScript("arguments[0].setAttribute('src', '" + url + "')", _iframe);
+        final JavascriptExecutor executor = (JavascriptExecutor) webDriver;
+        executor.executeScript("arguments[0].setAttribute('src', '" + url + "')", iframe);
         idle();
 
         // check title for a 404
-        final String title = _webDriver.getTitle();
+        final String title = webDriver.getTitle();
         if (title.contains("404")) {
             throw new IOException("URL not found: " + title + " (" + url + ')');
         }
@@ -68,20 +72,20 @@ public class PreviewImpl implements Preview {
 
     @Override
     public void reload() {
-        _body.sendKeys(Keys.CONTROL + "r");
+        body.sendKeys(Keys.CONTROL + "r");
         idle();
     }
 
     @Override
     @Nullable
-    public Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier) {
+    public Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier) throws CCAPIException {
         try {
             // cc have to select the iframe, first
-            _webDriver.switchTo().frame(html());
+            webDriver.switchTo().frame(html());
 
             // move the mouse to the given store-element to load the actions
-            final WebElement element = find(_webDriver, By.cssSelector("[data-fs-id=\"" + identifier.getId() + "\"]")); // eyJpZCI6MTA5NTcxOTgsInN0b3JlIjoiUEFHRVNUT1JFIn0=
-            new Actions(_webDriver).moveToElement(element, 10, 10).build().perform();
+            final WebElement element = Utils.findElement(webDriver, By.cssSelector("[data-fs-id=\"" + identifier.getId() + "\"]"));
+            new Actions(webDriver).moveToElement(element, 10, 10).build().perform();
 
             idle();
 
@@ -92,13 +96,13 @@ public class PreviewImpl implements Preview {
             return null;
         } finally {
             // back to outer document
-            _webDriver.switchTo().defaultContent();
+            webDriver.switchTo().defaultContent();
         }
     }
 
     @NotNull
-    private List<Action> findActions(final WebElement toolbar) {
-        final List<WebElement> actionIcons = toolbar.findElements(By.tagName("span"));
+    private List<Action> findActions(final WebElement toolbar) throws CCAPIException {
+        final List<WebElement> actionIcons = Utils.findMultipleItemsInElement(webDriver, toolbar, By.tagName("span"));
         final List<Action> actions = new ArrayList<>(actionIcons.size());
         for (final WebElement actionIcon : actionIcons) {
             final String tooltip = actionIcon.getAttribute("fs-tooltip");
@@ -111,10 +115,10 @@ public class PreviewImpl implements Preview {
     }
 
     @Nullable
-    private WebElement findToolbar() {
+    private WebElement findToolbar() throws CCAPIException {
         int i = 5;
         do {
-            final List<WebElement> elements = _webDriver.findElements(By.cssSelector(".fs-element-toolbar-actions"));
+            final List<WebElement> elements = Utils.findElements(webDriver, By.cssSelector(".fs-element-toolbar-actions"));
             for (final WebElement entry : elements) {
                 if (entry.isDisplayed()) {
                     return entry;
@@ -140,11 +144,11 @@ public class PreviewImpl implements Preview {
         public void execute() {
             try {
                 // cc have to select the iframe, first
-                _webDriver.switchTo().frame(PreviewImpl.this.html());
+                webDriver.switchTo().frame(PreviewImpl.this.html());
                 _action.click();
             } finally {
                 // back to outer document
-                _webDriver.switchTo().defaultContent();
+                webDriver.switchTo().defaultContent();
             }
         }
 

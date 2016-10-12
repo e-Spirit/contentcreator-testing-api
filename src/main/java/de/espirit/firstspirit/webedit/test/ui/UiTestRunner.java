@@ -1,6 +1,5 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
-import de.espirit.common.io.FileUtilities;
 import de.espirit.firstspirit.access.AdminService;
 import de.espirit.firstspirit.access.Connection;
 import de.espirit.firstspirit.access.ConnectionManager;
@@ -8,7 +7,6 @@ import de.espirit.firstspirit.access.User;
 import de.espirit.firstspirit.access.admin.ProjectStorage;
 import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.agency.ClientUrlAgent;
-import de.espirit.firstspirit.common.FilenameCleaner;
 import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.manager.RepositoryManager;
 import de.espirit.firstspirit.manager.SessionManager;
@@ -16,15 +14,14 @@ import de.espirit.firstspirit.server.sessionmanagement.Session;
 import de.espirit.firstspirit.server.usermanagement.UserImpl;
 import de.espirit.firstspirit.storage.Revision;
 import de.espirit.firstspirit.storage.RevisionImpl;
-
-import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalChromeWebDriverFactory;
-import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteChromeWebDriverFactory;
-import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteFirefoxWebDriverFactory;
-import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.WebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CCImpl;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FSImpl;
+import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalChromeWebDriverFactory;
+import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteChromeWebDriverFactory;
+import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteFirefoxWebDriverFactory;
+import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.WebDriverFactory;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
@@ -36,7 +33,6 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
@@ -45,11 +41,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -278,6 +270,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         final String port = env(PARAM_PORT, DEFAULT_PORT);
         final String username = env(PARAM_USER, DEFAULT_USERNAME);
         final String password = env(PARAM_PASSWORD, DEFAULT_PASSWORD);
+        LOGGER.info("Connecting to host '" + host + "', port '" + port + "' with user '" + username + '\'');
         try {
             final ServerConnection connection = (ServerConnection) ConnectionManager.getConnection(host, Integer.parseInt(port), ConnectionManager.HTTP_MODE, username, password);
             connection.connect();
@@ -369,6 +362,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         private void setUpBrowser() {
             try {
                 final String projectNameOrId = env(PARAM_PROJECT, DEFAULT_PROJECT_NAME);
+                LOGGER.info("Connecting to project '" + projectNameOrId + '\'');
                 final ProjectStorage prjStorage = _fs.connection().getService(AdminService.class).getProjectStorage();
                 Project project;
                 try {
@@ -505,8 +499,6 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                             _CC.driver().navigate().to(url);
                             s.evaluate();                                                                                       // execute test method
                         } catch (final Throwable throwable) {
-                            final File screenshot = ((RemoteWebDriver) _CC.driver()).getScreenshotAs(OutputType.FILE);
-                            FileUtilities.move(screenshot, new File("FAIL-" + System.currentTimeMillis() + '-' + FilenameCleaner.makeCleanWithoutCaseChange(throwable.getClass().getSimpleName() + '-' + throwable.getMessage()) + ".png"));
                             throw throwable;
                         } finally {
                             final RevisionImpl currentRevision = _fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);// after the test restore this revision

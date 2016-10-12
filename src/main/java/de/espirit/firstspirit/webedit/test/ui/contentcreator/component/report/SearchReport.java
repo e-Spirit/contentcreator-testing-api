@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.WebElement;
 
@@ -13,7 +14,7 @@ public interface SearchReport extends Report {
      *
      * @param onlyMyElements {@code true} to search only elements that I've created or changed, {@code false} to search all elements.
      */
-    void setParamMyElements(final boolean onlyMyElements);
+    void setParamMyElements(final boolean onlyMyElements) throws CCAPIException;
 
     /**
      * Returns the text-content of the report-message element or {@code null} if it doesn't exist or isn't {@link WebElement#isDisplayed() displayed}.
@@ -21,6 +22,6 @@ public interface SearchReport extends Report {
      * @return report-message text or {@code null}.
      */
     @Nullable
-    String reportMessage();
+    String reportMessage() throws CCAPIException;
 
 }

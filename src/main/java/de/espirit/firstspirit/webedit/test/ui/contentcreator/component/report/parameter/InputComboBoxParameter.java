@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.parameter;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComboBoxImpl;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +14,6 @@ public class InputComboBoxParameter extends CCInputComboBoxImpl {
 
     @Override
     public String label() {
-        return webElement.findElement(By.className("fs-listbox-text")).getAttribute("value");
+        return Utils.findItemInElement(webDriver, webElement, By.className("fs-listbox-text")).getAttribute("value");
     }
 }

@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,14 +16,14 @@ public interface CCInputCheckbox extends CCInputComponent {
      *
      * @return checkbox items
      */
-    List<CCInputCheckboxItem> items();
+    List<CCInputCheckboxItem> items() throws CCAPIException;
 
     /**
      * Returns a checkbox item by given displayname
      * @param displayName the displayname of the item
      * @return the item if found, otherwise null
      */
-    CCInputCheckboxItem itemByName(@NotNull final String displayName);
+    CCInputCheckboxItem itemByName(@NotNull final String displayName) throws CCAPIException;
 
     /**
      * Provides access to an input checkbox item
@@ -34,7 +35,7 @@ public interface CCInputCheckbox extends CCInputComponent {
          *
          * @return label
          */
-        String label();
+        String label() throws CCAPIException;
 
         /**
          * Returns the checked status of the item

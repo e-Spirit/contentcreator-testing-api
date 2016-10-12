@@ -1,24 +1,28 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
+import com.google.common.base.Predicate;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
 
 public class MenuBarImpl implements MenuBar {
-    private WebDriver _webDriver;
+    private WebDriver webDriver;
 
     public MenuBarImpl(@NotNull final WebDriver webDriver) {
-        this._webDriver = webDriver;
+        this.webDriver = webDriver;
     }
 
     @NotNull
     @Override
-    public ElementStatus getElementStatus() {
+    public ElementStatus getElementStatus() throws CCAPIException {
         int max = 5;
         do {
             final String cssClass = html().getAttribute("class");
@@ -42,16 +46,21 @@ public class MenuBarImpl implements MenuBar {
         return ElementStatus.UNKNOWN;
     }
 
+    @Override
+    public void waitForElementStatus(MenuBar.ElementStatus elementStatus) {
+        new WebDriverWait(webDriver, 30).until((Predicate<WebDriver>) webDriver1 -> getElementStatus().equals(elementStatus));
+    }
+
     @NotNull
     @Override
     public Menu workflowMenu() {
-        return new MenuImpl(_webDriver, By.className("fs-toolbar-state"));
+        return new MenuImpl(webDriver, By.className("fs-toolbar-state"));
     }
 
     @NotNull
     @Override
     public Menu actionMenu() {
-        return new MenuImpl(_webDriver, By.cssSelector("#fs-toolbar > div.fs-toolbar-content.fs-toolbar-content-main > div:nth-child(5) > div > div:nth-child(3)"));
+        return new MenuImpl(webDriver, By.cssSelector("#fs-toolbar > div.fs-toolbar-content.fs-toolbar-content-main > div:nth-child(5) > div > div:nth-child(3)"));
     }
 
     @NotNull
@@ -61,16 +70,16 @@ public class MenuBarImpl implements MenuBar {
     }
 
     @Override
-    public void search(final String query) {
-        final WebElement element = find(_webDriver, By.className("fs-searchtextbox-field"));
+    public void search(final String query) throws CCAPIException {
+        final WebElement element = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-searchtextbox-field")));
         element.click();
         element.sendKeys(query + '\n');
     }
 
     @NotNull
     @Override
-    public WebElement html() {
-        return find(_webDriver, By.className("fs-toolbar-state"));
+    public WebElement html() throws CCAPIException {
+        return Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-toolbar-state")));
     }
 
 }

@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +15,7 @@ public interface Reports extends Web {
      * @return Search report.
      */
     @NotNull
-    SearchReport search();
+    SearchReport search() throws CCAPIException;
 
     /**
      * Returns the bookmarks report.
@@ -22,7 +23,7 @@ public interface Reports extends Web {
      * @return Bookmarks report
      */
     @NotNull
-    Report bookmarks();
+    Report bookmarks() throws CCAPIException;
 
     /**
      * Returns the workflow report.
@@ -30,7 +31,7 @@ public interface Reports extends Web {
      * @return Workflow report
      */
     @NotNull
-    Report workflows();
+    Report workflows() throws CCAPIException;
 
     /**
      * Returns the history report.
@@ -38,7 +39,7 @@ public interface Reports extends Web {
      * @return History report
      */
     @NotNull
-    Report history();
+    Report history() throws CCAPIException;
 
     /**
      * Returns the relations report.
@@ -46,7 +47,7 @@ public interface Reports extends Web {
      * @return Relations report
      */
     @NotNull
-    Report relations();
+    Report relations() throws CCAPIException;
 
     /**
      * Returns the messages report.
@@ -54,7 +55,7 @@ public interface Reports extends Web {
      * @return Messages report
      */
     @NotNull
-    Report messages();
+    Report messages() throws CCAPIException;
 
     /**
      * Returns the N-th custom report.
@@ -63,7 +64,7 @@ public interface Reports extends Web {
      * @return custom report.
      */
     @NotNull
-    Report custom(final int no);
+    Report custom(final int no) throws CCAPIException;
 
     /**
      * Returns the custom report by given display name
@@ -71,5 +72,5 @@ public interface Reports extends Web {
      * @return Returns the report
      */
     @NotNull
-    Report customByName(final String displayName);
+    Report customByName(final String displayName) throws CCAPIException;
 }
