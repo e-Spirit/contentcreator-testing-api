@@ -31,7 +31,7 @@ public class MenuImpl implements Menu {
         if (item != null)
             return new MenuItemImpl(this, item.getText(), webDriver);
         else
-            return null;
+            throw new CCAPIException("Can't find menu item with the displayname: '"+displayName+"'", webDriver);
     }
 
 
@@ -49,6 +49,9 @@ public class MenuImpl implements Menu {
         return menuItems;
     }
 
+    /**
+     * TODO: Move this in order to make use of this elsewhere. See: PSCCT-15
+     */
     public static final String JS_MOUSEOVER = "var evObj = document.createEvent('MouseEvents');" +
             "evObj.initMouseEvent(\"mouseover\",true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);" +
             "arguments[0].dispatchEvent(evObj);";
@@ -56,9 +59,7 @@ public class MenuImpl implements Menu {
     @Override
     public WebElement open() throws CCAPIException {
         WebElement button = Utils.find(webDriver, ExpectedConditions.elementToBeClickable(selector));
-        //TODO: use script for hover
         ((JavascriptExecutor) webDriver).executeScript(JS_MOUSEOVER, button);
-        //new Actions(webDriver).moveToElement(button).perform();
         return Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.cssSelector("body > div.gwt-PopupPanel.fs-toolbar-flyout")));
     }
 

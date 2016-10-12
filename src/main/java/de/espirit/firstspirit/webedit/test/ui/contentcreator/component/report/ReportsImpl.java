@@ -72,7 +72,7 @@ public class ReportsImpl implements Reports {
                 return new CustomReport(webDriver, reportElement);
         }
 
-        return null;
+        throw new CCAPIException("Can't find report with the displayname: '"+displayName+"'", webDriver);
     }
 
     @NotNull

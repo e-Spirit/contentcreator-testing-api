@@ -44,7 +44,8 @@ public class CCInputCheckboxImpl implements CCInputCheckbox {
             if (Utils.findItemInElement(webDriver, webElement, By.className("fs-checkbox-label")).getText().equals(displayName))
                 return new CCInputCheckboxItemImpl(element, webDriver);
         }
-        return null;
+
+        throw new CCAPIException("Can't find item with the displayname: '"+displayName+"'", webDriver);
     }
 
     @NotNull

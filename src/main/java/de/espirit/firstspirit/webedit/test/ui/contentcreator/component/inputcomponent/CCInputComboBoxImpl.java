@@ -70,7 +70,8 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
             }
         }
         listBoxElement.click();
-        return null;
+
+        throw new CCAPIException("Can't find item with the displayname: '"+displayName+"'", webDriver);
     }
 
     @Override

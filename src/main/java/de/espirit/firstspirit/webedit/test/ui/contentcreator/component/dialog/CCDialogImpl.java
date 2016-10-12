@@ -49,7 +49,8 @@ public class CCDialogImpl implements CCDialog {
                     return ccInputComponent;
             }
         }
-        return null;
+
+        throw new CCAPIException("Can't find input component with the displayname: '"+displayName+"'", webDriver);
     }
 
     @Override
@@ -82,6 +83,7 @@ public class CCDialogImpl implements CCDialog {
         for (WebElement element : elements) {
             ccInputButtons.add(new CCInputButtonImpl(webDriver, element));
         }
+
         return ccInputButtons;
     }
 

@@ -45,11 +45,12 @@ public class CCInputRadioImpl implements CCInputRadio {
 
     @Override
     public CCInputRadioItem itemByName(@NotNull String displayName) throws CCAPIException {
-            for (WebElement element : items) {
-                if (Utils.findItemInElement(webDriver, element, By.className("fs-radiobutton-label")).getText().equals(displayName))
-                    return new CCInputRadioItemImpl(element);
-            }
-        return null;
+        for (WebElement element : items) {
+            if (Utils.findItemInElement(webDriver, element, By.className("fs-radiobutton-label")).getText().equals(displayName))
+                return new CCInputRadioItemImpl(element);
+        }
+
+        throw new CCAPIException("Can't find item with the displayname: '"+displayName+"'", webDriver);
     }
 
     @Override

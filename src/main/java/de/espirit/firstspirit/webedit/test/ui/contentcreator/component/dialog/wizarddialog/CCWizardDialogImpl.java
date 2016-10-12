@@ -40,7 +40,7 @@ public class CCWizardDialogImpl implements CCWizardDialog {
         if(result != null)
             return new CCWizardStepImpl(this, result, webDriver);
 
-        return null;
+        throw new CCAPIException("Can't find step with the displayname: '"+displayName+"'", webDriver);
     }
 
     @Override
@@ -60,6 +60,6 @@ public class CCWizardDialogImpl implements CCWizardDialog {
                 return button;
         }
 
-        return null;
+        throw new CCAPIException("Can't find button with the displayname: '"+displayName+"'", webDriver);
     }
 }

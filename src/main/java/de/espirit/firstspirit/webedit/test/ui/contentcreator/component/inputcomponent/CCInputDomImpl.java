@@ -51,7 +51,7 @@ public class CCInputDomImpl implements CCInputDom {
 
     @Override
     public String label() {
-        return webElement.findElement(By.className("gwt-Label")).getText();
+        return Utils.findItemInElement(webDriver, webElement, By.className("gwt-Label")).getText();
     }
 
     public static boolean isComponent(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {
