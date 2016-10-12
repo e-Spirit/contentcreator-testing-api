@@ -93,7 +93,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private static final String PARAM_PASSWORD = "password";
 
     //--- default values ---//
-    private static final String DEFAULT_PROJECT_NAME = "Test";
+    private static final String DEFAULT_PROJECT_NAME = "Mithras Energy";
     private static final String DEFAULT_HOST = "localhost";
     private static final String DEFAULT_PORT = "8000";
     private static final String DEFAULT_USERNAME = "Admin";
@@ -362,7 +362,8 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         private void setUpBrowser() {
             try {
                 final String projectNameOrId = env(PARAM_PROJECT, DEFAULT_PROJECT_NAME);
-                LOGGER.info("Connecting to project '" + projectNameOrId + '\'');
+                LOGGER.info("Connecting to project '" + projectNameOrId + "'\n");
+
                 final ProjectStorage prjStorage = _fs.connection().getService(AdminService.class).getProjectStorage();
                 Project project;
                 try {
