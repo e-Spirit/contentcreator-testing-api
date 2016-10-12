@@ -1,6 +1,8 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,11 +10,13 @@ import org.openqa.selenium.WebElement;
 
 public class CCInputTextImpl implements CCInputText {
     protected final WebElement inputElement;
+    private WebDriver webDriver;
     private WebElement webElement;
 
-    public CCInputTextImpl(@NotNull final WebElement webElement) {
+    public CCInputTextImpl(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) throws CCAPIException {
+        this.webDriver = webDriver;
         this.webElement = webElement;
-        this.inputElement = webElement.findElement(By.className("gwt-TextBox"));
+        this.inputElement = Utils.findItemInElement(webDriver, webElement, By.className("gwt-TextBox"));
     }
 
     @Override
@@ -27,13 +31,13 @@ public class CCInputTextImpl implements CCInputText {
     }
 
     @Override
-    public String errorMessage() {
-        return webElement.findElement(By.className("gwt-HTML")).getText();
+    public String errorMessage() throws CCAPIException {
+        return Utils.findItemInElement(webDriver, webElement, By.className("gwt-HTML")).getText();
     }
 
     @Override
-    public String label() {
-        return webElement.findElement(By.className("gwt-Label")).getText();
+    public String label() throws CCAPIException {
+        return Utils.findItemInElement(webDriver, webElement, By.className("gwt-Label")).getText();
     }
 
     public static boolean isComponent(@NotNull final WebElement webElement, @NotNull final WebDriver webDriver) {

@@ -2,10 +2,10 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcom
 
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -16,15 +16,15 @@ public class CCInputCheckboxImpl implements CCInputCheckbox {
     private final List<WebElement> items;
     private WebDriver webDriver;
 
-    public CCInputCheckboxImpl(@NotNull final WebElement webElement, WebDriver webDriver) {
+    public CCInputCheckboxImpl(@NotNull final WebElement webElement, WebDriver webDriver) throws CCAPIException {
         this.webElement = webElement;
-        this.items = webElement.findElements(By.className("fs-checkbox"));
+        this.items = Utils.findMultipleItemsInElement(webDriver, webElement, By.className("fs-checkbox"));
         this.webDriver = webDriver;
     }
 
     @Override
-    public String label() {
-        return webElement.findElement(By.className("gwt-Label")).getText();
+    public String label() throws CCAPIException {
+        return Utils.findItemInElement(webDriver, webElement, By.className("gwt-Label")).getText();
 
     }
 
@@ -39,9 +39,9 @@ public class CCInputCheckboxImpl implements CCInputCheckbox {
     }
 
     @Override
-    public CCInputCheckboxItem itemByName(@NotNull String displayName) {
+    public CCInputCheckboxItem itemByName(@NotNull String displayName) throws CCAPIException {
         for (WebElement element : items) {
-            if (webElement.findElement(By.className("fs-checkbox-label")).getText().equals(displayName))
+            if (Utils.findItemInElement(webDriver, webElement, By.className("fs-checkbox-label")).getText().equals(displayName))
                 return new CCInputCheckboxItemImpl(element, webDriver);
         }
         return null;

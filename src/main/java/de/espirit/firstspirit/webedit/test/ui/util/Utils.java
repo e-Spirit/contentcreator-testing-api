@@ -1,11 +1,13 @@
 package de.espirit.firstspirit.webedit.test.ui.util;
 
+import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Utils {
@@ -27,13 +29,74 @@ public class Utils {
      * Finds element by the given condition
      *
      * @param webDriver The webdriver instance
-     * @param by     The condition
+     * @param by The condition
      * @return Returns the web element if found
      */
-    public static WebElement find(@NotNull final WebDriver webDriver, @NotNull final By by) throws CCAPIException {
-        idle();
+    public static WebElement findElement(@NotNull final WebDriver webDriver, @NotNull final By by) throws CCAPIException {
         try {
             return webDriver.findElement(by);
+        } catch (WebDriverException exception){
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
+    }
+
+    /**
+     * Finds a number of elements by the given condition
+     *
+     * @param webDriver The webdriver instance
+     * @param by The condition
+     * @return Returns a number of web elements if found
+     */
+    public static List<WebElement> findElements(@NotNull final WebDriver webDriver, @NotNull final By by) throws CCAPIException {
+        try {
+            return webDriver.findElements(by);
+        } catch (WebDriverException exception){
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
+    }
+
+    /**
+     * Finds a web element by the given condition
+     *
+     * @param webDriver The webdriver instance
+     * @param expectedCondition The condition
+     * @return Returns the web element if found
+     */
+    public static WebElement find(@NotNull final WebDriver webDriver, @NotNull final ExpectedCondition<WebElement> expectedCondition) throws CCAPIException {
+        try {
+            return new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(expectedCondition);
+        } catch (WebDriverException exception) {
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
+    }
+
+    /**
+     * Finds a element in the web element by the given condition
+     *
+     * @param webDriver The webdriver instance
+     * @param webElement The webelement
+     * @param by The condition
+     * @return Returns the web element if found
+     */
+    public static WebElement findItemInElement(@NotNull final WebDriver webDriver, @NotNull final WebElement webElement, @NotNull final By by) throws CCAPIException {
+        try {
+            return webElement.findElement(by);
+        } catch (WebDriverException exception) {
+            throw new CCAPIException(exception.getMessage(), webDriver);
+        }
+    }
+
+    /**
+     * Finds a number of elements in the web element by the given condition
+     *
+     * @param webDriver The webdriver instance
+     * @param webElement The webelement
+     * @param by The condition
+     * @return Returns a number of web elements if found
+     */
+    public static List<WebElement> findMultipleItemsInElement(@NotNull final WebDriver webDriver, @NotNull final WebElement webElement, @NotNull final By by) throws CCAPIException {
+        try {
+            return webElement.findElements(by);
         } catch (WebDriverException exception) {
             throw new CCAPIException(exception.getMessage(), webDriver);
         }
@@ -103,4 +166,6 @@ public class Utils {
             }
         });
     }
+
+
 }

@@ -44,6 +44,6 @@ public interface CCInputComboBox extends CCInputComponent{
         /**
          * Select the item
          */
-        void select();
+        void select() throws CCAPIException;
     }
 }

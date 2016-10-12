@@ -18,7 +18,7 @@ public interface CCInputComponent extends Web {
      * Returns the displayed error message
      * @return the error message if there is any
      */
-    default String errorMessage(){
+    default String errorMessage() throws CCAPIException {
         return "";
     }
 }

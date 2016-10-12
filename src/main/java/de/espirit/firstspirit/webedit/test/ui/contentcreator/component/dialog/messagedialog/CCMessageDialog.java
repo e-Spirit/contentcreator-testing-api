@@ -14,7 +14,7 @@ public interface CCMessageDialog extends Web {
      * Returns the message of the message dialog
      * @return message of the dialog
      */
-    String message();
+    String message() throws CCAPIException;
 
     /**
      * Clicks ok button

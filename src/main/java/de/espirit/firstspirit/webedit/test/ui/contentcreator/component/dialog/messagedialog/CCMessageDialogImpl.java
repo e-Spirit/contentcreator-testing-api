@@ -3,10 +3,10 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.m
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButtonImpl;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -22,8 +22,9 @@ public class CCMessageDialogImpl implements CCMessageDialog {
     }
 
     @Override
-    public String message() {
-        return dialogElement.findElement(By.className("fs-MessageDialogBox-Message")).getText();
+    public String message() throws CCAPIException {
+        final WebElement messageBox = Utils.findItemInElement(webDriver, dialogElement, By.className("fs-MessageDialogBox-Message"));
+        return messageBox.getText();
     }
 
     @Override
@@ -32,34 +33,24 @@ public class CCMessageDialogImpl implements CCMessageDialog {
     }
 
     private void clickButton(final int buttonIndex) throws CCAPIException {
-        try {
-            WebElement dialogFooterElement = dialogElement.findElement(By.className("fs-MessageDialogBox-Buttons"));
-            List<WebElement> elements = dialogFooterElement.findElements(By.className("fs-button"));
+        List<WebElement> buttons = getDialogButtons();
 
-            if(elements.size()>buttonIndex)
-                elements.get(buttonIndex).click();
-        } catch (WebDriverException exception) {
-            throw new CCAPIException(exception.getMessage(), webDriver);
-        }
+        if(buttons.size()>buttonIndex)
+            buttons.get(buttonIndex).click();
+    }
+
+    private List<WebElement> getDialogButtons() throws CCAPIException {
+        WebElement dialogFooterElement = Utils.findItemInElement(webDriver, dialogElement, By.className("fs-MessageDialogBox-Buttons"));
+        return Utils.findMultipleItemsInElement(webDriver, dialogFooterElement, By.className("fs-button"));
     }
 
     @Override
     public List<CCInputButton> buttons() throws CCAPIException {
-        List<CCInputButton> ccInputButtons;
-
-        try {
-            WebElement dialogFooterElement = dialogElement.findElement(By.className("fs-MessageDialogBox-Buttons"));
-            List<WebElement> elements = dialogFooterElement.findElements(By.className("fs-button"));
-            ccInputButtons = new ArrayList<>();
-
-            for (WebElement element : elements) {
-                ccInputButtons.add(new CCInputButtonImpl(webDriver, element));
-            }
-        }  catch (WebDriverException exception) {
-            throw new CCAPIException(exception.getMessage(), webDriver);
+        List<WebElement> buttons = getDialogButtons();
+        List<CCInputButton> ccInputButtons = new ArrayList<>();
+        for (WebElement element : buttons) {
+            ccInputButtons.add(new CCInputButtonImpl(webDriver, element));
         }
-
-
         return ccInputButtons;
     }
 
