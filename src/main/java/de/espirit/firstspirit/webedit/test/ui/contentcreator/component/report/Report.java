@@ -2,6 +2,7 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComponent;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface Report extends Web {
      * Returns how many results the report has found.
      * @return the result count
      */
-    int getResultCount();
+    int getResultCount() throws CCAPIException;
 
     /**
      * Returns the html of the given report entry.
@@ -23,7 +24,7 @@ public interface Report extends Web {
      * @param pos number of the report entry (0 = first entry, 1 = second one, ...)
      * @return report entry.
      */
-    WebElement getEntry(final int pos);
+    WebElement getEntry(final int pos) throws CCAPIException;
 
     /**
      * Toggles the visibility of a report (expands it or collapses it, depending on the current state).
@@ -33,11 +34,11 @@ public interface Report extends Web {
     /**
      * Restarts a report.
      */
-    void reload();
+    void reload() throws CCAPIException;
 
     /**
      * Returns a list of all parameters within the report
      * @return the parameters within the report
      */
-    List<CCInputComponent> parameters();
+    List<CCInputComponent> parameters() throws CCAPIException;
 }

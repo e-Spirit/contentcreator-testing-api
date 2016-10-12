@@ -1,6 +1,8 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,17 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CCInputRadioImpl implements CCInputRadio {
+    private final WebDriver webDriver;
     private WebElement webElement;
     private List<WebElement> items;
 
-    public CCInputRadioImpl(@NotNull final WebElement webElement) {
+    public CCInputRadioImpl(WebDriver webDriver, @NotNull final WebElement webElement) throws CCAPIException {
+        this.webDriver = webDriver;
         this.webElement = webElement;
-        this.items = webElement.findElements(By.className("fs-radiobutton"));
+        this.items = Utils.findMultipleItemsInElement(webDriver, webElement, By.className("fs-radiobutton"));
+
     }
 
     @Override
-    public String label() {
-        return webElement.findElement(By.className("gwt-Label")).getText();
+    public String label() throws CCAPIException {
+        return Utils.findItemInElement(webDriver, webElement, By.className("gwt-Label")).getText();
     }
 
     @NotNull
@@ -31,7 +36,7 @@ public class CCInputRadioImpl implements CCInputRadio {
 
     @Override
     public List<CCInputRadioItem> items() {
-        final List<CCInputRadioItem> resultList= new ArrayList<>();
+        final List<CCInputRadioItem> resultList = new ArrayList<>();
         for (WebElement element : items) {
             resultList.add(new CCInputRadioItemImpl(element));
         }
@@ -39,19 +44,18 @@ public class CCInputRadioImpl implements CCInputRadio {
     }
 
     @Override
-    public CCInputRadioItem itemByName(@NotNull String displayName) {
-        for (WebElement element : items) {
-            if(element.findElement(By.className("fs-radiobutton-label")).getText().equals(displayName))
-                return new CCInputRadioItemImpl(element);
-        }
+    public CCInputRadioItem itemByName(@NotNull String displayName) throws CCAPIException {
+            for (WebElement element : items) {
+                if (Utils.findItemInElement(webDriver, element, By.className("fs-radiobutton-label")).getText().equals(displayName))
+                    return new CCInputRadioItemImpl(element);
+            }
         return null;
     }
 
     @Override
     public CCInputRadioItem selectedItem() {
         for (WebElement item : items) {
-            if(item.getAttribute("class").contains("fs-radiobutton-selected"))
-            {
+            if (item.getAttribute("class").contains("fs-radiobutton-selected")) {
                 return new CCInputRadioItemImpl(item);
             }
         }
@@ -67,7 +71,6 @@ public class CCInputRadioImpl implements CCInputRadio {
         private WebElement element;
 
         public CCInputRadioItemImpl(@NotNull final WebElement element) {
-
             this.element = element;
         }
 
@@ -78,13 +81,13 @@ public class CCInputRadioImpl implements CCInputRadio {
         }
 
         @Override
-        public void select(){
+        public void select() {
             element.click();
         }
 
         @Override
-        public String label() {
-            return element.findElement(By.className("fs-radiobutton-label")).getText();
+        public String label() throws CCAPIException {
+            return Utils.findItemInElement(webDriver, element, By.className("fs-radiobutton-label")).getText();
         }
 
         @Override

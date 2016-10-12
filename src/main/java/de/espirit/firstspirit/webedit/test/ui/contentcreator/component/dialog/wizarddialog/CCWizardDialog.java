@@ -2,6 +2,7 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.w
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -16,18 +17,18 @@ public interface CCWizardDialog extends Web {
      * @param displayName the display name of the step
      * @return CCWizardStep
      */
-    CCWizardStep stepByName(@NotNull final String displayName);
+    CCWizardStep stepByName(@NotNull final String displayName) throws CCAPIException;
 
     /**
      * Returns all buttons within the dialog footer
      * @return all buttons
      */
-    List<CCInputButton> buttons();
+    List<CCInputButton> buttons() throws CCAPIException;
 
     /**
      * Returns the button identified by the given display name
      * @param displayName the display name of the button
      * @return button if found, otherwise null
      */
-    CCInputButton buttonByName(@NotNull final String displayName);
+    CCInputButton buttonByName(@NotNull final String displayName) throws CCAPIException;
 }

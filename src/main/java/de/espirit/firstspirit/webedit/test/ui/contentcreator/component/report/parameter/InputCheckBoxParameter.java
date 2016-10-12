@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 
 public class InputCheckBoxParameter extends CCInputCheckboxItemImpl implements CCInputComponent {
     public InputCheckBoxParameter(@NotNull WebElement webElement) {
-        super(webElement);
+        super(webElement, webDriver);
         this.webElement = webElement.findElement(By.className("fs-checkbox"));
     }
 }

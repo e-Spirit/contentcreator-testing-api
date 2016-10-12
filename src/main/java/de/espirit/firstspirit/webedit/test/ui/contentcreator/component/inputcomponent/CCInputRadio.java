@@ -1,6 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent;
 
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface CCInputRadio extends CCInputComponent {
      * @param displayName the displayname of the item
      * @return the item if found, otherwise null
      */
-    CCInputRadioItem itemByName(@NotNull final String displayName);
+    CCInputRadioItem itemByName(@NotNull final String displayName) throws CCAPIException;
 
     /**
      * Returns the currently selected item
@@ -40,7 +41,7 @@ public interface CCInputRadio extends CCInputComponent {
          *
          * @return label
          */
-        String label();
+        String label() throws CCAPIException;
 
         /**
          * Returns the checked status of the item

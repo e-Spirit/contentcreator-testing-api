@@ -5,6 +5,8 @@ import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 /**
  * Provides access to a specific WebEdit menu (action menu, content menu)
  */
@@ -16,8 +18,15 @@ public interface Menu extends Web {
      * @param displayName The display name of the item
      * @return Returns the menu item if found
      */
-    @NotNull
     MenuItem menuItem(@NotNull final String displayName) throws CCAPIException;
+
+
+    /**
+     * Gets all menu items
+     *
+     * @return Returns the menu items if found
+     */
+    List<MenuItem> menuItems() throws CCAPIException;
 
     /**
      * Opens the menu (hovers over the menu)
