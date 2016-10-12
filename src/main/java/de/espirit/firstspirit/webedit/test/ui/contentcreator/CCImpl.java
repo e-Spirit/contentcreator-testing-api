@@ -50,15 +50,12 @@ public class CCImpl implements CC {
     @Override
     public WebElement html() throws CCAPIException {
         return Utils.findElement(driver, By.tagName("html"));
-        //return find(driver, By.tagName("html"));
     }
 
     @Override
     public Preview preview() throws CCAPIException {
         final WebElement body = Utils.findElement(driver, By.tagName("body"));
-        //final WebElement body = find(driver, By.tagName("body"));
         final WebElement iframe = Utils.findElement(driver, By.id("previewContent"));
-        //final WebElement iframe = find(driver, By.id("previewContent"));
         return new PreviewImpl(driver, body, iframe);
     }
 

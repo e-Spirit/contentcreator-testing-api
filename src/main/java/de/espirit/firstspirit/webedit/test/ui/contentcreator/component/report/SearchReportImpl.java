@@ -20,7 +20,6 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
     @Override
     public void setParamMyElements(final boolean onlyMyElements) throws CCAPIException {
         final WebElement webElement = Utils.findElement(webDriver, By.className("fs-checkbox-label"));
-        //final WebElement webElement = find(webDriver, By.className("fs-checkbox-label"));
         if (webElement.getAttribute("class").contains("fs-checkbox-checked") != onlyMyElements) {
             webElement.click();
         }
@@ -30,7 +29,6 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
     @Override
     public String reportMessage() throws CCAPIException {
         final WebElement reportMsg = Utils.findElement(webDriver, By.className("report-message"));
-        //final WebElement reportMsg = find(webDriver, By.className("report-message"));
         return reportMsg.isDisplayed() ? reportMsg.getText() : null;
     }
 
@@ -39,7 +37,6 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
     public WebElement html() throws CCAPIException {
         if(ComponentUtils.hasElement(webDriver, By.className("fs-sidebar-content")))
             return Utils.findElement(webDriver, By.className("fs-sidebar-content"));
-            //return webDriver.findElement(By.className("fs-sidebar-content"));
 
         return null;
     }

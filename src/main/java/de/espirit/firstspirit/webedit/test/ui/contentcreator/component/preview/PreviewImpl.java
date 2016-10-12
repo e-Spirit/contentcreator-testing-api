@@ -101,7 +101,6 @@ public class PreviewImpl implements Preview {
     @NotNull
     private List<Action> findActions(final WebElement toolbar) throws CCAPIException {
         final List<WebElement> actionIcons = Utils.findMultipleItemsInElement(_webDriver, toolbar, By.tagName("span"));
-        //final List<WebElement> actionIcons = toolbar.findElements(By.tagName("span"));
         final List<Action> actions = new ArrayList<>(actionIcons.size());
         for (final WebElement actionIcon : actionIcons) {
             final String tooltip = actionIcon.getAttribute("fs-tooltip");
@@ -118,7 +117,6 @@ public class PreviewImpl implements Preview {
         int i = 5;
         do {
             final List<WebElement> elements = Utils.findElements(_webDriver, By.cssSelector(".fs-element-toolbar-actions"));
-            //final List<WebElement> elements = _webDriver.findElements(By.cssSelector(".fs-element-toolbar-actions"));
             for (final WebElement entry : elements) {
                 if (entry.isDisplayed()) {
                     return entry;
