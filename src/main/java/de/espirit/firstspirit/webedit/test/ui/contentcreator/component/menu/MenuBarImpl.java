@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
+import com.google.common.base.Predicate;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.commons.lang.NotImplementedException;
@@ -8,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
 
@@ -42,6 +44,11 @@ public class MenuBarImpl implements MenuBar {
             idle();
         } while (--max > 0);
         return ElementStatus.UNKNOWN;
+    }
+
+    @Override
+    public void waitForElementStatus(MenuBar.ElementStatus elementStatus) {
+        new WebDriverWait(webDriver, 30).until((Predicate<WebDriver>) webDriver1 -> getElementStatus().equals(elementStatus));
     }
 
     @NotNull

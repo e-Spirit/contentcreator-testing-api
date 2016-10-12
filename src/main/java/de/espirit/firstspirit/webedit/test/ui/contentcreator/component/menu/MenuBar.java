@@ -25,6 +25,12 @@ public interface MenuBar extends Web {
     ElementStatus getElementStatus() throws CCAPIException;
 
     /**
+     * Waits for a specified element status
+     * @param elementStatus The element status to wait for
+     */
+    void waitForElementStatus(MenuBar.ElementStatus elementStatus);
+
+    /**
      * Returns the workflow menu
      * @return WorkflowMenu
      */

@@ -1,7 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview;
 
 import de.espirit.firstspirit.client.EditorIdentifier;
-
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;

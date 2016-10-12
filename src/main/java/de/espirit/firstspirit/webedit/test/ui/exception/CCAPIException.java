@@ -28,10 +28,11 @@ public class CCAPIException extends UncheckedException {
     }
 
     private void printPageSource(long timestamp) {
-        File pageSource = new File(errorFilePath +"\\pageSource-"+timestamp+".html");
-
         try {
+            String fileName = errorFilePath +"\\pageSource-"+timestamp+".html";
+            File pageSource = new File(fileName);
             FileUtils.write(pageSource, webDriver.getPageSource());
+            LOGGER.error("Page source saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,11 +41,11 @@ public class CCAPIException extends UncheckedException {
     private void takeScreenshot(long timestamp) {
         final java.io.File screenshot = ((PhantomJSDriver) webDriver).getScreenshotAs(OutputType.FILE);
         try {
-            FileUtils.copyFile(screenshot, new File(errorFilePath +"\\screenshot-"+timestamp+".png"));
+            String fileName = errorFilePath +"\\screenshot-"+timestamp+".png";
+            FileUtils.copyFile(screenshot, new File(fileName));
+            LOGGER.error("Screenshot saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        LOGGER.error("Screenshot saved to " + errorFilePath);
     }
 }
