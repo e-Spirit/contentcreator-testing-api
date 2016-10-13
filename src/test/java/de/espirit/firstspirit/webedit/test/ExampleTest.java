@@ -15,7 +15,6 @@ import org.junit.Test;
 public class ExampleTest extends AbstractUiTest {
 	private static final Logger LOGGER = Logger.getLogger(ExampleTest.class);
 
-
 	@Test
 	public void executeTestcase() {
 		System.setProperty(Constants.PARAM_ERROR_FILE_PATH, "d:\\screenshots\\");
