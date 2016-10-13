@@ -1,11 +1,14 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
+import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -23,9 +26,10 @@ public class MenuItemImpl implements MenuItem {
     @Override
     public void click() throws CCAPIException {
         WebElement item = html();
-
-        if (item != null)
+        if (item != null) {
+            new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(ExpectedConditions.elementToBeClickable(item));
             item.click();
+        }
     }
 
     @NotNull

@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
+import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -7,7 +8,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,14 @@ public class MenuImpl implements Menu {
         WebElement menuElement = open();
         List<WebElement> items = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
 
+        for (WebElement item : items) {
+            new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(new ExpectedCondition<Boolean>() {
+                @Override
+                public Boolean apply(final WebDriver d) {
+                    return item.getText() != null && !item.getText().isEmpty();
+                }
+            });
+        }
         WebElement item = items.stream().filter(i -> i.getText().equals(displayName)).findFirst().orElse(null);
 
         if (item != null)
