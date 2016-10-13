@@ -1,13 +1,11 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
 import de.espirit.firstspirit.access.project.Project;
-import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Reports;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -68,11 +66,6 @@ public interface CC extends Web {
      */
     CCDialogs dialogs();
 
-    /**
-     * Navigates to a page
-     * @param pageRef The page ref to navigate to
-     */
-    void navigateTo(@NotNull final PageRef pageRef);
 
     /**
      * Returns the current id of the preview element

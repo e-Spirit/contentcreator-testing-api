@@ -6,6 +6,7 @@ import de.espirit.firstspirit.access.ConnectionManager;
 import de.espirit.firstspirit.access.User;
 import de.espirit.firstspirit.access.admin.ProjectStorage;
 import de.espirit.firstspirit.access.project.Project;
+import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.agency.ClientUrlAgent;
 import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.manager.RepositoryManager;
@@ -103,7 +104,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
     private final Class<?> _parentClass;
 
-    private FS _fs;
+    private FS fs;
 
     /**
      * The annotation defines which UI tests should be executed, by specifying a classname pattern.<br>
@@ -273,7 +274,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         try {
             final ServerConnection connection = (ServerConnection) ConnectionManager.getConnection(host, Integer.parseInt(port), ConnectionManager.HTTP_MODE, username, password);
             connection.connect();
-            _fs = new FSImpl(connection, env(PARAM_PROJECT, DEFAULT_PROJECT_NAME));
+            fs = new FSImpl(connection, env(PARAM_PROJECT, DEFAULT_PROJECT_NAME));
         } catch (final Exception e) {
             throw new RuntimeException("connecting FirstSpirit server failed (" + host + ':' + port + ") !", e);
         }
@@ -284,8 +285,8 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
      */
     private void tearDownFS() {
         try {
-            if (_fs != null) {
-                _fs.connection().disconnect();
+            if (fs != null) {
+                fs.connection().disconnect();
             }
         } catch (final IOException e) {
             throw new RuntimeException("disconnecting FirstSpirit server failed!");
@@ -305,7 +306,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         private final WebDriverFactory _browser;
         private final Class<?>[] _testClasses;
 
-        private CC _CC;
+        private CC cc;
 
         private BrowserRunner(final WebDriverFactory browser, final Class<?>[] testClasses) throws InitializationError {
             super(browser.getClass());
@@ -331,7 +332,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 final String projectNameOrId = env(PARAM_PROJECT, DEFAULT_PROJECT_NAME);
                 LOGGER.info("Connecting to project '" + projectNameOrId + "'\n");
 
-                final ProjectStorage prjStorage = _fs.connection().getService(AdminService.class).getProjectStorage();
+                final ProjectStorage prjStorage = fs.connection().getService(AdminService.class).getProjectStorage();
                 Project project;
                 try {
                     project = prjStorage.getProject(Long.parseLong(projectNameOrId));
@@ -348,11 +349,11 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 webDriver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
                 webDriver.manage().window().setSize(new Dimension(1200, 800));
 
-                final String url = _fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(project).createUrl();
+                final String url = fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(project).createUrl();
 
-                disableTourHints(_fs.connection());
+                disableTourHints(fs.connection());
 
-                _CC = new CCImpl(project, webDriver, url, _fs.connection().createTicket(), _fs);
+                cc = new CCImpl(project, webDriver, url, fs.connection().createTicket(), fs);
             } catch (final IOException e) {
                 throw new RuntimeException("IO error occurred!", e);
             }
@@ -375,9 +376,9 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
          * {@link org.openqa.selenium.WebDriver#quit() Quits} the {@code WebDriver} instance.
          */
         private void tearDownBrowser() {
-            if (_CC != null) {
-                _CC.logout();
-                _CC.driver().quit();
+            if (cc != null) {
+                cc.logout();
+                cc.driver().quit();
             }
         }
 
@@ -413,6 +414,9 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
             runner.run(runNotifier);
         }
 
+
+
+
         /**
          * JUnit4 {@link Runner} for a single UI test method. Before every test method the browser will be refreshed with the
          * initial url.
@@ -430,8 +434,9 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
             protected Object createTest() throws Exception {
                 final Object test = super.createTest();
                 if (test instanceof AbstractUiTest) {
-                    ((AbstractUiTest) test).setFS(_fs);
-                    ((AbstractUiTest) test).setCC(_CC);
+                    ((AbstractUiTest) test).setFS(fs);
+                    ((AbstractUiTest) test).setCC(cc);
+
                 }
                 return test;
             }
@@ -446,10 +451,10 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
-                        final long projectId = _CC.project().getId();
+                        final long projectId = cc.project().getId();
                         Revision oldRevision = null;
                         try {
-                            oldRevision = _fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);    // after the test restore this revision
+                            oldRevision = fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);    // after the test restore this revision
                             String locale = Constants.DEFAULT_LOCALE;
                             BrowserLocale annotation = method.getMethod().getAnnotation(BrowserLocale.class);
                             if (annotation == null) {
@@ -461,14 +466,15 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                                 locale = System.getenv(Constants.PARAM_LOCALE);
                             }
 
-                            String url = _CC.driver().getCurrentUrl();
+                            String url = cc.driver().getCurrentUrl();
                             if (url.contains("&locale=")) {
                                 url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
                             } else {
                                 url += "&locale=" + locale;
                             }
-                            _CC.driver().navigate().to(url);
-                            Utils.waitForCC(_CC.driver());
+                            ((AbstractUiTest)test).setLocale(locale);
+                            cc.driver().navigate().to(url);
+                            Utils.waitForCC(cc.driver());
                             s.evaluate();                                                                                       // execute test method
                         } catch (final Throwable throwable) {
                             throw throwable;

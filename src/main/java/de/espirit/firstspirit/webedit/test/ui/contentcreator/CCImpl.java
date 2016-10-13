@@ -1,8 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
 import de.espirit.firstspirit.access.project.Project;
-import de.espirit.firstspirit.access.store.sitestore.PageRef;
-import de.espirit.firstspirit.agency.ClientUrlAgent;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogsImpl;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
@@ -86,13 +84,6 @@ public class CCImpl implements CC {
     @Override
     public CCDialogs dialogs() {
         return new CCDialogsImpl(driver);
-    }
-
-    @Override
-    public void navigateTo(@NotNull PageRef pageRef) {
-        final String url = fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(project).element(pageRef).createUrl();
-        driver.get(url);
-        Utils.waitForCC(driver);
     }
 
     @Override

@@ -6,9 +6,11 @@ import de.espirit.firstspirit.access.store.Previewable;
 import de.espirit.firstspirit.access.store.Store;
 import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.access.store.sitestore.SiteStoreFolder;
+import de.espirit.firstspirit.agency.ClientUrlAgent;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import junit.framework.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.RunWith;
@@ -27,8 +29,10 @@ import static de.espirit.firstspirit.access.store.Previewable.PREVIEWMODE_WEBEDI
 @RunWith(UiTestRunner.class)
 public abstract class AbstractUiTest extends Assert {
 
-    private FS _fs;
-    private CC _CC;
+    private FS fs;
+    private CC cc;
+
+    private String locale;
 
     //--- public methods ---//
 
@@ -38,7 +42,7 @@ public abstract class AbstractUiTest extends Assert {
      */
     @NotNull
     public FS fs() {
-        return _fs;
+        return fs;
     }
 
     /**
@@ -47,7 +51,7 @@ public abstract class AbstractUiTest extends Assert {
      */
     @NotNull
     public CC cc() {
-        return _CC;
+        return cc;
     }
 
     /**
@@ -81,14 +85,35 @@ public abstract class AbstractUiTest extends Assert {
         return startNode;
     }
 
+    /**
+     * Navigates to a page
+     * @param pageRef The page ref to navigate to
+     */
+    public void navigateTo(@NotNull PageRef pageRef) {
+
+        String url = fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(cc.project()).element(pageRef).createUrl();
+        if (url.contains("&locale=")) {
+            url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
+        } else {
+            url += "&locale=" + locale;
+        }
+        cc().driver().get(url);
+        Utils.waitForCC(cc.driver());
+    }
+
+
     //--- package protected methods ---//
 
     void setFS(final FS fs) {
-        _fs = fs;
+        this.fs = fs;
     }
 
     void setCC(final CC CC) {
-        _CC = CC;
+        cc = CC;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
 }
