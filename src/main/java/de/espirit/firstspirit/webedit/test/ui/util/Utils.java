@@ -122,7 +122,6 @@ public class Utils {
         new WebDriverWait(webDriver, 20).until(new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(final WebDriver d) {
-
                 boolean weApiAvailable = ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
 
                 if(weApiAvailable && ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement() !== 'undefined'").equals(Boolean.TRUE))

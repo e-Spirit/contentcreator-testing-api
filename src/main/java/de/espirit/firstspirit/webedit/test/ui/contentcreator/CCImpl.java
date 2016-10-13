@@ -43,7 +43,6 @@ public class CCImpl implements CC {
         this.driver = driver;
         this.fs = fs;
         this.driver.get(webEditUrl);
-        Utils.waitForCC(this.driver);
     }
 
     @NotNull
