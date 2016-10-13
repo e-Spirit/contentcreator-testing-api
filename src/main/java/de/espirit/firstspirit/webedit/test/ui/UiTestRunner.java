@@ -9,11 +9,8 @@ import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.agency.ClientUrlAgent;
 import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.manager.RepositoryManager;
-import de.espirit.firstspirit.manager.SessionManager;
-import de.espirit.firstspirit.server.sessionmanagement.Session;
 import de.espirit.firstspirit.server.usermanagement.UserImpl;
 import de.espirit.firstspirit.storage.Revision;
-import de.espirit.firstspirit.storage.RevisionImpl;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CCImpl;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
@@ -42,7 +39,10 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -286,44 +286,12 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private void tearDownFS() {
         try {
             if (_fs != null) {
-                closeBoundProjectSessions(_fs.connection().getSessionId());
                 _fs.connection().disconnect();
             }
         } catch (final IOException e) {
             throw new RuntimeException("disconnecting FirstSpirit server failed!");
         }
 
-    }
-
-    /**
-     * Closes all other sessions that are bound to a project.
-     *
-     * @param mySessionId session which provides the bound project.
-     */
-    private void closeBoundProjectSessions(final long mySessionId) {
-        final SessionManager sessionMgr = _fs.connection().getManager(SessionManager.class);
-        final Session mySession = sessionMgr.getSession(mySessionId);
-        if (mySession != null) {
-            for (final Session session : sessionMgr.getSessions()) {
-                if (session.isBoundToProject() && session.getID() != mySessionId) {
-                    LOGGER.debug("closes other session, id: " + session.getID());
-                    closeSession(session);
-                }
-            }
-        }
-    }
-
-    /**
-     * Safely closes the given sesion.
-     *
-     * @param session to close.
-     */
-    private void closeSession(final Session session) {
-        try {
-            _fs.connection().getManager(SessionManager.class).logout(session.getID());
-        } catch (final Exception e) {
-           LOGGER.debug("Closing session failed: " + e);
-        }
     }
 
     /**
@@ -505,11 +473,6 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                             s.evaluate();                                                                                       // execute test method
                         } catch (final Throwable throwable) {
                             throw throwable;
-                        } finally {
-                            final RevisionImpl currentRevision = _fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);// after the test restore this revision
-                            if (oldRevision != null && !oldRevision.equals(currentRevision)) {
-//								_fs.connection().getManager(ArchiveManager.class).revertProject(projectId, oldRevision.getId(), false); // discard every change, the test made
-                            }
                         }
                     }
                 };
