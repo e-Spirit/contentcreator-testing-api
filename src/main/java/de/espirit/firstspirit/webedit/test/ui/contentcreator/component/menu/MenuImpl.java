@@ -27,16 +27,20 @@ public class MenuImpl implements Menu {
     @Override
     public MenuItem menuItem(@NotNull final String displayName) throws CCAPIException {
         WebElement menuElement = open();
-        List<WebElement> items = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
 
-        for (WebElement item : items) {
-            new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(new ExpectedCondition<Boolean>() {
-                @Override
-                public Boolean apply(final WebDriver d) {
-                    return item.getText() != null && !item.getText().isEmpty();
+        new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(final WebDriver d) {
+                final List<WebElement> li = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
+                for (WebElement element : li) {
+                    if (element.getText().equals(displayName))
+                        return true;
                 }
-            });
-        }
+                return false;
+            }
+        });
+
+        List<WebElement> items = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
         WebElement item = items.stream().filter(i -> i.getText().equals(displayName)).findFirst().orElse(null);
 
         if (item != null)
