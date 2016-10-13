@@ -35,7 +35,7 @@ public class CCDialogsImpl implements CCDialogs {
         if(!ComponentUtils.hasElement(dialog, webDriver, By.className("fs-MessageDialogBox-Container")))
             return new CCDialogImpl(dialog, webDriver);
 
-        return null;
+       throw new CCAPIException("Can't find dialog", webDriver);
     }
 
     @Override
@@ -45,6 +45,6 @@ public class CCDialogsImpl implements CCDialogs {
         if(ComponentUtils.hasElement(dialog, webDriver, By.className("fs-MessageDialogBox-Container")))
             return new CCMessageDialogImpl(dialog, webDriver);
 
-        return null;
+        throw new CCAPIException("Can't find message dialog", webDriver);
     }
 }

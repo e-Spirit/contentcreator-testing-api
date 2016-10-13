@@ -18,6 +18,7 @@ import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CCImpl;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FSImpl;
+import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalChromeWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteChromeWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteFirefoxWebDriverFactory;
@@ -98,7 +99,6 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private static final String DEFAULT_PORT = "8000";
     private static final String DEFAULT_USERNAME = "Admin";
     private static final String DEFAULT_PASSWORD = "Admin";
-    private static final String DEFAULT_LANGUAGE = Locale.ENGLISH.getLanguage();
 
     private static final Logger LOGGER = Logger.getLogger(UiTestRunner.class);
 
@@ -226,7 +226,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     protected List<BrowserRunner> getChildren() {
         try {
             final Class<?>[] testClasses = getTestClasses(_parentClass);
-            final List<BrowserRunner> browserRunner = new LinkedList<BrowserRunner>();
+            final List<BrowserRunner> browserRunner = new LinkedList<>();
             for (final WebDriverFactory browser : getBrowsers(_parentClass)) {
                 browserRunner.add(new BrowserRunner(browser, testClasses));
             }
@@ -483,14 +483,17 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                         Revision oldRevision = null;
                         try {
                             oldRevision = _fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);    // after the test restore this revision
-                            String locale = DEFAULT_LANGUAGE;
+                            String locale = Constants.DEFAULT_LOCALE;
                             BrowserLocale annotation = method.getMethod().getAnnotation(BrowserLocale.class);
                             if (annotation == null) {
                                 annotation = _testClass.getAnnotation(BrowserLocale.class);
                             }
                             if (annotation != null) {
                                 locale = annotation.value();
+                            } else if(System.getenv(Constants.PARAM_LOCALE) != null){
+                                locale = System.getenv(Constants.PARAM_LOCALE);
                             }
+
                             String url = _CC.driver().getCurrentUrl();
                             if (url.contains("&locale=")) {
                                 url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
@@ -498,6 +501,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                                 url += "&locale=" + locale;
                             }
                             _CC.driver().navigate().to(url);
+                            Utils.waitForCC(_CC.driver());
                             s.evaluate();                                                                                       // execute test method
                         } catch (final Throwable throwable) {
                             throw throwable;
