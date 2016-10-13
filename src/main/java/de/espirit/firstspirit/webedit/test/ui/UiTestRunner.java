@@ -9,7 +9,6 @@ import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.agency.ClientUrlAgent;
 import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.manager.RepositoryManager;
-import de.espirit.firstspirit.server.usermanagement.UserImpl;
 import de.espirit.firstspirit.storage.Revision;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CCImpl;
@@ -367,8 +366,8 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         public void disableTourHints(@NotNull final Connection connection) {
             final User user = connection.getUser();
             final Map<String, String> bindings = user.getUserBindings();
-            bindings.put(UserImpl.CC_TOUR_DISABLED, String.valueOf(true));
-            bindings.put(UserImpl.CC_HINTS_DISABLED, String.valueOf(true));
+            bindings.put("cc.tour.disabled", String.valueOf(true));
+            bindings.put("cc.hints.disabled", String.valueOf(true));
             user.setUserBindings(bindings);
         }
 
