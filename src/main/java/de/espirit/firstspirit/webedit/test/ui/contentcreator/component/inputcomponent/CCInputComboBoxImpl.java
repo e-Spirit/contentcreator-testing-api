@@ -43,8 +43,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         WebElement listBoxElement = Utils.findItemInElement(webDriver, webElement, By.className("fs-listbox-text"));
         listBoxElement.click();
 
-        WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
-        List<WebElement> options =  Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
+        List<WebElement> options = getOptions();
 
         List<CCInputComboBox.CCInputComboBoxItem> resultList = new ArrayList<>();
         for (WebElement option : options) {
@@ -54,13 +53,17 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         return resultList;
     }
 
+    private List<WebElement> getOptions() {
+        WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
+        return Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
+    }
+
     @Override
     public CCInputComboBox.CCInputComboBoxItem itemByName(@NotNull String displayName) throws CCAPIException {
         WebElement listBoxElement = Utils.findItemInElement(webDriver, webElement, By.className("fs-listbox-text"));
         listBoxElement.click();
 
-        WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
-        List<WebElement> options =  Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
+        List<WebElement> options = getOptions();
 
         for (WebElement option : options) {
             if (option.getText().equals(displayName)) {
@@ -79,8 +82,7 @@ public class CCInputComboBoxImpl implements CCInputComboBox {
         WebElement listBoxElement = Utils.findItemInElement(webDriver, webElement, By.className("fs-listbox-text"));
         listBoxElement.click();
 
-        WebElement listBoxPopup = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-listbox-popup")));
-        List<WebElement> options =  Utils.findMultipleItemsInElement(webDriver, listBoxPopup, By.tagName("option"));
+        List<WebElement> options = getOptions();
 
         String value = listBoxElement.getAttribute("value");
 

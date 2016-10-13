@@ -1,16 +1,14 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
 import de.espirit.firstspirit.access.project.Project;
-import de.espirit.firstspirit.access.store.ContentProducer;
 import de.espirit.firstspirit.access.store.IDProvider;
+import de.espirit.firstspirit.access.store.Previewable;
 import de.espirit.firstspirit.access.store.Store;
 import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.access.store.sitestore.SiteStoreFolder;
-import de.espirit.firstspirit.store.access.AccessImplUtil;
-
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
-import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
+import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import junit.framework.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.RunWith;
@@ -61,7 +59,14 @@ public abstract class AbstractUiTest extends Assert {
      */
     public String toPreviewUrl(final IDProvider element) {
         final Project project = element.getProject();
-        return AccessImplUtil.getPreviewUrl(project.getUserService(), (ContentProducer) element, project.getMasterLanguage(), project.getWebEditTemplateSet(), false, PREVIEWMODE_FULL_QUALIFIED | PREVIEWMODE_WEBEDIT, null);
+
+        if(element instanceof Previewable)
+        {
+            Previewable previewable = (Previewable) element;
+            return previewable.getPreviewUrl(project.getMasterLanguage(), project.getWebEditTemplateSet(), false, PREVIEWMODE_FULL_QUALIFIED | PREVIEWMODE_WEBEDIT, null);
+        }
+
+        return null;
     }
 
     /**
