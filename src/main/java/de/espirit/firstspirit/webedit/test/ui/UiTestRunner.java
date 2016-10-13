@@ -99,7 +99,6 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private static final String DEFAULT_PORT = "8000";
     private static final String DEFAULT_USERNAME = "Admin";
     private static final String DEFAULT_PASSWORD = "Admin";
-    private static final String DEFAULT_LANGUAGE = Locale.ENGLISH.getLanguage();
 
     private static final Logger LOGGER = Logger.getLogger(UiTestRunner.class);
 
@@ -484,14 +483,17 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                         Revision oldRevision = null;
                         try {
                             oldRevision = _fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);    // after the test restore this revision
-                            String locale = DEFAULT_LANGUAGE;
+                            String locale = Constants.DEFAULT_LOCALE;
                             BrowserLocale annotation = method.getMethod().getAnnotation(BrowserLocale.class);
                             if (annotation == null) {
                                 annotation = _testClass.getAnnotation(BrowserLocale.class);
                             }
                             if (annotation != null) {
                                 locale = annotation.value();
+                            } else if(System.getenv(Constants.PARAM_LOCALE) != null){
+                                locale = System.getenv(Constants.PARAM_LOCALE);
                             }
+
                             String url = _CC.driver().getCurrentUrl();
                             if (url.contains("&locale=")) {
                                 url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
