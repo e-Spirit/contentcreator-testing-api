@@ -3,6 +3,7 @@ package de.espirit.firstspirit.webedit.test.ui.util;
 import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -16,7 +17,7 @@ public class Utils {
      */
     private static final int WAIT = 250;
 
-    public static String env(final String name, final String defValue) {
+    public static String env(final String name, @Nullable final String defValue) {
         final String env = System.getenv(name);
         if (env != null) {
             return env;
@@ -118,24 +119,8 @@ public class Utils {
      *
      * @param webDriver the webdriver to use
      */
-    public static void waitForCC(@NotNull final WebDriver webDriver) {
-        new WebDriverWait(webDriver, 20).until(new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(final WebDriver d) {
-                boolean weApiAvailable = ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
-
-                if(weApiAvailable && ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement() !== 'undefined'").equals(Boolean.TRUE))
-                {
-                    WebElement previewFrame = d.findElement(By.id("previewContent"));
-                    webDriver.switchTo().frame(previewFrame);
-                    boolean previewState = ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete");
-                    webDriver.switchTo().defaultContent();
-                    return previewState;
-                }
-
-                return false;
-            }
-        });
+    public static void waitForCC() {
+        CustomConditions.waitForCC();
     }
 
     /**
