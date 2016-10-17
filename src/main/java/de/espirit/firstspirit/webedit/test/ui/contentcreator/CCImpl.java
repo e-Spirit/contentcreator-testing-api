@@ -88,7 +88,7 @@ public class CCImpl implements CC {
 
     @Override
     public long previewElementId() {
-        waitForCC(driver);
+        waitForCC();
         Long id = (Long) ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API.Common.getPreviewElement().getId()");
 
         return id;

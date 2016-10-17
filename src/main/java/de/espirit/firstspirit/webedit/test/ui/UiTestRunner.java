@@ -6,11 +6,8 @@ import de.espirit.firstspirit.access.ConnectionManager;
 import de.espirit.firstspirit.access.User;
 import de.espirit.firstspirit.access.admin.ProjectStorage;
 import de.espirit.firstspirit.access.project.Project;
-import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.agency.ClientUrlAgent;
 import de.espirit.firstspirit.io.ServerConnection;
-import de.espirit.firstspirit.manager.RepositoryManager;
-import de.espirit.firstspirit.storage.Revision;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.CCImpl;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
@@ -451,10 +448,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
-                        final long projectId = cc.project().getId();
-                        Revision oldRevision = null;
                         try {
-                            oldRevision = fs.connection().getManager(RepositoryManager.class).getLatestRevision(projectId);    // after the test restore this revision
                             String locale = Constants.DEFAULT_LOCALE;
                             BrowserLocale annotation = method.getMethod().getAnnotation(BrowserLocale.class);
                             if (annotation == null) {
@@ -474,7 +468,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                             }
                             ((AbstractUiTest)test).setLocale(locale);
                             cc.driver().navigate().to(url);
-                            Utils.waitForCC(cc.driver());
+                            Utils.waitForCC();
                             s.evaluate();                                                                                       // execute test method
                         } catch (final Throwable throwable) {
                             throw throwable;
