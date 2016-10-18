@@ -468,7 +468,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                             }
                             ((AbstractUiTest)test).setLocale(locale);
                             cc.driver().navigate().to(url);
-                            Utils.waitForCC();
+                            Utils.waitForCC(cc.driver());
                             s.evaluate();                                                                                       // execute test method
                         } catch (final Throwable throwable) {
                             throw throwable;

@@ -98,7 +98,7 @@ public abstract class AbstractUiTest extends Assert {
             url += "&locale=" + locale;
         }
         cc().driver().get(url);
-        Utils.waitForCC();
+        Utils.waitForCC(cc().driver());
     }
 
 
