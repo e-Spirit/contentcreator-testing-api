@@ -52,7 +52,7 @@ public class ErrorHandler {
 		}
 	}
 
-	private static String getErrorFilePath(){
+	public static String getErrorFilePath(){
 		return env(Constants.PARAM_ERROR_FILE_PATH, Constants.DEFAULT_ERROR_FILE_PATH) + '/' + env(Constants.PARAM_ERROR_SUBDIRECTORY, Constants.DEFAULT_ERROR_SUBDIRECTORY);
 	}
 }

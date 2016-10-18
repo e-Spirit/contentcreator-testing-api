@@ -12,7 +12,7 @@
 		<ci.version>0.4</ci.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<firstspirit.version>5.2.513</firstspirit.version>
+		<firstspirit.version>5.2.600</firstspirit.version>
 	</properties>
 
 	<dependencies>

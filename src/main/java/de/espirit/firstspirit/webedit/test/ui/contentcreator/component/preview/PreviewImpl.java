@@ -1,7 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview;
 
 import de.espirit.firstspirit.client.EditorIdentifier;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.log4j.Logger;
@@ -9,13 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.idle;
 
@@ -45,6 +42,7 @@ public class PreviewImpl implements Preview {
 
     @Override
     public String getUrl() {
+        Utils.waitForCC(webDriver);
         return iframe.getAttribute("src");
     }
 
@@ -100,7 +98,8 @@ public class PreviewImpl implements Preview {
         }
     }
 
-    @NotNull
+
+	@NotNull
     private List<Action> findActions(final WebElement toolbar) throws CCAPIException {
         final List<WebElement> actionIcons = Utils.findMultipleItemsInElement(webDriver, toolbar, By.tagName("span"));
         final List<Action> actions = new ArrayList<>(actionIcons.size());

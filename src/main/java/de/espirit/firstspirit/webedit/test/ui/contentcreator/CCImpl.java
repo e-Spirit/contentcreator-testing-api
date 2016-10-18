@@ -28,7 +28,7 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.waitForCC;
 public class CCImpl implements CC {
     private static final Logger LOGGER = Logger.getLogger(CCImpl.class);
 
-    private final org.openqa.selenium.WebDriver driver;
+    private final org.openqa.selenium.WebDriver webDriver;
     private final Project project;
     private final FS fs;
 
@@ -38,32 +38,32 @@ public class CCImpl implements CC {
 
     CCImpl(final Project project, final WebDriver driver, final String webEditUrl, FS fs) {
         this.project = project;
-        this.driver = driver;
+        this.webDriver = driver;
         this.fs = fs;
-        this.driver.get(webEditUrl);
+        this.webDriver.get(webEditUrl);
     }
 
     @NotNull
     @Override
     public WebElement html() throws CCAPIException {
-        return Utils.findElement(driver, By.tagName("html"));
+        return Utils.findElement(webDriver, By.tagName("html"));
     }
 
     @Override
     public Preview preview() throws CCAPIException {
-        final WebElement body = Utils.findElement(driver, By.tagName("body"));
-        final WebElement iframe = Utils.findElement(driver, By.id("previewContent"));
-        return new PreviewImpl(driver, body, iframe);
+        final WebElement body = Utils.findElement(webDriver, By.tagName("body"));
+        final WebElement iframe = Utils.findElement(webDriver, By.id("previewContent"));
+        return new PreviewImpl(webDriver, body, iframe);
     }
 
     @Override
     public MenuBar menu() {
-        return new MenuBarImpl(driver);
+        return new MenuBarImpl(webDriver);
     }
 
     @Override
     public Reports reports() {
-        return new ReportsImpl(driver);
+        return new ReportsImpl(webDriver);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class CCImpl implements CC {
 
     @Override
     public org.openqa.selenium.WebDriver driver() {
-        return driver;
+        return webDriver;
     }
 
     @Override
@@ -83,13 +83,13 @@ public class CCImpl implements CC {
 
     @Override
     public CCDialogs dialogs() {
-        return new CCDialogsImpl(driver);
+        return new CCDialogsImpl(webDriver);
     }
 
     @Override
     public long previewElementId() {
-        waitForCC();
-        Long id = (Long) ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API.Common.getPreviewElement().getId()");
+        waitForCC(webDriver);
+        Long id = (Long) ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement().getId()");
 
         return id;
     }

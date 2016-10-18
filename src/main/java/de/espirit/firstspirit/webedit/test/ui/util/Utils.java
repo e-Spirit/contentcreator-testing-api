@@ -2,16 +2,22 @@ package de.espirit.firstspirit.webedit.test.ui.util;
 
 import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
 public class Utils {
+    private static final Logger LOGGER = Logger.getLogger(Utils.class);
     /**
      * After processing idle time for a lot of HTTP operations.
      */
@@ -119,8 +125,8 @@ public class Utils {
      *
      * @param webDriver the webdriver to use
      */
-    public static void waitForCC() {
-        CustomConditions.waitForCC();
+    public static void waitForCC(final WebDriver webDriver) {
+        new WebDriverWait(webDriver, 20).until(CustomConditions.waitForCC());
     }
 
     /**
@@ -149,6 +155,35 @@ public class Utils {
                 return false;
             }
         });
+    }
+
+    /**
+     * Takes a screenshot of the whole page and stores it below the error-file-path
+     *
+     * @param webDriver the webdriver to use
+     * @param myfilename the filename to use, extension will be automatically added
+     */
+    public static void takeScreenshot(final WebDriver webDriver, final String myfilename) {
+
+        if(getErrorFilePath() != null && webDriver instanceof PhantomJSDriver) {
+            final java.io.File screenshot = ((PhantomJSDriver) webDriver).getScreenshotAs(OutputType.FILE);
+            try {
+                final String fileName = ErrorHandler.getErrorFilePath() +"/" + myfilename + ".png ";
+                FileUtils.copyFile(screenshot, new File(fileName));
+                LOGGER.info("Screenshot saved to " + fileName);
+            } catch (final IOException e) {
+                LOGGER.error("", e);
+            }
+        }
+    }
+
+    /**
+     * Returns the error-file-path
+     *
+     * @return Returns the error-file-path
+     */
+    public static String getErrorFilePath(){
+        return env(Constants.PARAM_ERROR_FILE_PATH, Constants.DEFAULT_ERROR_FILE_PATH);
     }
 
 
