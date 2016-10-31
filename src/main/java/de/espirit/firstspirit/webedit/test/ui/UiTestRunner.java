@@ -339,6 +339,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 if (project == null) {
                     throw new IllegalStateException("couldn't find project '" + projectNameOrId + "' !");
                 }
+                LOGGER.info("Connection established");
 
                 final RemoteWebDriver webDriver = _browser.createWebDriver();
                 webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -351,6 +352,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                 disableTourHints(fs.connection());
 
                 cc = new CCImpl(project, webDriver, url, fs.connection().createTicket(), fs);
+                LOGGER.info("ContentCreator loaded");
             } catch (final IOException e) {
                 throw new RuntimeException("IO error occurred!", e);
             }
