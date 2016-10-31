@@ -327,7 +327,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         private void setUpBrowser() {
             try {
                 final String projectNameOrId = env(PARAM_PROJECT, DEFAULT_PROJECT_NAME);
-                LOGGER.info("Connecting to project '" + projectNameOrId + "'\n");
+                LOGGER.info("Connecting to project '" + projectNameOrId + '\'');
 
                 final ProjectStorage prjStorage = fs.connection().getService(AdminService.class).getProjectStorage();
                 Project project;

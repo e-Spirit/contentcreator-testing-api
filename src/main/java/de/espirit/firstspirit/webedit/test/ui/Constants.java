@@ -7,7 +7,7 @@ public abstract class Constants {
     /**
      * Time in seconds the webdriver should be wait
      */
-    public static final int WEBDRIVER_WAIT = 10;
+    public static final int WEBDRIVER_WAIT = 20;
 
     /**
      * Environment parameter for the path to error files
