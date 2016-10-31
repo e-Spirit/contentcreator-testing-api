@@ -2,6 +2,7 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
 import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import de.espirit.firstspirit.webedit.test.ui.exception.CCAPITimeoutException;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -25,7 +26,7 @@ public class MenuImpl implements Menu {
     }
 
     @Override
-    public MenuItem menuItem(@NotNull final String displayName) throws CCAPIException {
+    public MenuItem menuItem(@NotNull final String displayName) throws CCAPIException, CCAPITimeoutException {
         WebElement menuElement = open();
 
         new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(new ExpectedCondition<Boolean>() {
