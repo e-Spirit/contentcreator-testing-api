@@ -2,7 +2,6 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu;
 
 import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
-import de.espirit.firstspirit.webedit.test.ui.exception.CCAPITimeoutException;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
@@ -26,20 +25,24 @@ public class MenuImpl implements Menu {
     }
 
     @Override
-    public MenuItem menuItem(@NotNull final String displayName) throws CCAPIException, CCAPITimeoutException {
+    public MenuItem menuItem(@NotNull final String displayName) throws CCAPIException {
         WebElement menuElement = open();
 
-        new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(final WebDriver d) {
-                final List<WebElement> li = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
-                for (WebElement element : li) {
-                    if (element.getText().equals(displayName))
-                        return true;
+        try {
+            new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(new ExpectedCondition<Boolean>() {
+                @Override
+                public Boolean apply(final WebDriver d) {
+                    final List<WebElement> li = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
+                    for (WebElement element : li) {
+                        if (element.getText().equals(displayName))
+                            return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+        } catch (RuntimeException e) {
+            throw new CCAPIException(e.getMessage(), webDriver);
+        }
 
         List<WebElement> items = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
         WebElement item = items.stream().filter(i -> i.getText().equals(displayName)).findFirst().orElse(null);
