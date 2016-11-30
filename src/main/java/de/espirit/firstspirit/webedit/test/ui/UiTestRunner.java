@@ -202,6 +202,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 							result.add(type);
 						}
 					} catch (final ClassNotFoundException ignored) {
+						// this can be ignored because we know that is class is present.
 					}
 				}
 			}
@@ -303,7 +304,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 				this.fs.connection().disconnect();
 			}
 		} catch (final IOException e) {
-			throw new RuntimeException("disconnecting FirstSpirit server failed!");
+			throw new RuntimeException("disconnecting FirstSpirit server failed!", e);
 		}
 
 	}

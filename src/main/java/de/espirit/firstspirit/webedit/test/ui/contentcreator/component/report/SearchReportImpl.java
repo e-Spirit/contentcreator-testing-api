@@ -41,13 +41,14 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
 
 
 	@NotNull
+	@SuppressWarnings("null")
 	@Override
 	public WebElement html() throws CCAPIException {
 		if (ComponentUtils.hasElement(this.webDriver, By.className("fs-sidebar-content"))) {
 			return Utils.findElement(this.webDriver, By.className("fs-sidebar-content"));
 		}
 
-		return null;
+		throw new CCAPIException("coudn't find the html source", this.webDriver);
 	}
 
 

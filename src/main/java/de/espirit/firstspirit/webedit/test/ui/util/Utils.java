@@ -51,7 +51,7 @@ public class Utils {
 		try {
 			return webDriver.findElement(by);
 		} catch (final WebDriverException exception) {
-			throw new CCAPIException(exception.getMessage(), webDriver);
+			throw new CCAPIException(exception.getMessage(), webDriver, exception);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class Utils {
 		try {
 			return webDriver.findElements(by);
 		} catch (final WebDriverException exception) {
-			throw new CCAPIException(exception.getMessage(), webDriver);
+			throw new CCAPIException(exception.getMessage(), webDriver, exception);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class Utils {
 		try {
 			return new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(expectedCondition);
 		} catch (final WebDriverException exception) {
-			throw new CCAPIException(exception.getMessage(), webDriver);
+			throw new CCAPIException(exception.getMessage(), webDriver, exception);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class Utils {
 		try {
 			return webElement.findElement(by);
 		} catch (final WebDriverException exception) {
-			throw new CCAPIException(exception.getMessage(), webDriver);
+			throw new CCAPIException(exception.getMessage(), webDriver, exception);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class Utils {
 		try {
 			return webElement.findElements(by);
 		} catch (final WebDriverException exception) {
-			throw new CCAPIException(exception.getMessage(), webDriver);
+			throw new CCAPIException(exception.getMessage(), webDriver, exception);
 		}
 	}
 
@@ -155,13 +155,15 @@ public class Utils {
 			final boolean weApiAvailable = ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
 
 			if (weApiAvailable && ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement() !== 'undefined'").equals(Boolean.TRUE)) {
-				final WebElement previewFrame = d.findElement(By.id("previewContent"));
-				webDriver.switchTo().frame(previewFrame);
-				final boolean previewState = ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete");
-				webDriver.switchTo().defaultContent();
+				if (d != null) {
+					final WebElement previewFrame = d.findElement(By.id("previewContent"));
+					webDriver.switchTo().frame(previewFrame);
+					final boolean previewState = ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete");
+					webDriver.switchTo().defaultContent();
 
-				if (previewState && Objects.equals(((JavascriptExecutor) d).executeScript("return WE_API.Common.getPreviewElement().getId()"), idToWaitFor)) {
-					return true;
+					if (previewState && Objects.equals(((JavascriptExecutor) d).executeScript("return WE_API.Common.getPreviewElement().getId()"), idToWaitFor)) {
+						return true;
+					}
 				}
 			}
 
