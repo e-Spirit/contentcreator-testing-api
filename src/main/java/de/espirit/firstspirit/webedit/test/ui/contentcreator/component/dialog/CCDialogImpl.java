@@ -43,7 +43,7 @@ public class CCDialogImpl implements CCDialog {
 
 
 	@Override
-	public CCInputComponent inputComponentByName(@NotNull final String displayName) throws CCAPIException {
+	public CCInputComponent inputComponentByName(final String displayName) throws CCAPIException {
 		final List<WebElement> elements = Utils.findMultipleItemsInElement(this.webDriver, this.dialogElement, By.className("fs-gadget"));
 		for (final WebElement element : elements) {
 			final CCInputComponent ccInputComponent = ComponentUtils.matchComponent(element, this.webDriver);

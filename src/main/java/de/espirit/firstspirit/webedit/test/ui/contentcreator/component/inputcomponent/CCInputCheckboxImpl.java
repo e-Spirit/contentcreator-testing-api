@@ -43,7 +43,7 @@ public class CCInputCheckboxImpl implements CCInputCheckbox {
 
 
 	@Override
-	public CCInputCheckboxItem itemByName(@NotNull final String displayName) throws CCAPIException {
+	public CCInputCheckboxItem itemByName(final String displayName) throws CCAPIException {
 		for (final WebElement element : this.items) {
 			if (Utils.findItemInElement(this.webDriver, this.webElement, By.className("fs-checkbox-label")).getText().equals(displayName)) {
 				return new CCInputCheckboxItemImpl(element, this.webDriver);

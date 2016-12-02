@@ -27,7 +27,7 @@ public class MenuImpl implements Menu {
 
 
 	@Override
-	public MenuItem menuItem(@NotNull final String displayName) throws CCAPIException {
+	public MenuItem menuItem(final String displayName) throws CCAPIException {
 		final WebElement menuElement = this.open();
 
 		try {

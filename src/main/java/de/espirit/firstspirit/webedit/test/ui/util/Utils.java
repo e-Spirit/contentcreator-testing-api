@@ -1,21 +1,16 @@
 package de.espirit.firstspirit.webedit.test.ui.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import de.espirit.firstspirit.webedit.test.ui.Constants;
@@ -125,6 +120,7 @@ public class Utils {
 	/**
 	 * Sleeps {@link #WAIT} milliseconds.
 	 */
+	@Deprecated
 	public static void idle() {
 		try {
 			Thread.sleep(Utils.WAIT); // let it load
@@ -177,30 +173,12 @@ public class Utils {
 	 *
 	 * @param webDriver the webdriver to use
 	 * @param myfilename the filename to use, extension will be automatically added
+	 * @deprecated use {@link ImageUtils#takeScreenshot(WebDriver, String)}
 	 */
 	@Nullable
+	@Deprecated
 	public static File takeScreenshot(final WebDriver webDriver, final String myfilename) {
-		if ((Utils.getErrorFilePath() != null) && (webDriver instanceof PhantomJSDriver)) {
-			java.io.File screenshot = null;
-			if (webDriver instanceof PhantomJSDriver) {
-				screenshot = ((PhantomJSDriver) webDriver).getScreenshotAs(OutputType.FILE);
-			} else if (webDriver instanceof ChromeDriver) {
-				screenshot = ((ChromeDriver) webDriver).getScreenshotAs(OutputType.FILE);
-			}
-			if (screenshot == null) {
-				throw new IllegalArgumentException("webDriver don't support screenshots");
-			} else {
-				try {
-					final String fileName = ErrorHandler.getErrorFilePath() + "/" + myfilename + ".png ";
-					FileUtils.copyFile(screenshot, new File(fileName));
-					Utils.LOGGER.info("Screenshot saved to " + fileName);
-					return screenshot;
-				} catch (final IOException e) {
-					Utils.LOGGER.error("", e);
-				}
-			}
-		}
-		return null;
+		return ImageUtils.takeScreenshot(webDriver, myfilename);
 	}
 
 

@@ -49,7 +49,7 @@ public class CCInputRadioImpl implements CCInputRadio {
 
 
 	@Override
-	public CCInputRadioItem itemByName(@NotNull final String displayName) throws CCAPIException {
+	public CCInputRadioItem itemByName(final String displayName) throws CCAPIException {
 		for (final WebElement element : this.items) {
 			if (Utils.findItemInElement(this.webDriver, element, By.className("fs-radiobutton-label")).getText().equals(displayName)) {
 				return new CCInputRadioItemImpl(element);

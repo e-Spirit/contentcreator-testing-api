@@ -31,7 +31,7 @@ public class CCWizardDialogImpl implements CCWizardDialog {
 
 
 	@Override
-	public CCWizardStep stepByName(@NotNull final String displayName) throws CCAPIException {
+	public CCWizardStep stepByName(final String displayName) throws CCAPIException {
 		final WebElement stepsElement = Utils.findItemInElement(this.webDriver, this.dialogElement, By.className("fs-WizardDialogBox-Side"));
 		final List<WebElement> elements = Utils.findMultipleItemsInElement(this.webDriver, stepsElement, By.className("fs-WizardDialogBox-Step"));
 
@@ -55,7 +55,7 @@ public class CCWizardDialogImpl implements CCWizardDialog {
 
 
 	@Override
-	public CCInputButton buttonByName(@NotNull final String displayName) throws CCAPIException {
+	public CCInputButton buttonByName(final String displayName) throws CCAPIException {
 		for (final CCInputButton button : this.buttons()) {
 			if (button.label().equals(displayName)) {
 				return button;

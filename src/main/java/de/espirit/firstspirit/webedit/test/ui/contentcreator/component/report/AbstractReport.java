@@ -17,7 +17,7 @@ import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 
 public abstract class AbstractReport implements Report {
 
-	private final WebDriver webDriver;
+	protected final WebDriver webDriver;
 	protected WebElement reportButton;
 
 

@@ -1,14 +1,11 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report;
 
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.input.CCInputEntry;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
-import de.espirit.firstspirit.webedit.test.ui.exception.CCInputNotPresentException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 
@@ -56,16 +53,5 @@ public class SearchReportImpl extends AbstractReport implements SearchReport {
 	@Override
 	public WebElement button() {
 		return this.reportButton;
-	}
-
-
-	/*
-	 * (non-Javadoc)
-	 * @see de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Report#query(java.util.List)
-	 */
-	@Override
-	public void query(final List<CCInputEntry<?>> inputs) throws CCAPIException, CCInputNotPresentException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

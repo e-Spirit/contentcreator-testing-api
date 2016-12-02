@@ -87,7 +87,7 @@ public class PreviewImpl implements Preview {
 
 	@Override
 	@Nullable
-	public Collection<Action> actionsOf(@NotNull final EditorIdentifier identifier) throws CCAPIException {
+	public Collection<Action> actionsOf(final EditorIdentifier identifier) throws CCAPIException {
 		try {
 			// cc have to select the iframe, first
 			this.webDriver.switchTo().frame(this.html());
