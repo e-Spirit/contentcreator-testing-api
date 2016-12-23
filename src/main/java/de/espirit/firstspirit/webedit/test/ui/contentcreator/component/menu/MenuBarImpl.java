@@ -60,7 +60,7 @@ public class MenuBarImpl implements MenuBar {
     @NotNull
     @Override
     public Menu actionMenu() {
-        return new MenuImpl(webDriver, By.cssSelector("#fs-toolbar > div.fs-toolbar-content.fs-toolbar-content-main > div:nth-child(5) > div > div:nth-child(3)"));
+        return new MenuImpl(webDriver, By.cssSelector("#fs-toolbar > div.fs-toolbar-content.fs-toolbar-content-main > div:nth-child(5) > div > div:nth-child(4)"));
     }
 
     @NotNull

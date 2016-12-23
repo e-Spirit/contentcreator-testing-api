@@ -30,7 +30,7 @@ public abstract class AbstractReport implements Report {
         if (isVisible()) {
             final WebElement element = Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-sidebar-report-status-count")));
             new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(CustomConditions.resultChanged(element));
-            final String text = element.getText(); // text = "Ergebnisse: 47"
+            final String text = element.getText();
             if (!text.isEmpty() && Character.isDigit(text.charAt(text.length() - 1))) {
                 return Integer.parseInt(text.substring(text.lastIndexOf(' ') + 1));
             }
@@ -41,7 +41,7 @@ public abstract class AbstractReport implements Report {
     @Override
     public WebElement getEntry(final int pos) throws CCAPIException {
         if (isVisible()) {
-            return Utils.findElement(webDriver, By.cssSelector("div.report-entry-container > div > div > div:nth-child(1) > div:nth-child(" + (pos + 1) + ") > div > a"));
+            return Utils.findElement(webDriver, By.cssSelector("div.report-entry-container > div > div > div:nth-child(1) > div:nth-child(" + (pos + 1) + ") > div"));
         }
 
         return null;
@@ -49,7 +49,8 @@ public abstract class AbstractReport implements Report {
 
     @Override
     public void toggle() {
-        reportButton.click();
+        WebElement button = Utils.find(webDriver, ExpectedConditions.elementToBeClickable(reportButton));
+        button.click();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
 import de.espirit.firstspirit.access.project.Project;
-import de.espirit.firstspirit.access.store.IDProvider;
 import de.espirit.firstspirit.access.store.Previewable;
 import de.espirit.firstspirit.access.store.Store;
 import de.espirit.firstspirit.access.store.sitestore.PageRef;
@@ -61,16 +60,9 @@ public abstract class AbstractUiTest extends Assert {
      * @return preview-url of the given {@code element}.
      * @see Preview#setUrl(String)
      */
-    public String toPreviewUrl(final IDProvider element) {
+    public String toPreviewUrl(final Previewable element) {
         final Project project = element.getProject();
-
-        if(element instanceof Previewable)
-        {
-            Previewable previewable = (Previewable) element;
-            return previewable.getPreviewUrl(project.getMasterLanguage(), project.getWebEditTemplateSet(), false, PREVIEWMODE_FULL_QUALIFIED | PREVIEWMODE_WEBEDIT, null);
-        }
-
-        return null;
+        return element.getPreviewUrl(project.getMasterLanguage(), project.getWebEditTemplateSet(), false, PREVIEWMODE_FULL_QUALIFIED | PREVIEWMODE_WEBEDIT, null);
     }
 
     /**
@@ -90,7 +82,6 @@ public abstract class AbstractUiTest extends Assert {
      * @param pageRef The page ref to navigate to
      */
     public void navigateTo(@NotNull PageRef pageRef) {
-
         String url = fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(cc.project()).element(pageRef).createUrl();
         if (url.contains("&locale=")) {
             url = url.replaceAll("&locale=\\w+", "&locale=" + locale);

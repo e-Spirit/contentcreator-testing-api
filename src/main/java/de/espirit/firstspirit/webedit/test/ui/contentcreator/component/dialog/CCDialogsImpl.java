@@ -13,8 +13,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static de.espirit.firstspirit.webedit.test.ui.util.Utils.find;
-
 public class CCDialogsImpl implements CCDialogs {
     private WebDriver webDriver;
 
@@ -24,7 +22,7 @@ public class CCDialogsImpl implements CCDialogs {
 
     @Override
     public CCWizardDialog wizardDialog() throws CCAPIException {
-        WebElement dialog = find(webDriver, ExpectedConditions.visibilityOfElementLocated(By.className("fs-WizardDialogBox")));
+        WebElement dialog = Utils.find(webDriver, ExpectedConditions.visibilityOfElementLocated(By.className("fs-WizardDialogBox")));
         return new CCWizardDialogImpl(dialog, webDriver);
     }
 

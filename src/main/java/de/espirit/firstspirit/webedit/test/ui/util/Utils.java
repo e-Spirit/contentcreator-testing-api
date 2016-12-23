@@ -40,6 +40,7 @@ public class Utils {
      * @return Returns the web element if found
      */
     public static WebElement findElement(@NotNull final WebDriver webDriver, @NotNull final By by) throws CCAPIException {
+        idle();
         try {
             return webDriver.findElement(by);
         } catch (WebDriverException exception){
@@ -55,6 +56,7 @@ public class Utils {
      * @return Returns a number of web elements if found
      */
     public static List<WebElement> findElements(@NotNull final WebDriver webDriver, @NotNull final By by) throws CCAPIException {
+        idle();
         try {
             return webDriver.findElements(by);
         } catch (WebDriverException exception){
@@ -70,6 +72,7 @@ public class Utils {
      * @return Returns the web element if found
      */
     public static WebElement find(@NotNull final WebDriver webDriver, @NotNull final ExpectedCondition<WebElement> expectedCondition) throws CCAPIException {
+        idle();
         try {
             return new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(expectedCondition);
         } catch (WebDriverException exception) {
@@ -86,6 +89,7 @@ public class Utils {
      * @return Returns the web element if found
      */
     public static WebElement findItemInElement(@NotNull final WebDriver webDriver, @NotNull final WebElement webElement, @NotNull final By by) throws CCAPIException {
+        idle();
         try {
             return webElement.findElement(by);
         } catch (WebDriverException exception) {
@@ -102,6 +106,7 @@ public class Utils {
      * @return Returns a number of web elements if found
      */
     public static List<WebElement> findMultipleItemsInElement(@NotNull final WebDriver webDriver, @NotNull final WebElement webElement, @NotNull final By by) throws CCAPIException {
+        idle();
         try {
             return webElement.findElements(by);
         } catch (WebDriverException exception) {
@@ -126,6 +131,7 @@ public class Utils {
      * @param webDriver the webdriver to use
      */
     public static void waitForCC(final WebDriver webDriver) {
+        idle();
         new WebDriverWait(webDriver, 20).until(CustomConditions.waitForCC());
     }
 
@@ -135,25 +141,21 @@ public class Utils {
      * @param webDriver the webdriver to use
      */
     public static void waitForPage(@NotNull final WebDriver webDriver, @NotNull final long idToWaitFor) {
-        new WebDriverWait(webDriver, 20).until(new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(final WebDriver d) {
+        new WebDriverWait(webDriver, 20).until((ExpectedCondition<Boolean>) d -> {
+            boolean weApiAvailable = ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
 
-                boolean weApiAvailable = ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
+            if(weApiAvailable && ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement() !== 'undefined'").equals(Boolean.TRUE))
+            {
+                WebElement previewFrame = d.findElement(By.id("previewContent"));
+                webDriver.switchTo().frame(previewFrame);
+                boolean previewState = ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete");
+                webDriver.switchTo().defaultContent();
 
-                if(weApiAvailable && ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement() !== 'undefined'").equals(Boolean.TRUE))
-                {
-                    WebElement previewFrame = d.findElement(By.id("previewContent"));
-                    webDriver.switchTo().frame(previewFrame);
-                    boolean previewState = ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete");
-                    webDriver.switchTo().defaultContent();
-
-                    if(previewState && Objects.equals(((JavascriptExecutor) d).executeScript("return WE_API.Common.getPreviewElement().getId()"), idToWaitFor))
-                        return true;
-                }
-
-                return false;
+                if(previewState && Objects.equals(((JavascriptExecutor) d).executeScript("return WE_API.Common.getPreviewElement().getId()"), idToWaitFor))
+                    return true;
             }
+
+            return false;
         });
     }
 

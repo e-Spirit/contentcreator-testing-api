@@ -351,7 +351,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
                 disableTourHints(fs.connection());
 
-                cc = new CCImpl(project, webDriver, url, fs.connection().createTicket(), fs);
+                cc = new CCImpl(project, webDriver, url, fs.connection().createTicket());
                 LOGGER.info("ContentCreator loaded");
             } catch (final IOException e) {
                 throw new RuntimeException("IO error occurred!", e);

@@ -29,16 +29,13 @@ public class MenuImpl implements Menu {
         WebElement menuElement = open();
 
         try {
-            new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until(new ExpectedCondition<Boolean>() {
-                @Override
-                public Boolean apply(final WebDriver d) {
-                    final List<WebElement> li = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
-                    for (WebElement element : li) {
-                        if (element.getText().equals(displayName))
-                            return true;
-                    }
-                    return false;
+            new WebDriverWait(webDriver, Constants.WEBDRIVER_WAIT).until((ExpectedCondition<Boolean>) d -> {
+                final List<WebElement> li = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
+                for (WebElement element : li) {
+                    if (element.getText().equals(displayName))
+                        return true;
                 }
+                return false;
             });
         } catch (RuntimeException e) {
             throw new CCAPIException(e.getMessage(), webDriver);
@@ -58,7 +55,6 @@ public class MenuImpl implements Menu {
     public List<MenuItem> menuItems() throws CCAPIException {
         final WebElement menuElement = open();
         final List<WebElement> menuWebElements = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
-
         final List<MenuItem> menuItems = new ArrayList<>();
 
         for (WebElement menuItem : menuWebElements) {
@@ -79,7 +75,7 @@ public class MenuImpl implements Menu {
     public WebElement open() throws CCAPIException {
         WebElement button = Utils.find(webDriver, ExpectedConditions.elementToBeClickable(selector));
         ((JavascriptExecutor) webDriver).executeScript(JS_MOUSEOVER, button);
-        return Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.cssSelector("body > div.gwt-PopupPanel.fs-toolbar-flyout")));
+        return Utils.find(webDriver, ExpectedConditions.presenceOfElementLocated(By.cssSelector("body > div.fs-toolbar-flyout")));
     }
 
 

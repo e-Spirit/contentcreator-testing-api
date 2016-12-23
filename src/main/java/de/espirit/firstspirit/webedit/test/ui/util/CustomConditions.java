@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 
 public class CustomConditions {
 	public static ExpectedCondition<Boolean> waitForCC() {
-
 		return driver -> {
 			boolean weApiAvailable = ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
 

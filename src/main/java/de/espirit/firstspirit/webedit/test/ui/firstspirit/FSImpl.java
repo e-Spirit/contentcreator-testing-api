@@ -46,8 +46,7 @@ public class FSImpl implements FS {
 
         final PageTemplate pageTemplate = (PageTemplate) storeElementAgent.loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false);
 
-        if (existingPageFolder != null && pageTemplate != null)
-        {
+        if (existingPageFolder != null && pageTemplate != null) {
             try {
                 final PageFolder pageFolder = existingPageFolder.createPageFolder(name);
                 final Page page = pageFolder.createPage(name, pageTemplate, true);
@@ -58,7 +57,6 @@ public class FSImpl implements FS {
                     final PageRefFolder pageRefFolder = existingSiteStoreFolder.createPageRefFolder(name);
                     return pageRefFolder.createPageRef(name, page, true);
                 }
-
             } catch (ElementDeletedException | LockException e) {
                 LOGGER.error(e);
             }
