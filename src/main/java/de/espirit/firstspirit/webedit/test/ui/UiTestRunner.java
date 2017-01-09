@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
@@ -24,6 +25,7 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
 import de.espirit.firstspirit.access.AdminService;
 import de.espirit.firstspirit.access.Connection;
 import de.espirit.firstspirit.access.ConnectionManager;
@@ -43,9 +45,9 @@ import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteFirefoxWeb
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.WebDriverFactory;
 
 /**
- * JUnit4 {@link Runner} for WebEdit {@link AbstractUiTest UI tests}. A test class can be parametrized with
- * {@link ClassPattern ClassPattern}, concrete {@link Classes Classes} and/or different
- * {@link WebDriver browsers}.
+ * JUnit4 {@link Runner} for WebEdit {@link AbstractUiTest UI tests}. A test class can be
+ * parametrized with {@link ClassPattern ClassPattern}, concrete {@link Classes Classes} and/or
+ * different {@link WebDriver browsers}.
  * <p>
  * Single test:
  *
@@ -84,451 +86,467 @@ import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.WebDriverFactory
  */
 public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
-	// --- -D parameter names ---//
-	private static final String PARAM_PROJECT = "project";
-	private static final String PARAM_HOST = "host";
-	private static final String PARAM_PORT = "port";
-	private static final String PARAM_USER = "user";
-	private static final String PARAM_PASSWORD = "password";
-
-	// --- default values ---//
-	private static final String DEFAULT_PROJECT_NAME = "Mithras Energy";
-	private static final String DEFAULT_HOST = "localhost";
-	private static final String DEFAULT_PORT = "8000";
-	private static final String DEFAULT_USERNAME = "Admin";
-	private static final String DEFAULT_PASSWORD = "Admin";
-
-	private static final Logger LOGGER = Logger.getLogger(UiTestRunner.class);
-
-	private final Class<?> _parentClass;
-
-	private FS fs;
-
-	/**
-	 * The annotation defines which UI tests should be executed, by specifying a classname pattern.<br>
-	 * For example: de.espirit.firstspirit.webedit.*.UiTest*
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface ClassPattern {
-
-		String value();
-	}
-
-	/**
-	 * The annotation defines which UI tests should be executed, by specifying concrete classes.
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface Classes {
-
-		Class<?>[] value();
-	}
-
-	/**
-	 * This annotation defines which browsers should be used to execute the specified ui tests, by specifying
-	 * a set of {@link WebDriverFactory browser} factories.
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface WebDriver {
-
-		Class<? extends WebDriverFactory>[] value();
-	}
-
-	/**
-	 * This annotation defines which locale should be used to execute the specified ui tests, by specifying
-	 * the language code of a locale.
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface BrowserLocale {
-
-		@NotNull
-		String value();
-	}
-
-
-	@SuppressWarnings("UnusedDeclaration")
-	public UiTestRunner(final Class<?> parentClass) throws InitializationError {
-		super(parentClass);
-		this._parentClass = parentClass;
-	}
-
-
-	private static Class<?>[] getTestClasses(final Class<?> testClass) {
-		final ClassPattern allClassPattern = testClass.getAnnotation(ClassPattern.class);
-		if (allClassPattern != null) {
-			final File base = new File("firstspirit/webedit/src/test");
-			String value = allClassPattern.value();
-			value = value.replaceAll("\\.", "\\.");
-			value = value.replaceAll("\\*", ".*");
-			final Pattern pattern = Pattern.compile('^' + value + '$');
-			final List<Class<?>> collection = UiTestRunner.collectUiTests(base, pattern);
-			return collection.toArray(new Class<?>[collection.size()]);
-		}
-
-		final Classes allClasses = testClass.getAnnotation(Classes.class);
-		if (allClasses != null) {
-			return allClasses.value();
-		}
-
-		return new Class[] { testClass };
-	}
-
-
-	@NotNull
-	private static List<Class<?>> collectUiTests(@NotNull final File base, @NotNull final Pattern pattern) {
-		return UiTestRunner.collectUiTests(base, base, pattern);
-	}
-
-
-	@NotNull
-	private static List<Class<?>> collectUiTests(@NotNull final File base, @NotNull final File file, @NotNull final Pattern pattern) {
-		final List<Class<?>> result = new ArrayList<>();
-		final File[] children = file.listFiles();
-		if (children != null) {
-			for (final File child : children) {
-				final String path = child.getPath();
-				String className = path.substring(base.getPath().length() + 1);
-				className = className.replaceAll("[\\\\/]", ".");
-				className = className.replaceAll("\\.java$", "");
-				if (child.isDirectory()) {
-					result.addAll(UiTestRunner.collectUiTests(base, child, pattern));
-				} else if (pattern.matcher(className).find()) {
-					try {
-						final Class<?> type = UiTestRunner.class.getClassLoader().loadClass(className);
-						if (AbstractUiTest.class.isAssignableFrom(type) && ((type.getModifiers() & Modifier.ABSTRACT) == 0)) {
-							result.add(type);
-						}
-					} catch (final ClassNotFoundException ignored) {
-						// this can be ignored because we know that is class is present.
-					}
-				}
-			}
-		}
-		return result;
-	}
-
-
-	private static WebDriverFactory[] getBrowsers(final Class<?> testClass) {
-		final WebDriver browser = testClass.getAnnotation(WebDriver.class);
-		if (browser != null) {
-			final Class<? extends WebDriverFactory>[] value = browser.value();
-			final WebDriverFactory[] factories = new WebDriverFactory[value.length];
-			for (int i = 0; i < factories.length; i++) {
-				try {
-					factories[i] = value[i].newInstance();
-				} catch (final Exception e) {
-					throw new RuntimeException("couldn't instantiate WebDriverFactory!", e);
-				}
-			}
-			return factories;
-		}
-
-		return new WebDriverFactory[] { new LocalChromeWebDriverFactory() };
-	}
-
-
-	// --- ParentRunner ---//
-
-	@Override
-	protected List<BrowserRunner> getChildren() {
-		try {
-			final Class<?>[] testClasses = UiTestRunner.getTestClasses(this._parentClass);
-			final List<BrowserRunner> browserRunner = new LinkedList<>();
-			for (final WebDriverFactory browser : UiTestRunner.getBrowsers(this._parentClass)) {
-				browserRunner.add(new BrowserRunner(browser, testClasses));
-			}
-			return browserRunner;
-		} catch (final InitializationError error) {
-			throw new RuntimeException(error);
-		}
-	}
-
-
-	@Override
-	public Description getDescription() {
-		final Description description = Description.createSuiteDescription(this._parentClass);
-		for (final BrowserRunner browser : this.getChildren()) {
-			description.addChild(this.describeChild(browser));
-		}
-		return description;
-	}
-
-
-	@Override
-	protected Description describeChild(final BrowserRunner runner) {
-		return runner.getDescription();
-	}
-
-
-	@Override
-	protected void runChild(final BrowserRunner runner, final RunNotifier runNotifier) {
-		try {
-			this.setupFS();
-			runner.run(runNotifier);
-		} finally {
-			this.tearDownFS();
-		}
-	}
-
-
-	// --- private methods ---//
-
-	/**
-	 * Establishes a connection to a FirstSpirit server.
-	 */
-	private void setupFS() {
-		final String host = Utils.env(UiTestRunner.PARAM_HOST, UiTestRunner.DEFAULT_HOST);
-		final String port = Utils.env(UiTestRunner.PARAM_PORT, UiTestRunner.DEFAULT_PORT);
-		final String username = Utils.env(UiTestRunner.PARAM_USER, UiTestRunner.DEFAULT_USERNAME);
-		final String password = Utils.env(UiTestRunner.PARAM_PASSWORD, UiTestRunner.DEFAULT_PASSWORD);
-		UiTestRunner.LOGGER.info("Connecting to host '" + host + "', port '" + port + "' with user '" + username + '\'');
-		try {
-			final ServerConnection connection = (ServerConnection) ConnectionManager.getConnection(host, Integer.parseInt(port), ConnectionManager.HTTP_MODE, username, password);
-			connection.connect();
-			this.fs = new FSImpl(connection, Utils.env(UiTestRunner.PARAM_PROJECT, UiTestRunner.DEFAULT_PROJECT_NAME));
-		} catch (final Exception e) {
-			throw new RuntimeException("connecting FirstSpirit server failed (" + host + ':' + port + ") !", e);
-		}
-	}
-
-
-	/**
-	 * Closes the FirstSpirit connection.
-	 */
-	private void tearDownFS() {
-		try {
-			if (this.fs != null) {
-				this.fs.connection().disconnect();
-			}
-		} catch (final IOException e) {
-			throw new RuntimeException("disconnecting FirstSpirit server failed!", e);
-		}
-
-	}
-
-	/**
-	 * JUnit4 {@link Runner} for WebEdit UI tests that run inside a single browser instance.
-	 * <p>
-	 * {@link #withBeforeClasses(Statement) Before} and {@link #withAfterClasses(Statement) after} a test class the
-	 * browser will be {@link #setUpBrowser() opened} and {@link #tearDownBrowser() closed}. For every test
-	 * method the {@link SingleUiTestRunner SingleUiTestRunner} is used.
-	 */
-	public class BrowserRunner extends ParentRunner<UiTestRunner.BrowserRunner.SingleUiTestRunner> {
-
-		private final WebDriverFactory _browser;
-		private final Class<?>[] _testClasses;
-
-		private CC cc;
-
-
-		private BrowserRunner(final WebDriverFactory browser, final Class<?>[] testClasses) throws InitializationError {
-			super(browser.getClass());
-			this._browser = browser;
-			this._testClasses = testClasses;
-		}
-
-
-		@Override
-		public void run(final RunNotifier notifier) {
-			try {
-				this.setUpBrowser();
-				super.run(notifier);
-			} finally {
-				this.tearDownBrowser();
-			}
-		}
-
-
-		/**
-		 * Creates the specified {@link org.openqa.selenium.WebDriver WebDriver} instance.
-		 */
-		private void setUpBrowser() {
-			try {
-				final String projectNameOrId = Utils.env(UiTestRunner.PARAM_PROJECT, UiTestRunner.DEFAULT_PROJECT_NAME);
-				UiTestRunner.LOGGER.info("Connecting to project '" + projectNameOrId + '\'');
-
-				final ProjectStorage prjStorage = UiTestRunner.this.fs.connection().getService(AdminService.class).getProjectStorage();
-				Project project;
-				try {
-					project = prjStorage.getProject(Long.parseLong(projectNameOrId));
-				} catch (final Exception e) {
-					project = prjStorage.getProject(projectNameOrId);
-				}
-				if (project == null) {
-					throw new IllegalStateException("couldn't find project '" + projectNameOrId + "' !");
-				}
-				UiTestRunner.LOGGER.info("Connection established");
-
-				final RemoteWebDriver webDriver = this._browser.createWebDriver();
-				webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-				webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-				webDriver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
-				webDriver.manage().window().setSize(new Dimension(1200, 800));
-
-				final String url = UiTestRunner.this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(project).createUrl();
-
-				this.disableTourHints(UiTestRunner.this.fs.connection());
-
-				this.cc = new CCImpl(project, webDriver, url, UiTestRunner.this.fs.connection().createTicket(), UiTestRunner.this.fs);
-				UiTestRunner.LOGGER.info("ContentCreator loaded");
-			} catch (final IOException e) {
-				throw new RuntimeException("IO error occurred!", e);
-			}
-		}
-
-
-		/**
-		 * Disables hints and tour for the user of the given {@code connection} because they overlay the views.
-		 *
-		 * @param connection for which tour/hints should be disabled.
-		 */
-		public void disableTourHints(@NotNull final Connection connection) {
-			final User user = connection.getUser();
-			final Map<String, String> bindings = user.getUserBindings();
-			bindings.put("cc.tour.disabled", String.valueOf(true));
-			bindings.put("cc.hints.disabled", String.valueOf(true));
-			user.setUserBindings(bindings);
-		}
-
-
-		/**
-		 * {@link org.openqa.selenium.WebDriver#quit() Quits} the {@code WebDriver} instance.
-		 */
-		private void tearDownBrowser() {
-			if (this.cc != null) {
-				this.cc.logout();
-				this.cc.driver().quit();
-			}
-		}
-
-
-		@Override
-		protected List<SingleUiTestRunner> getChildren() {
-			final List<SingleUiTestRunner> testRunner = new LinkedList<>();
-			for (final Class<?> testClass : this._testClasses) {
-				try {
-					testRunner.add(new SingleUiTestRunner(testClass));
-				} catch (final InitializationError initializationError) {
-					throw new RuntimeException("couldn't initialize test-class: " + initializationError, initializationError);
-				}
-			}
-			return testRunner;
-		}
-
-
-		@Override
-		public Description getDescription() {
-			final Description description = Description.createSuiteDescription(this._browser.getClass());
-			for (final SingleUiTestRunner runner : this.getChildren()) {
-				description.addChild(this.describeChild(runner));
-			}
-			return description;
-		}
-
-
-		@Override
-		protected Description describeChild(final SingleUiTestRunner runner) {
-			return runner.getDescription();
-		}
-
-
-		@Override
-		protected void runChild(final SingleUiTestRunner runner, final RunNotifier runNotifier) {
-			runner.run(runNotifier);
-		}
-
-		/**
-		 * JUnit4 {@link Runner} for a single UI test method. Before every test method the browser will be refreshed with the
-		 * initial url.
-		 */
-		public class SingleUiTestRunner extends BlockJUnit4ClassRunner {
-
-			private final Class<?> _testClass;
-
-
-			private SingleUiTestRunner(final Class<?> testClass) throws InitializationError {
-				super(testClass);
-				this._testClass = testClass;
-			}
-
-
-			@Override
-			protected Object createTest() throws Exception {
-				final Object test = super.createTest();
-				if (test instanceof AbstractUiTest) {
-					((AbstractUiTest) test).setFS(UiTestRunner.this.fs);
-					((AbstractUiTest) test).setCC(BrowserRunner.this.cc);
-
-				}
-				return test;
-			}
-
-
-			/**
-			 * Reloads the browser url, saves a screenshot if an exception occurs during the test
-			 * and restores original revision after the execution is finished.
-			 */
-			@Override
-			protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
-				final Statement s = super.methodInvoker(method, test);
-				return new Statement() {
-
-					@Override
-					public void evaluate() throws Throwable {
-						try {
-							String locale = Constants.DEFAULT_LOCALE;
-							BrowserLocale annotation = method.getMethod().getAnnotation(BrowserLocale.class);
-							if (annotation == null) {
-								annotation = SingleUiTestRunner.this._testClass.getAnnotation(BrowserLocale.class);
-							}
-							if (annotation != null) {
-								locale = annotation.value();
-							} else if (System.getenv(Constants.PARAM_LOCALE) != null) {
-								locale = System.getenv(Constants.PARAM_LOCALE);
-							}
-
-							String url = BrowserRunner.this.cc.driver().getCurrentUrl();
-							if (url.contains("&locale=")) {
-								url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
-							} else {
-								url += "&locale=" + locale;
-							}
-							((AbstractUiTest) test).setLocale(locale);
-							BrowserRunner.this.cc.driver().navigate().to(url);
-							Utils.waitForCC(BrowserRunner.this.cc.driver());
-							s.evaluate(); // execute test method
-						} catch (final Throwable throwable) {
-							throw throwable;
-						}
-					}
-				};
-			}
-
-
-			@Override
-			protected String testName(final FrameworkMethod method) {
-				return method.getName() + " (" + BrowserRunner.this._browser.getName() + ')';
-			}
-
-
-			@Override
-			public Description getDescription() {
-				final Description description = Description.createSuiteDescription(this._testClass);
-				for (final FrameworkMethod method : this.getChildren()) {
-					description.addChild(this.describeChild(method));
-				}
-				return description;
-			}
-
-
-			@Override
-			protected Description describeChild(final FrameworkMethod method) {
-				return Description.createTestDescription(this._testClass, this.testName(method), method.getAnnotations());
-			}
-		}
-	}
-
+  // --- -D parameter names ---//
+  private static final String PARAM_PROJECT = "project";
+  private static final String PARAM_HOST = "host";
+  private static final String PARAM_PORT = "port";
+  private static final String PARAM_USER = "user";
+  private static final String PARAM_PASSWORD = "password";
+
+  // --- default values ---//
+  private static final String DEFAULT_PROJECT_NAME = "Mithras Energy";
+  private static final String DEFAULT_HOST = "localhost";
+  private static final String DEFAULT_PORT = "8000";
+  private static final String DEFAULT_USERNAME = "Admin";
+  private static final String DEFAULT_PASSWORD = "Admin";
+
+  private static final Logger LOGGER = Logger.getLogger(UiTestRunner.class);
+
+  private final Class<?> _parentClass;
+
+  private FS fs;
+
+  /**
+   * The annotation defines which UI tests should be executed, by specifying a classname
+   * pattern.<br>
+   * For example: de.espirit.firstspirit.webedit.*.UiTest*
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  @Inherited
+  public @interface ClassPattern {
+
+    String value();
+  }
+
+  /**
+   * The annotation defines which UI tests should be executed, by specifying concrete classes.
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  @Inherited
+  public @interface Classes {
+
+    Class<?>[] value();
+  }
+
+  /**
+   * This annotation defines which browsers should be used to execute the specified ui tests, by
+   * specifying a set of {@link WebDriverFactory browser} factories.
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  @Inherited
+  public @interface WebDriver {
+
+    Class<? extends WebDriverFactory>[] value();
+  }
+
+  /**
+   * This annotation defines which locale should be used to execute the specified ui tests, by
+   * specifying the language code of a locale.
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  @Inherited
+  public @interface BrowserLocale {
+
+    @NotNull
+    String value();
+  }
+
+
+  @SuppressWarnings("UnusedDeclaration")
+  public UiTestRunner(final Class<?> parentClass) throws InitializationError {
+    super(parentClass);
+    this._parentClass = parentClass;
+  }
+
+
+  private static Class<?>[] getTestClasses(final Class<?> testClass) {
+    final ClassPattern allClassPattern = testClass.getAnnotation(ClassPattern.class);
+    if (allClassPattern != null) {
+      final File base = new File("firstspirit/webedit/src/test");
+      String value = allClassPattern.value();
+      value = value.replaceAll("\\.", "\\.");
+      value = value.replaceAll("\\*", ".*");
+      final Pattern pattern = Pattern.compile('^' + value + '$');
+      final List<Class<?>> collection = UiTestRunner.collectUiTests(base, pattern);
+      return collection.toArray(new Class<?>[collection.size()]);
+    }
+
+    final Classes allClasses = testClass.getAnnotation(Classes.class);
+    if (allClasses != null) {
+      return allClasses.value();
+    }
+
+    return new Class[] {testClass};
+  }
+
+
+  @NotNull
+  private static List<Class<?>> collectUiTests(@NotNull final File base,
+      @NotNull final Pattern pattern) {
+    return UiTestRunner.collectUiTests(base, base, pattern);
+  }
+
+
+  @NotNull
+  private static List<Class<?>> collectUiTests(@NotNull final File base, @NotNull final File file,
+      @NotNull final Pattern pattern) {
+    final List<Class<?>> result = new ArrayList<>();
+    final File[] children = file.listFiles();
+    if (children != null) {
+      for (final File child : children) {
+        final String path = child.getPath();
+        String className = path.substring(base.getPath().length() + 1);
+        className = className.replaceAll("[\\\\/]", ".");
+        className = className.replaceAll("\\.java$", "");
+        if (child.isDirectory()) {
+          result.addAll(UiTestRunner.collectUiTests(base, child, pattern));
+        } else if (pattern.matcher(className).find()) {
+          try {
+            final Class<?> type = UiTestRunner.class.getClassLoader().loadClass(className);
+            if (AbstractUiTest.class.isAssignableFrom(type)
+                && ((type.getModifiers() & Modifier.ABSTRACT) == 0)) {
+              result.add(type);
+            }
+          } catch (final ClassNotFoundException ignored) {
+            // this can be ignored because we know that is class is present.
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+
+  private static WebDriverFactory[] getBrowsers(final Class<?> testClass) {
+    final WebDriver browser = testClass.getAnnotation(WebDriver.class);
+    if (browser != null) {
+      final Class<? extends WebDriverFactory>[] value = browser.value();
+      final WebDriverFactory[] factories = new WebDriverFactory[value.length];
+      for (int i = 0; i < factories.length; i++) {
+        try {
+          factories[i] = value[i].newInstance();
+        } catch (final Exception e) {
+          throw new RuntimeException("couldn't instantiate WebDriverFactory!", e);
+        }
+      }
+      return factories;
+    }
+
+    return new WebDriverFactory[] {new LocalChromeWebDriverFactory()};
+  }
+
+
+  // --- ParentRunner ---//
+
+  @Override
+  protected List<BrowserRunner> getChildren() {
+    try {
+      final Class<?>[] testClasses = UiTestRunner.getTestClasses(this._parentClass);
+      final List<BrowserRunner> browserRunner = new LinkedList<>();
+      for (final WebDriverFactory browser : UiTestRunner.getBrowsers(this._parentClass)) {
+        browserRunner.add(new BrowserRunner(browser, testClasses));
+      }
+      return browserRunner;
+    } catch (final InitializationError error) {
+      throw new RuntimeException(error);
+    }
+  }
+
+
+  @Override
+  public Description getDescription() {
+    final Description description = Description.createSuiteDescription(this._parentClass);
+    for (final BrowserRunner browser : this.getChildren()) {
+      description.addChild(this.describeChild(browser));
+    }
+    return description;
+  }
+
+
+  @Override
+  protected Description describeChild(final BrowserRunner runner) {
+    return runner.getDescription();
+  }
+
+
+  @Override
+  protected void runChild(final BrowserRunner runner, final RunNotifier runNotifier) {
+    try {
+      this.setupFS();
+      runner.run(runNotifier);
+    } finally {
+      this.tearDownFS();
+    }
+  }
+
+
+  // --- private methods ---//
+
+  /**
+   * Establishes a connection to a FirstSpirit server.
+   */
+  private void setupFS() {
+    final String host = Utils.env(UiTestRunner.PARAM_HOST, UiTestRunner.DEFAULT_HOST);
+    final String port = Utils.env(UiTestRunner.PARAM_PORT, UiTestRunner.DEFAULT_PORT);
+    final String username = Utils.env(UiTestRunner.PARAM_USER, UiTestRunner.DEFAULT_USERNAME);
+    final String password = Utils.env(UiTestRunner.PARAM_PASSWORD, UiTestRunner.DEFAULT_PASSWORD);
+    UiTestRunner.LOGGER.info(
+        "Connecting to host '" + host + "', port '" + port + "' with user '" + username + '\'');
+    try {
+      final ServerConnection connection = (ServerConnection) ConnectionManager.getConnection(host,
+          Integer.parseInt(port), ConnectionManager.HTTP_MODE, username, password);
+      connection.connect();
+      this.fs = new FSImpl(connection,
+          Utils.env(UiTestRunner.PARAM_PROJECT, UiTestRunner.DEFAULT_PROJECT_NAME));
+    } catch (final Exception e) {
+      throw new RuntimeException(
+          "connecting FirstSpirit server failed (" + host + ':' + port + ") !", e);
+    }
+  }
+
+
+  /**
+   * Closes the FirstSpirit connection.
+   */
+  private void tearDownFS() {
+    try {
+      if (this.fs != null) {
+        this.fs.connection().disconnect();
+      }
+    } catch (final IOException e) {
+      throw new RuntimeException("disconnecting FirstSpirit server failed!", e);
+    }
+
+  }
+
+  /**
+   * JUnit4 {@link Runner} for WebEdit UI tests that run inside a single browser instance.
+   * <p>
+   * {@link #withBeforeClasses(Statement) Before} and {@link #withAfterClasses(Statement) after} a
+   * test class the browser will be {@link #setUpBrowser() opened} and {@link #tearDownBrowser()
+   * closed}. For every test method the {@link SingleUiTestRunner SingleUiTestRunner} is used.
+   */
+  public class BrowserRunner extends ParentRunner<UiTestRunner.BrowserRunner.SingleUiTestRunner> {
+
+    private final WebDriverFactory _browser;
+    private final Class<?>[] _testClasses;
+
+    private CC cc;
+
+
+    private BrowserRunner(final WebDriverFactory browser, final Class<?>[] testClasses)
+        throws InitializationError {
+      super(browser.getClass());
+      this._browser = browser;
+      this._testClasses = testClasses;
+    }
+
+
+    @Override
+    public void run(final RunNotifier notifier) {
+      try {
+        this.setUpBrowser();
+        super.run(notifier);
+      } finally {
+        this.tearDownBrowser();
+      }
+    }
+
+
+    /**
+     * Creates the specified {@link org.openqa.selenium.WebDriver WebDriver} instance.
+     */
+    private void setUpBrowser() {
+      try {
+        final String projectNameOrId =
+            Utils.env(UiTestRunner.PARAM_PROJECT, UiTestRunner.DEFAULT_PROJECT_NAME);
+        UiTestRunner.LOGGER.info("Connecting to project '" + projectNameOrId + '\'');
+
+        final ProjectStorage prjStorage =
+            UiTestRunner.this.fs.connection().getService(AdminService.class).getProjectStorage();
+        Project project;
+        try {
+          project = prjStorage.getProject(Long.parseLong(projectNameOrId));
+        } catch (final Exception e) {
+          project = prjStorage.getProject(projectNameOrId);
+        }
+        if (project == null) {
+          throw new IllegalStateException("couldn't find project '" + projectNameOrId + "' !");
+        }
+        UiTestRunner.LOGGER.info("Connection established");
+
+        final RemoteWebDriver webDriver = this._browser.createWebDriver();
+        webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().window().setSize(new Dimension(1200, 800));
+
+        final String url =
+            UiTestRunner.this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE)
+                .getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(project).createUrl();
+
+        this.disableTourHints(UiTestRunner.this.fs.connection());
+
+        this.cc =
+            new CCImpl(project, webDriver, url, UiTestRunner.this.fs.connection().createTicket());
+        UiTestRunner.LOGGER.info("ContentCreator loaded");
+      } catch (final IOException e) {
+        throw new RuntimeException("IO error occurred!", e);
+      }
+    }
+
+
+    /**
+     * Disables hints and tour for the user of the given {@code connection} because they overlay the
+     * views.
+     *
+     * @param connection for which tour/hints should be disabled.
+     */
+    public void disableTourHints(@NotNull final Connection connection) {
+      final User user = connection.getUser();
+      final Map<String, String> bindings = user.getUserBindings();
+      bindings.put("cc.tour.disabled", String.valueOf(true));
+      bindings.put("cc.hints.disabled", String.valueOf(true));
+      user.setUserBindings(bindings);
+    }
+
+
+    /**
+     * {@link org.openqa.selenium.WebDriver#quit() Quits} the {@code WebDriver} instance.
+     */
+    private void tearDownBrowser() {
+      if (this.cc != null) {
+        this.cc.logout();
+        this.cc.driver().quit();
+      }
+    }
+
+
+    @Override
+    protected List<SingleUiTestRunner> getChildren() {
+      final List<SingleUiTestRunner> testRunner = new LinkedList<>();
+      for (final Class<?> testClass : this._testClasses) {
+        try {
+          testRunner.add(new SingleUiTestRunner(testClass));
+        } catch (final InitializationError initializationError) {
+          throw new RuntimeException("couldn't initialize test-class: " + initializationError,
+              initializationError);
+        }
+      }
+      return testRunner;
+    }
+
+
+    @Override
+    public Description getDescription() {
+      final Description description = Description.createSuiteDescription(this._browser.getClass());
+      for (final SingleUiTestRunner runner : this.getChildren()) {
+        description.addChild(this.describeChild(runner));
+      }
+      return description;
+    }
+
+
+    @Override
+    protected Description describeChild(final SingleUiTestRunner runner) {
+      return runner.getDescription();
+    }
+
+
+    @Override
+    protected void runChild(final SingleUiTestRunner runner, final RunNotifier runNotifier) {
+      runner.run(runNotifier);
+    }
+
+    /**
+     * JUnit4 {@link Runner} for a single UI test method. Before every test method the browser will
+     * be refreshed with the initial url.
+     */
+    public class SingleUiTestRunner extends BlockJUnit4ClassRunner {
+
+      private final Class<?> _testClass;
+
+
+      private SingleUiTestRunner(final Class<?> testClass) throws InitializationError {
+        super(testClass);
+        this._testClass = testClass;
+      }
+
+
+      @Override
+      protected Object createTest() throws Exception {
+        final Object test = super.createTest();
+        if (test instanceof AbstractUiTest) {
+          ((AbstractUiTest) test).setFS(UiTestRunner.this.fs);
+          ((AbstractUiTest) test).setCC(BrowserRunner.this.cc);
+
+        }
+        return test;
+      }
+
+
+      /**
+       * Reloads the browser url, saves a screenshot if an exception occurs during the test and
+       * restores original revision after the execution is finished.
+       */
+      @Override
+      protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
+        final Statement s = super.methodInvoker(method, test);
+        return new Statement() {
+
+          @Override
+          public void evaluate() throws Throwable {
+            try {
+              String locale = Constants.DEFAULT_LOCALE;
+              BrowserLocale annotation = method.getMethod().getAnnotation(BrowserLocale.class);
+              if (annotation == null) {
+                annotation = SingleUiTestRunner.this._testClass.getAnnotation(BrowserLocale.class);
+              }
+              if (annotation != null) {
+                locale = annotation.value();
+              } else if (System.getenv(Constants.PARAM_LOCALE) != null) {
+                locale = System.getenv(Constants.PARAM_LOCALE);
+              }
+
+              String url = BrowserRunner.this.cc.driver().getCurrentUrl();
+              if (url.contains("&locale=")) {
+                url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
+              } else {
+                url += "&locale=" + locale;
+              }
+              ((AbstractUiTest) test).setLocale(locale);
+              BrowserRunner.this.cc.driver().navigate().to(url);
+              Utils.waitForCC(BrowserRunner.this.cc.driver());
+              s.evaluate(); // execute test method
+            } catch (final Throwable throwable) {
+              throw throwable;
+            }
+          }
+        };
+      }
+
+
+      @Override
+      protected String testName(final FrameworkMethod method) {
+        return method.getName() + " (" + BrowserRunner.this._browser.getName() + ')';
+      }
+
+
+      @Override
+      public Description getDescription() {
+        final Description description = Description.createSuiteDescription(this._testClass);
+        for (final FrameworkMethod method : this.getChildren()) {
+          description.addChild(this.describeChild(method));
+        }
+        return description;
+      }
+
+
+      @Override
+      protected Description describeChild(final FrameworkMethod method) {
+        return Description.createTestDescription(this._testClass, this.testName(method),
+            method.getAnnotations());
+      }
+    }
+  }
 }

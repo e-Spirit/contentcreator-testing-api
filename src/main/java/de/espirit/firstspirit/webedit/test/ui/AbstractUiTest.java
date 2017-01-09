@@ -3,8 +3,8 @@ package de.espirit.firstspirit.webedit.test.ui;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
+
 import de.espirit.firstspirit.access.project.Project;
-import de.espirit.firstspirit.access.store.IDProvider;
 import de.espirit.firstspirit.access.store.Previewable;
 import de.espirit.firstspirit.access.store.Store;
 import de.espirit.firstspirit.access.store.sitestore.PageRef;
@@ -16,8 +16,9 @@ import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 
 /**
- * Abstract super class for <b>all</b> WebEdit UI tests. The {@link UiTestRunner UI test runner} ensures that the connection to
- * the FirstSpirit server {@link #fs()} and WebEdit client {@link #cc()} are properly initialized.
+ * Abstract super class for <b>all</b> WebEdit UI tests. The {@link UiTestRunner UI test runner}
+ * ensures that the connection to the FirstSpirit server {@link #fs()} and WebEdit client
+ * {@link #cc()} are properly initialized.
  *
  * @see FS
  * @see CC
@@ -26,100 +27,99 @@ import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 @RunWith(UiTestRunner.class)
 public abstract class AbstractUiTest extends Assert {
 
-	private FS fs;
-	private CC cc;
+  private FS fs;
+  private CC cc;
 
-	private String locale;
-
-
-	// --- public methods ---//
-
-	/**
-	 * Returns the connection to the FirstSpirit server.
-	 *
-	 * @return FS
-	 */
-	@NotNull
-	public FS fs() {
-		return this.fs;
-	}
+  private String locale;
 
 
-	/**
-	 * Returns the connection to the WebEdit client.
-	 *
-	 * @return CC
-	 */
-	@NotNull
-	public CC cc() {
-		return this.cc;
-	}
+  // --- public methods ---//
+
+  /**
+   * Returns the connection to the FirstSpirit server.
+   *
+   * @return FS
+   */
+  @NotNull
+  public FS fs() {
+    return this.fs;
+  }
 
 
-	/**
-	 * Provides a {@link Preview#setUrl(String) preview-url} of the given {@code element}.
-	 *
-	 * @param element to view in the preview frame.
-	 * @return preview-url of the given {@code element}.
-	 * @see Preview#setUrl(String)
-	 */
-	public String toPreviewUrl(final IDProvider element) {
-		final Project project = element.getProject();
-
-		if (element instanceof Previewable) {
-			final Previewable previewable = (Previewable) element;
-			return previewable.getPreviewUrl(project.getMasterLanguage(), project.getWebEditTemplateSet(), false, Previewable.PREVIEWMODE_FULL_QUALIFIED | Previewable.PREVIEWMODE_WEBEDIT, null);
-		}
-
-		return null;
-	}
+  /**
+   * Returns the connection to the WebEdit client.
+   *
+   * @return CC
+   */
+  @NotNull
+  public CC cc() {
+    return this.cc;
+  }
 
 
-	/**
-	 * Returns sitestore start node.
-	 *
-	 * @return start node.
-	 */
-	@NotNull
-	public PageRef getStartNode() {
-		final PageRef startNode = (PageRef) ((SiteStoreFolder) this.cc().project().getUserService().getStore(Store.Type.SITESTORE, false)).findStartNode();
-		Assert.assertNotNull("pre-condition: no start-node found!", startNode);
-		return startNode;
-	}
+  /**
+   * Provides a {@link Preview#setUrl(String) preview-url} of the given {@code element}.
+   *
+   * @param element to view in the preview frame.
+   * @return preview-url of the given {@code element}.
+   * @see Preview#setUrl(String)
+   */
+  public String toPreviewUrl(final Previewable element) {
+    final Project project = element.getProject();
+
+    return element.getPreviewUrl(project.getMasterLanguage(), project.getWebEditTemplateSet(),
+        false, Previewable.PREVIEWMODE_FULL_QUALIFIED | Previewable.PREVIEWMODE_WEBEDIT, null);
+  }
 
 
-	/**
-	 * Navigates to a page
-	 *
-	 * @param pageRef The page ref to navigate to
-	 */
-	public void navigateTo(@NotNull final PageRef pageRef) {
-
-		String url = this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE).getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(this.cc.project()).element(pageRef).createUrl();
-		if (url.contains("&locale=")) {
-			url = url.replaceAll("&locale=\\w+", "&locale=" + this.locale);
-		} else {
-			url += "&locale=" + this.locale;
-		}
-		this.cc().driver().get(url);
-		Utils.waitForCC(this.cc().driver());
-	}
+  /**
+   * Returns sitestore start node.
+   *
+   * @return start node.
+   */
+  @NotNull
+  public PageRef getStartNode() {
+    final PageRef startNode = (PageRef) ((SiteStoreFolder) this.cc().project().getUserService()
+        .getStore(Store.Type.SITESTORE, false)).findStartNode();
+    Assert.assertNotNull("pre-condition: no start-node found!", startNode);
+    return startNode;
+  }
 
 
-	// --- package protected methods ---//
+  /**
+   * Navigates to a page
+   *
+   * @param pageRef The page ref to navigate to
+   */
+  public void navigateTo(@NotNull final PageRef pageRef) {
 
-	void setFS(final FS fs) {
-		this.fs = fs;
-	}
+    String url = this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE)
+        .getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(this.cc.project()).element(pageRef)
+        .createUrl();
+    if (url.contains("&locale=")) {
+      url = url.replaceAll("&locale=\\w+", "&locale=" + this.locale);
+    } else {
+      url += "&locale=" + this.locale;
+    }
+    this.cc().driver().get(url);
+    Utils.waitForCC(this.cc().driver());
+  }
 
 
-	void setCC(final CC CC) {
-		this.cc = CC;
-	}
+  // --- package protected methods ---//
+
+  void setFS(final FS fs) {
+    this.fs = fs;
+  }
 
 
-	public void setLocale(final String locale) {
-		this.locale = locale;
-	}
+  void setCC(final CC CC) {
+    this.cc = CC;
+  }
+
+
+  public void setLocale(final String locale) {
+    this.locale = locale;
+  }
 
 }
