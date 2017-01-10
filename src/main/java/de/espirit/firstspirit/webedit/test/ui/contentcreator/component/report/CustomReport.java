@@ -5,7 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class CustomReport extends AbstractReport {
-    public CustomReport(@NotNull WebDriver webDriver, @NotNull WebElement reportButton) {
-        super(webDriver, reportButton);
-    }
+
+	public CustomReport(@NotNull final WebDriver webDriver, @NotNull final WebElement reportButton) {
+		super(webDriver, reportButton);
+	}
 }

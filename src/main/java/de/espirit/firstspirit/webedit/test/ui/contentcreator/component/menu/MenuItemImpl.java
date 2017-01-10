@@ -32,13 +32,15 @@ public class MenuItemImpl implements MenuItem {
         }
     }
 
-    @NotNull
     @Override
     public WebElement html() throws CCAPIException {
         WebElement menuElement = menu.html();
         List<WebElement> items = Utils.findMultipleItemsInElement(webDriver, menuElement, By.tagName("li"));
 
-        WebElement item = items.stream().filter(i -> i.getText().equals(label)).findFirst().orElse(null);
+        WebElement item = items.stream()
+                .filter(i -> i.getText().equals(label))
+                .findFirst()
+                .orElse(null);
 
         return item;
     }

@@ -10,7 +10,6 @@ import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.P
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.Reports;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.report.ReportsImpl;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
-import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -30,16 +29,14 @@ public class CCImpl implements CC {
 
     private final org.openqa.selenium.WebDriver webDriver;
     private final Project project;
-    private final FS fs;
 
-    public CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket, final FS fs) {
-        this(project, driver, url + "&login.ticket=" + ssoTicket, fs);
+    public CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket) {
+        this(project, driver, url + "&login.ticket=" + ssoTicket);
     }
 
-    CCImpl(final Project project, final WebDriver driver, final String webEditUrl, FS fs) {
+    CCImpl(final Project project, final WebDriver driver, final String webEditUrl) {
         this.project = project;
         this.webDriver = driver;
-        this.fs = fs;
         this.webDriver.get(webEditUrl);
     }
 
