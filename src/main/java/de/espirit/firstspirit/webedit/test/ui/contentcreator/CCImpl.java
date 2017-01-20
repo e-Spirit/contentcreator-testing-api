@@ -18,6 +18,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.waitForCC;
 
@@ -95,6 +97,11 @@ public class CCImpl implements CC {
     public void logout() {
         try {
             ((RemoteWebDriver) driver()).executeScript("location.href='logout.jsp';");
+            new WebDriverWait(webDriver, 20).until((ExpectedCondition<Boolean>) webDriver -> {
+                if(((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API == 'undefined'").equals(Boolean.TRUE))
+                    return true;
+                return false;
+            });
         } catch (final Exception e) {
             LOGGER.warn("exception during logout", e);
         }

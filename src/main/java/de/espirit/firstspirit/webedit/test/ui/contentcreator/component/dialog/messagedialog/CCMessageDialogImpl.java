@@ -1,27 +1,25 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.messagedialog;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.jetbrains.annotations.NotNull;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButtonImpl;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CCMessageDialogImpl implements CCMessageDialog {
-
 	private final WebElement dialogElement;
 	private final WebDriver webDriver;
-
 
 	public CCMessageDialogImpl(@NotNull final WebElement dialogElement, final WebDriver webDriver) {
 		this.dialogElement = dialogElement;
 		this.webDriver = webDriver;
 	}
-
 
 	@Override
 	public String message() throws CCAPIException {
@@ -29,12 +27,10 @@ public class CCMessageDialogImpl implements CCMessageDialog {
 		return messageBox.getText();
 	}
 
-
 	@Override
 	public void ok() throws CCAPIException {
 		this.clickButton(0);
 	}
-
 
 	private void clickButton(final int buttonIndex) throws CCAPIException {
 		final List<WebElement> buttons = this.getDialogButtons();
@@ -44,12 +40,10 @@ public class CCMessageDialogImpl implements CCMessageDialog {
 		}
 	}
 
-
 	private List<WebElement> getDialogButtons() throws CCAPIException {
 		final WebElement dialogFooterElement = Utils.findItemInElement(this.webDriver, this.dialogElement, By.className("fs-MessageDialogBox-Buttons"));
 		return Utils.findMultipleItemsInElement(this.webDriver, dialogFooterElement, By.className("fs-button"));
 	}
-
 
 	@Override
 	public List<CCInputButton> buttons() throws CCAPIException {
@@ -60,7 +54,6 @@ public class CCMessageDialogImpl implements CCMessageDialog {
 		}
 		return ccInputButtons;
 	}
-
 
 	@NotNull
 	@Override
