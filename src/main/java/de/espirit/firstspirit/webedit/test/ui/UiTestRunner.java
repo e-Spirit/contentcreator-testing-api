@@ -1,31 +1,5 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.junit.runner.Description;
-import org.junit.runner.Runner;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.ParentRunner;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.remote.RemoteWebDriver;
-
 import de.espirit.firstspirit.access.AdminService;
 import de.espirit.firstspirit.access.Connection;
 import de.espirit.firstspirit.access.ConnectionManager;
@@ -43,6 +17,31 @@ import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalChromeWebDr
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteChromeWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.RemoteFirefoxWebDriverFactory;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.WebDriverFactory;
+import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
+import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.ParentRunner;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * JUnit4 {@link Runner} for WebEdit {@link AbstractUiTest UI tests}. A test class can be
@@ -493,7 +492,6 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
       protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
         final Statement s = super.methodInvoker(method, test);
         return new Statement() {
-
           @Override
           public void evaluate() throws Throwable {
             try {
