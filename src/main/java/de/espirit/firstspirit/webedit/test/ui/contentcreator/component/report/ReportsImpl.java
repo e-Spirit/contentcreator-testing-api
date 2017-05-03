@@ -27,9 +27,7 @@ public class ReportsImpl implements Reports {
     @NotNull
     @Override
     public Report bookmarks() throws CCAPIException {
-        final WebElement button = Utils.findElementByFsElementName(this.webDriver, By.cssSelector("div.fs-sidebar-buttons > div"), "Bookmarks");
-        Objects.requireNonNull(button);
-        return new CustomReport(this.webDriver, button);
+        return customByFsElementName("Bookmarks");
     }
 
     @NotNull

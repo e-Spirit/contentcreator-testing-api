@@ -47,8 +47,7 @@ public class MenuBarImpl implements MenuBar {
 
     @Override
     public void waitForElementStatus(final MenuBar.ElementStatus elementStatus) {
-        new WebDriverWait(this.webDriver, 30)
-                .until((Predicate<WebDriver>) webDriver1 -> this.getElementStatus().equals(elementStatus));
+        new WebDriverWait(this.webDriver, 30).until((Predicate<WebDriver>) webDriver1 -> this.getElementStatus().equals(elementStatus));
     }
 
     @NotNull
@@ -90,10 +89,8 @@ public class MenuBarImpl implements MenuBar {
      */
     @Override
     public int getSearchResultCount() {
-        final WebElement element = Utils.find(this.webDriver, ExpectedConditions
-                .presenceOfElementLocated(By.className("fs-sidebar-report-status-count")));
-        new WebDriverWait(this.webDriver, Constants.WEBDRIVER_WAIT)
-                .until(CustomConditions.resultChanged(element));
+        final WebElement element = Utils.find(this.webDriver, ExpectedConditions.presenceOfElementLocated(By.className("fs-sidebar-report-status-count")));
+        new WebDriverWait(this.webDriver, Constants.WEBDRIVER_WAIT).until(CustomConditions.resultChanged(element));
         final String text = element.getText(); // text = "Ergebnisse: 47"
         if (!text.isEmpty() && Character.isDigit(text.charAt(text.length() - 1))) {
             return Integer.parseInt(text.substring(text.lastIndexOf(' ') + 1));
