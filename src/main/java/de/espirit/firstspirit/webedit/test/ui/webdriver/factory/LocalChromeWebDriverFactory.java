@@ -15,8 +15,7 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.env;
  * The chrome executable can be configured with -D property {@code "webdriver.executable"}, default value {@link #DEFAULT_WEBDRIVER_EXECUTABLE}.
  */
 public class LocalChromeWebDriverFactory implements WebDriverFactory {
-
-    private static final String DEFAULT_WEBDRIVER_EXECUTABLE = "D:\\Programme\\Chromedriver\\chromedriver.exe";
+    private static final String DEFAULT_WEBDRIVER_EXECUTABLE = "D:\\Entwicklung\\Chromedriver\\chromedriver.exe";
     private static final String DEFAULT_VERBOSITY = "false";
 
     @Override
