@@ -23,5 +23,4 @@ public interface SearchReport extends Report {
      */
     @Nullable
     String reportMessage() throws CCAPIException;
-
 }
