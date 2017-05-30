@@ -30,7 +30,7 @@ public class FSImplTest {
     }
 
     @Test
-    public void create_page_with_pagefolder_return_pageref_success() {
+    public void create_page_with_pagefolder_return_pageref_success() throws LockException, ElementDeletedException {
         // Arrange
         final String name = "testPageName";
         final String targetPageFolder = "testPageFolder";
@@ -62,32 +62,25 @@ public class FSImplTest {
             .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
             .thenReturn(pageTemplate);
 
-        // @ToDo: The try-catch block in the original source should be refactored. It's not needed when mocking.
-        try {
-            final PageFolder pageFolder = mock(PageFolder.class);
-            final SiteStoreFolder existingSiteStoreFolder = mock(SiteStoreFolder.class);
-            final PageRefFolder pageRefFolder = mock(PageRefFolder.class);
-            final Page page = mock(Page.class);
+        final PageFolder pageFolder = mock(PageFolder.class);
+        final SiteStoreFolder existingSiteStoreFolder = mock(SiteStoreFolder.class);
+        final PageRefFolder pageRefFolder = mock(PageRefFolder.class);
+        final Page page = mock(Page.class);
 
-            when(existingPageFolder
-                .createPageFolder(name))
-                .thenReturn(pageFolder);
-            when(storeElementAgent
-                .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
-                .thenReturn(existingSiteStoreFolder);
-            when(existingSiteStoreFolder.createPageRefFolder(name))
-                .thenReturn(pageRefFolder);
-            when(pageFolder
-                .createPage(name, pageTemplate, true))
-                .thenReturn(page);
-            when(pageRefFolder
-                .createPageRef(name, page, true))
-                .thenReturn(mock(PageRef.class));
-        }  catch (ElementDeletedException e) {
-            fail("ElementDeletedException thrown.");
-        }  catch(LockException e) {
-            fail("LockException thrown.");
-        }
+        when(existingPageFolder
+            .createPageFolder(name))
+            .thenReturn(pageFolder);
+        when(storeElementAgent
+            .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
+            .thenReturn(existingSiteStoreFolder);
+        when(existingSiteStoreFolder.createPageRefFolder(name))
+            .thenReturn(pageRefFolder);
+        when(pageFolder
+            .createPage(name, pageTemplate, true))
+            .thenReturn(page);
+        when(pageRefFolder
+            .createPageRef(name, page, true))
+            .thenReturn(mock(PageRef.class));
 
         // Act
         final PageRef pageRef = _fs.createPage(name, pageTemplateUid, targetPageFolder);
@@ -96,28 +89,8 @@ public class FSImplTest {
         assertNotNull("Page created, expect non-null PageRef.", pageRef);
     }
 
-    @Test(expected = ElementDeletedException.class)
-    public void create_page_throws_element_deleted_exception_fail() {
-        // @ToDo: Implement test. Thrown by the FS API. PageRef should be null
-        // Arrange
-
-        // Act
-
-        // Assert
-    }
-
-    @Test(expected = LockException.class)
-    public void create_page_throws_lock_exception_fail() {
-        // @ToDo: Implement test. Thrown by the FS API. PageRef should be null
-        // Arrange
-
-        // Act
-
-        // Assert
-    }
-
     @Test
-    public void create_page_with_pagefolder_site_store_folder_not_found_return_null_success() {
+    public void create_page_with_pagefolder_site_store_folder_not_found_return_null_success() throws LockException, ElementDeletedException {
         // Arrange
         final String name = "testPageName";
         final String targetPageFolder = "testPageFolder";
@@ -131,39 +104,32 @@ public class FSImplTest {
         final PageTemplate pageTemplate = mock(PageTemplate.class);
 
         when(_connection
-                .getBroker())
-                .thenReturn(specialistsBroker);
+            .getBroker())
+            .thenReturn(specialistsBroker);
         when(specialistsBroker
-                .requireSpecialist(BrokerAgent.TYPE))
-                .thenReturn(brokerAgent);
+            .requireSpecialist(BrokerAgent.TYPE))
+            .thenReturn(brokerAgent);
         when(brokerAgent
-                .getBrokerByProjectName(PROJECT_NAME))
-                .thenReturn(specialistsBroker);
+            .getBrokerByProjectName(PROJECT_NAME))
+            .thenReturn(specialistsBroker);
         when(specialistsBroker
-                .requireSpecialist(StoreElementAgent.TYPE))
-                .thenReturn(storeElementAgent);
+            .requireSpecialist(StoreElementAgent.TYPE))
+            .thenReturn(storeElementAgent);
         when(storeElementAgent
-                .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
-                .thenReturn(existingPageFolder);
+            .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
+            .thenReturn(existingPageFolder);
         when(storeElementAgent
-                .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
-                .thenReturn(pageTemplate);
+            .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
+            .thenReturn(pageTemplate);
 
-        // @ToDo: The try-catch block in the original source should be refactored. It's not needed when mocking.
-        try {
-            final PageFolder pageFolder = mock(PageFolder.class);
+        final PageFolder pageFolder = mock(PageFolder.class);
 
-            when(existingPageFolder
-                    .createPageFolder(name))
-                    .thenReturn(pageFolder);
-            when(storeElementAgent
-                    .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
-                    .thenReturn(null);
-        }  catch (ElementDeletedException e) {
-            fail("ElementDeletedException thrown.");
-        }  catch(LockException e) {
-            fail("LockException thrown.");
-        }
+        when(existingPageFolder
+            .createPageFolder(name))
+            .thenReturn(pageFolder);
+        when(storeElementAgent
+            .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
+            .thenReturn(null);
 
         // Act
         final PageRef pageRef = _fs.createPage(name, pageTemplateUid, targetPageFolder);
