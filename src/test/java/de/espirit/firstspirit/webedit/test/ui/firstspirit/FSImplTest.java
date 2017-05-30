@@ -244,15 +244,14 @@ public class FSImplTest {
             .thenReturn(pageTemplate);
 
         final PageRefFolder existingPageRefFolder = mock(PageRefFolder.class);
-        final PageFolder pageFolder = mock(PageFolder.class);
         final Page page = mock(Page.class);
 
+        when(existingPageFolder
+            .createPage(name, pageTemplate, true))
+            .thenReturn(page);
         when(storeElementAgent
             .loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false))
             .thenReturn(existingPageRefFolder);
-        when(pageFolder
-            .createPage(name, pageTemplate, true))
-            .thenReturn(page);
         when(existingPageRefFolder
             .createPageRef(name, page, true))
             .thenReturn(mock(PageRef.class));
@@ -262,6 +261,6 @@ public class FSImplTest {
 
         // Assert
         verify(existingPageFolder, never()).createPageFolder(name);
-        assertNull("No page created, expect null.", pageRef);
+        assertNotNull("Page created, expect non-null PageRef.", pageRef);
     }
 }

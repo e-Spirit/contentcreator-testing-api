@@ -69,7 +69,6 @@ public class FSImpl implements FS {
 
         if ((existingPageFolder != null) && (pageTemplate != null)) {
             try {
-                // @ToDo: Explicitly test new behavior
                 final PageFolder pageFolder;
                 if(createFolders) {
                     pageFolder = existingPageFolder.createPageFolder(name);// @ToDo: 'name' parameter unchecked. Can be null or empty
@@ -89,7 +88,7 @@ public class FSImpl implements FS {
                     }
                 } else {
                     final PageRefFolder existingPageRefFolder = (PageRefFolder) storeElementAgent
-                            .loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false);
+                        .loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false);
                     if (existingPageRefFolder != null) {
                         return existingPageRefFolder.createPageRef(name, page, true);
                     }
@@ -102,12 +101,10 @@ public class FSImpl implements FS {
         return null;
     }
 
-
     @Override
     public FSProject project() {
         return new FSProjectImpl(this.connection.getProjectByName(this.projectName));
     }
-
 
     @Nullable
     @Override
