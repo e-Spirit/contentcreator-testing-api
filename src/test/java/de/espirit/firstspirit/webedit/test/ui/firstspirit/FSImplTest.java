@@ -209,4 +209,62 @@ public class FSImplTest {
         // Assert
         assertNull("No page created, expect null.", pageRef);
     }
+
+    @Test
+    public void create_page_without_pagefolder_return_pageref_success() throws LockException, ElementDeletedException {
+        // Arrange
+        final String name = "testPageName";
+        final String targetPageFolder = "testPageFolder";
+        final String pageTemplateUid = "testPageTemplate";
+
+        final SpecialistsBroker specialistsBroker = mock(SpecialistsBroker.class);
+        final BrokerAgent brokerAgent = mock(BrokerAgent.class);
+        final StoreElementAgent storeElementAgent = mock(StoreElementAgent.class);
+
+        final PageFolder existingPageFolder = mock(PageFolder.class);
+        final PageTemplate pageTemplate = mock(PageTemplate.class);
+
+        when(_connection
+            .getBroker())
+            .thenReturn(specialistsBroker);
+        when(specialistsBroker
+            .requireSpecialist(BrokerAgent.TYPE))
+            .thenReturn(brokerAgent);
+        when(brokerAgent
+            .getBrokerByProjectName(PROJECT_NAME))
+            .thenReturn(specialistsBroker);
+        when(specialistsBroker
+            .requireSpecialist(StoreElementAgent.TYPE))
+            .thenReturn(storeElementAgent);
+        when(storeElementAgent
+            .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
+            .thenReturn(existingPageFolder);
+        when(storeElementAgent
+            .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
+            .thenReturn(pageTemplate);
+
+        final SiteStoreFolder existingSiteStoreFolder = mock(SiteStoreFolder.class);
+        final PageFolder pageFolder = mock(PageFolder.class);
+        final PageRefFolder pageRefFolder = mock(PageRefFolder.class);
+        final Page page = mock(Page.class);
+
+        when(storeElementAgent
+            .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
+            .thenReturn(existingSiteStoreFolder);
+        when(existingSiteStoreFolder.createPageRefFolder(name))
+            .thenReturn(pageRefFolder);
+        when(pageFolder
+            .createPage(name, pageTemplate, true))
+            .thenReturn(page);
+        when(pageRefFolder
+            .createPageRef(name, page, true))
+            .thenReturn(mock(PageRef.class));
+
+        // Act
+        final PageRef pageRef = _fs.createPage("testPageName", pageTemplateUid, targetPageFolder, false);
+
+        // Assert
+        verify(existingPageFolder, never()).createPageFolder(name);
+        assertNull("No page created, expect null.", pageRef);
+    }
 }

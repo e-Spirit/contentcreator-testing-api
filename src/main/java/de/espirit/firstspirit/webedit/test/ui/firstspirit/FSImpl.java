@@ -44,9 +44,15 @@ public class FSImpl implements FS {
         return this.connection;
     }
 
-
+    @Deprecated
     @Override
     public PageRef createPage(final String name, final String pageTemplateUid, final String targetPageFolder) {
+        // @ToDo: Method is deprecated.
+        return this.createPage(name, pageTemplateUid, targetPageFolder, true);
+    }
+
+    @Override
+    public PageRef createPage(String name, String pageTemplateUid, String targetPageFolder, boolean createFolders) {
         final SpecialistsBroker projectSpecialistBroker = this.connection
             .getBroker()
             .requireSpecialist(BrokerAgent.TYPE)
@@ -63,7 +69,13 @@ public class FSImpl implements FS {
 
         if ((existingPageFolder != null) && (pageTemplate != null)) {
             try {
-                final PageFolder pageFolder = existingPageFolder.createPageFolder(name);
+                final PageFolder pageFolder;
+                if(createFolders) {
+                    pageFolder = existingPageFolder.createPageFolder(name);// @ToDo: 'name' parameter unchecked. Can be null or empty
+                } else {
+                    pageFolder = existingPageFolder;
+                }
+
                 final Page page = pageFolder.createPage(name, pageTemplate, true);
 
                 final SiteStoreFolder existingSiteStoreFolder = (SiteStoreFolder) storeElementAgent

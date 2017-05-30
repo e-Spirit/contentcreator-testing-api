@@ -18,20 +18,41 @@ public interface FS {
     ServerConnection connection();
 
     /**
-     * Creates a page.
-     * @return FirstSpirit pageref.
+     * Creates a page and a pageFolder with the same name as parent.
+     * Also creates a pageRef and a pageRefFolder with the same structure.
+     *
+     * @param name             Uid of the page and pageFolder to be created
+     * @param pageTemplateUid  Page template to be used for creation
+     * @param targetPageFolder Uid of the parent folder where the page and pageFolder will be created
+     * @return FirstSpirit pageRef or null.
+     * @deprecated Use {@link #createPage(String, String, String, boolean)} with the additional Parameter.
      */
     PageRef createPage(final String name, final String pageTemplateUid, final String targetPageFolder);
 
-	/**
-	 * Returns a link to the FirstSpirit project.
-	 * @return FirstSpirit project.
-	 */
-	FSProject project();
+    /**
+     * Creates a page in the given targetPageFolder.
+     * Also creates a pageRef with the same structure.
+     *
+     * @param name             Uid of the page and pageFolder to be created
+     * @param pageTemplateUid  Page template to be used for creation
+     * @param targetPageFolder Uid of the parent folder where the page and pageFolder will be created
+     * @param createFolders    Create pageFolder and pageRefFolder as parent of the page
+     * @return FirstSpirit pageRef or null.
+     */
+    PageRef createPage(final String name, final String pageTemplateUid, final String targetPageFolder, final boolean createFolders);
 
-	/**
-	 * Starts a deployment.
-	 * @return FirstSpirit scheduleentrystate.
-	 */
-	ScheduleEntryState deploy(String deployment);
+    /**
+     * Returns a link to the FirstSpirit project.
+     *
+     * @return FirstSpirit project.
+     */
+    FSProject project();
+
+    /**
+     * Starts a deployment.
+     *
+     * @param deployment
+     * @return FirstSpirit scheduleEntryState.
+     */
+    ScheduleEntryState deploy(final String deployment);
 }
