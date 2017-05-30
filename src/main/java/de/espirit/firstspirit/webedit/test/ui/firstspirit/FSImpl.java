@@ -52,7 +52,7 @@ public class FSImpl implements FS {
     }
 
     @Override
-    public PageRef createPage(String name, String pageTemplateUid, String targetPageFolder, boolean createFolders) {
+    public PageRef createPage(final String name, final String pageTemplateUid, final String targetPageFolder, final boolean createFolders) {
         final SpecialistsBroker projectSpecialistBroker = this.connection
             .getBroker()
             .requireSpecialist(BrokerAgent.TYPE)
@@ -70,6 +70,7 @@ public class FSImpl implements FS {
         if ((existingPageFolder != null) && (pageTemplate != null)) {
             try {
                 final PageFolder pageFolder;
+
                 if(createFolders) {
                     pageFolder = existingPageFolder.createPageFolder(name);// @ToDo: 'name' parameter unchecked. Can be null or empty
                 } else {

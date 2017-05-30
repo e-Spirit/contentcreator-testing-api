@@ -20,13 +20,34 @@ import static org.mockito.Mockito.*;
 
 public class FSImplTest {
     private static final String PROJECT_NAME = "Test Project";
+
     private ServerConnection _connection;
     private FSImpl _fs;
+    private SpecialistsBroker _specialistsBroker;
+    private BrokerAgent _brokerAgent;
+    private StoreElementAgent _storeElementAgent;
 
     @Before
     public void beforeEachTest() {
         _connection = mock(ServerConnection.class, RETURNS_DEEP_STUBS);
         _fs = new FSImpl(_connection, PROJECT_NAME);
+
+        _specialistsBroker = mock(SpecialistsBroker.class);
+        _brokerAgent = mock(BrokerAgent.class);
+        _storeElementAgent = mock(StoreElementAgent.class);
+
+        when(_connection
+            .getBroker())
+            .thenReturn(_specialistsBroker);
+        when(_specialistsBroker
+            .requireSpecialist(BrokerAgent.TYPE))
+            .thenReturn(_brokerAgent);
+        when(_brokerAgent
+            .getBrokerByProjectName(PROJECT_NAME))
+            .thenReturn(_specialistsBroker);
+        when(_specialistsBroker
+            .requireSpecialist(StoreElementAgent.TYPE))
+            .thenReturn(_storeElementAgent);
     }
 
     @Test
@@ -36,29 +57,13 @@ public class FSImplTest {
         final String targetPageFolder = "testPageFolder";
         final String pageTemplateUid = "testPageTemplate";
 
-        final SpecialistsBroker specialistsBroker = mock(SpecialistsBroker.class);
-        final BrokerAgent brokerAgent = mock(BrokerAgent.class);
-        final StoreElementAgent storeElementAgent = mock(StoreElementAgent.class);
-
         final PageFolder existingPageFolder = mock(PageFolder.class);
         final PageTemplate pageTemplate = mock(PageTemplate.class);
 
-        when(_connection
-            .getBroker())
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(BrokerAgent.TYPE))
-            .thenReturn(brokerAgent);
-        when(brokerAgent
-            .getBrokerByProjectName(PROJECT_NAME))
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(StoreElementAgent.TYPE))
-            .thenReturn(storeElementAgent);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
             .thenReturn(existingPageFolder);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
             .thenReturn(pageTemplate);
 
@@ -70,7 +75,7 @@ public class FSImplTest {
         when(existingPageFolder
             .createPageFolder(name))
             .thenReturn(pageFolder);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
             .thenReturn(existingSiteStoreFolder);
         when(existingSiteStoreFolder.createPageRefFolder(name))
@@ -86,6 +91,7 @@ public class FSImplTest {
         final PageRef pageRef = _fs.createPage(name, pageTemplateUid, targetPageFolder);
 
         // Assert
+        verify(existingPageFolder, times(1)).createPageFolder(name);
         assertNotNull("Page created, expect non-null PageRef.", pageRef);
     }
 
@@ -96,29 +102,13 @@ public class FSImplTest {
         final String targetPageFolder = "testPageFolder";
         final String pageTemplateUid = "testPageTemplate";
 
-        final SpecialistsBroker specialistsBroker = mock(SpecialistsBroker.class);
-        final BrokerAgent brokerAgent = mock(BrokerAgent.class);
-        final StoreElementAgent storeElementAgent = mock(StoreElementAgent.class);
-
         final PageFolder existingPageFolder = mock(PageFolder.class);
         final PageTemplate pageTemplate = mock(PageTemplate.class);
 
-        when(_connection
-            .getBroker())
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(BrokerAgent.TYPE))
-            .thenReturn(brokerAgent);
-        when(brokerAgent
-            .getBrokerByProjectName(PROJECT_NAME))
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(StoreElementAgent.TYPE))
-            .thenReturn(storeElementAgent);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
             .thenReturn(existingPageFolder);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
             .thenReturn(pageTemplate);
 
@@ -127,7 +117,7 @@ public class FSImplTest {
         when(existingPageFolder
             .createPageFolder(name))
             .thenReturn(pageFolder);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
             .thenReturn(null);
 
@@ -144,26 +134,10 @@ public class FSImplTest {
         final String targetPageFolder = "testPageFolder";
         final String pageTemplateUid = "unknownPageTemplate";
 
-        final SpecialistsBroker specialistsBroker = mock(SpecialistsBroker.class);
-        final BrokerAgent brokerAgent = mock(BrokerAgent.class);
-        final StoreElementAgent storeElementAgent = mock(StoreElementAgent.class);
-
-        when(_connection
-            .getBroker())
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(BrokerAgent.TYPE))
-            .thenReturn(brokerAgent);
-        when(brokerAgent
-            .getBrokerByProjectName(PROJECT_NAME))
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(StoreElementAgent.TYPE))
-            .thenReturn(storeElementAgent);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
             .thenReturn(mock(PageFolder.class));
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
             .thenReturn(null);
 
@@ -180,26 +154,10 @@ public class FSImplTest {
         final String targetPageFolder = "unknownPageFolder";
         final String pageTemplateUid = "testPageTemplate";
 
-        final SpecialistsBroker specialistsBroker = mock(SpecialistsBroker.class);
-        final BrokerAgent brokerAgent = mock(BrokerAgent.class);
-        final StoreElementAgent storeElementAgent = mock(StoreElementAgent.class);
-
-        when(_connection
-            .getBroker())
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(BrokerAgent.TYPE))
-            .thenReturn(brokerAgent);
-        when(brokerAgent
-            .getBrokerByProjectName(PROJECT_NAME))
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(StoreElementAgent.TYPE))
-            .thenReturn(storeElementAgent);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
             .thenReturn(null);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
             .thenReturn(mock(PageTemplate.class));
 
@@ -217,29 +175,13 @@ public class FSImplTest {
         final String targetPageFolder = "testPageFolder";
         final String pageTemplateUid = "testPageTemplate";
 
-        final SpecialistsBroker specialistsBroker = mock(SpecialistsBroker.class);
-        final BrokerAgent brokerAgent = mock(BrokerAgent.class);
-        final StoreElementAgent storeElementAgent = mock(StoreElementAgent.class);
-
         final PageFolder existingPageFolder = mock(PageFolder.class);
         final PageTemplate pageTemplate = mock(PageTemplate.class);
 
-        when(_connection
-            .getBroker())
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(BrokerAgent.TYPE))
-            .thenReturn(brokerAgent);
-        when(brokerAgent
-            .getBrokerByProjectName(PROJECT_NAME))
-            .thenReturn(specialistsBroker);
-        when(specialistsBroker
-            .requireSpecialist(StoreElementAgent.TYPE))
-            .thenReturn(storeElementAgent);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false))
             .thenReturn(existingPageFolder);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
             .thenReturn(pageTemplate);
 
@@ -249,7 +191,7 @@ public class FSImplTest {
         when(existingPageFolder
             .createPage(name, pageTemplate, true))
             .thenReturn(page);
-        when(storeElementAgent
+        when(_storeElementAgent
             .loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false))
             .thenReturn(existingPageRefFolder);
         when(existingPageRefFolder
