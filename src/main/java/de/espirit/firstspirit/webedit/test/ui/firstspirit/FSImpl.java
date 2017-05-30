@@ -69,6 +69,7 @@ public class FSImpl implements FS {
 
         if ((existingPageFolder != null) && (pageTemplate != null)) {
             try {
+                // @ToDo: Explicitly test new behavior
                 final PageFolder pageFolder;
                 if(createFolders) {
                     pageFolder = existingPageFolder.createPageFolder(name);// @ToDo: 'name' parameter unchecked. Can be null or empty
@@ -78,14 +79,21 @@ public class FSImpl implements FS {
 
                 final Page page = pageFolder.createPage(name, pageTemplate, true);
 
-                final SiteStoreFolder existingSiteStoreFolder = (SiteStoreFolder) storeElementAgent
-                    .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false);
+                if(createFolders) {
+                    final SiteStoreFolder existingSiteStoreFolder = (SiteStoreFolder) storeElementAgent
+                        .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false);
 
-                if (existingSiteStoreFolder != null) {
-                    final PageRefFolder pageRefFolder = existingSiteStoreFolder.createPageRefFolder(name);
-                    return pageRefFolder.createPageRef(name, page, true);
+                    if (existingSiteStoreFolder != null) {
+                        final PageRefFolder pageRefFolder = existingSiteStoreFolder.createPageRefFolder(name);
+                        return pageRefFolder.createPageRef(name, page, true);
+                    }
+                } else {
+                    final PageRefFolder existingPageRefFolder = (PageRefFolder) storeElementAgent
+                            .loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false);
+                    if (existingPageRefFolder != null) {
+                        return existingPageRefFolder.createPageRef(name, page, true);
+                    }
                 }
-
             } catch (ElementDeletedException | LockException e) {
                 FSImpl.LOGGER.error(e);
             }

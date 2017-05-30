@@ -243,20 +243,17 @@ public class FSImplTest {
             .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false))
             .thenReturn(pageTemplate);
 
-        final SiteStoreFolder existingSiteStoreFolder = mock(SiteStoreFolder.class);
+        final PageRefFolder existingPageRefFolder = mock(PageRefFolder.class);
         final PageFolder pageFolder = mock(PageFolder.class);
-        final PageRefFolder pageRefFolder = mock(PageRefFolder.class);
         final Page page = mock(Page.class);
 
         when(storeElementAgent
-            .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false))
-            .thenReturn(existingSiteStoreFolder);
-        when(existingSiteStoreFolder.createPageRefFolder(name))
-            .thenReturn(pageRefFolder);
+            .loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false))
+            .thenReturn(existingPageRefFolder);
         when(pageFolder
             .createPage(name, pageTemplate, true))
             .thenReturn(page);
-        when(pageRefFolder
+        when(existingPageRefFolder
             .createPageRef(name, page, true))
             .thenReturn(mock(PageRef.class));
 
