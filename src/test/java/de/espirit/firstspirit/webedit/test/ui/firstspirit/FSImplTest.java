@@ -88,7 +88,7 @@ public class FSImplTest {
             .thenReturn(mock(PageRef.class));
 
         // Act
-        final PageRef pageRef = _fs.createPage(name, pageTemplateUid, targetPageFolder);
+        final PageRef pageRef = _fs.createPage(name, pageTemplateUid, targetPageFolder, true);
 
         // Assert
         verify(existingPageFolder, times(1)).createPageFolder(name);
@@ -122,7 +122,7 @@ public class FSImplTest {
             .thenReturn(null);
 
         // Act
-        final PageRef pageRef = _fs.createPage(name, pageTemplateUid, targetPageFolder);
+        final PageRef pageRef = _fs.createPage(name, pageTemplateUid, targetPageFolder, true);
 
         // Assert
         assertNull("No page created, expect null.", pageRef);
@@ -142,7 +142,7 @@ public class FSImplTest {
             .thenReturn(null);
 
         // Act
-        final PageRef pageRef = _fs.createPage("testPageName", pageTemplateUid, targetPageFolder);
+        final PageRef pageRef = _fs.createPage("testPageName", pageTemplateUid, targetPageFolder, true);
 
         // Assert
         assertNull("No page created, expect null.", pageRef);
@@ -162,7 +162,7 @@ public class FSImplTest {
             .thenReturn(mock(PageTemplate.class));
 
         // Act
-        final PageRef pageRef = _fs.createPage("testPageName", pageTemplateUid, targetPageFolder);
+        final PageRef pageRef = _fs.createPage("testPageName", pageTemplateUid, targetPageFolder, true);
 
         // Assert
         assertNull("No page created, expect null.", pageRef);
