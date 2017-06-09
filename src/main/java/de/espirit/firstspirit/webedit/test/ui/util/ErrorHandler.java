@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 public class ErrorHandler {
     private static final Logger LOGGER = Logger.getLogger(ErrorHandler.class);
 
+    //Prevent class instantiation
+    private ErrorHandler() {}
+
     /**
      * Handles the error by printing logs and taking a screenshot
      *
