@@ -380,8 +380,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         webDriver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().window().setSize(new Dimension(1200, 800));
 
-        final String url =
-            UiTestRunner.this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE)
+        final String url = UiTestRunner.this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE)
                 .getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(project).createUrl();
 
         this.disableTourHints(UiTestRunner.this.fs.connection());
