@@ -3,6 +3,7 @@ package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.m
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.Web;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -26,4 +27,11 @@ public interface CCMessageDialog extends Web {
      * @return all buttons
      */
     List<CCInputButton> buttons() throws CCAPIException;
+
+    /**
+     * Returns the button identified by the given display name
+     * @param displayName the display name of the button
+     * @return button if found, otherwise null
+     */
+    CCInputButton buttonByName(@NotNull final String displayName) throws CCAPIException;
 }
