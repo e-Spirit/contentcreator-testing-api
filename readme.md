@@ -24,7 +24,9 @@ This is a testing framework for the FirstSpirit ContentCreator. It supports the 
     * default: *false*
 * **webdriver.phantomjs.executable** - Path to the phantomjs executable
     * default: *D:\Entwicklung\phantomjs\bin\phantomjs.exe*
-
+* **webdriver.ie.executable** - Path to the internet explorer executable
+    * default: *D:\Entwicklung\IEDriverServer\IEDriverServer.exe*
+    
 ## Annotations
 
 In order to specify the webdriver which should be used, the *UiTestRunner.WebDriver* annoation has to be added to the test class.
@@ -35,6 +37,7 @@ These are the default webdriver factories that are provided by the ContentCreato
 
 * **LocalChromeWebDriverFactory**
 * **LocalPhantomJSWebDriverFactory**
+* **LocalIEWebDriverFactory**
 * **RemoteChromeWebDriverFactory**
 * **RemoteFirefoxWebDriverFactory**
 * **RemoteIEWebDriverFactory**
