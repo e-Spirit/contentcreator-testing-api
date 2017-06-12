@@ -6,7 +6,6 @@ import de.espirit.firstspirit.access.schedule.TaskResult;
 import de.espirit.firstspirit.webedit.test.ui.AbstractSimplyUiTest;
 import de.espirit.firstspirit.webedit.test.ui.Constants;
 import de.espirit.firstspirit.webedit.test.ui.UiTestRunner;
-import de.espirit.firstspirit.webedit.test.ui.daimler.DaimlerPreAuthLoginHook;
 import de.espirit.firstspirit.webedit.test.ui.util.Assert;
 import de.espirit.firstspirit.webedit.test.ui.webdriver.factory.LocalIEWebDriverFactory;
 import org.apache.log4j.Logger;
@@ -15,7 +14,6 @@ import org.junit.Test;
 
 
 @UiTestRunner.WebDriver({LocalIEWebDriverFactory.class})
-@UiTestRunner.UseLoginHook(DaimlerPreAuthLoginHook.class)
 public class ExampleTest extends AbstractSimplyUiTest {
 	
 	private static final Logger LOGGER = Logger.getLogger(ExampleTest.class);
