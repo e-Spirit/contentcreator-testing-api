@@ -1,6 +1,5 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
-import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
@@ -10,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 
 /**
  * Provides access to WebEdit's UI elements like the {@link #menu() MenuBar}, {@link #preview() Preview}
- * and {@link #reports() Reports}.
+ * and {@link #reports() Reports} without connection to the FS-Server.
  *
  * @see MenuBar
  * @see Preview
@@ -54,13 +53,6 @@ public interface CC extends Web {
     WebDriver driver();
 
     /**
-     * Returns the initial project.
-     *
-     * @return initial project.
-     */
-    Project project();
-
-    /**
      * Returns the current dialogs
      * @return current dialogs
      */
@@ -72,7 +64,8 @@ public interface CC extends Web {
      * @return id of the preview element
      */
     long previewElementId();
-
+    
+    
     /**
      * Logs out current session.
      */

@@ -3,7 +3,7 @@
  * <p>
  * <b>Write an UI test</b>
  * <ul>
- * <li>Create a sub-class of {@link de.espirit.firstspirit.webedit.test.ui.AbstractUiTest}.</li>
+ * <li>Create a sub-class of {@link de.espirit.firstspirit.webedit.test.ui.AbstractSimplyUiTest}.</li>
  * <li>Use {@link de.espirit.firstspirit.webedit.test.ui.contentcreator.CC} to access ContentCreator UI elements (html).</li>
  * <li>Use {@link de.espirit.firstspirit.webedit.test.ui.firstspirit.FS} to access FirstSpirit server.</li>
  * </ul>

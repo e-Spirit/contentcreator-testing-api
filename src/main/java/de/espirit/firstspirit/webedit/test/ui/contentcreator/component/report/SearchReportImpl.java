@@ -10,42 +10,48 @@ import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 
 public class SearchReportImpl extends AbstractReport implements SearchReport {
-    private final WebDriver webDriver;
 
-    public SearchReportImpl(@NotNull final WebDriver webDriver, @NotNull final WebElement button) {
-        super(webDriver, button);
-        this.webDriver = webDriver;
-    }
+	private final WebDriver webDriver;
 
-    @Override
-    public void setParamMyElements(final boolean onlyMyElements) throws CCAPIException {
-        final WebElement webElement = Utils.findElement(this.webDriver, By.className("fs-checkbox-label"));
-        if (webElement.getAttribute("class").contains("fs-checkbox-checked") != onlyMyElements) {
-            webElement.click();
-        }
-    }
 
-    @Nullable
-    @Override
-    public String reportMessage() throws CCAPIException {
-        final WebElement reportMsg = Utils.findElement(this.webDriver, By.className("report-message"));
-        return reportMsg.isDisplayed() ? reportMsg.getText() : null;
-    }
+	public SearchReportImpl(@NotNull final WebDriver webDriver, @NotNull final WebElement button) {
+		super(webDriver, button);
+		this.webDriver = webDriver;
+	}
 
-    @NotNull
-    @SuppressWarnings("null")
-    @Override
-    public WebElement html() throws CCAPIException {
-        if (ComponentUtils.hasElement(this.webDriver, By.className("fs-sidebar-content"))) {
-            return Utils.findElement(this.webDriver, By.className("fs-sidebar-content"));
-        }
 
-        throw new CCAPIException("coudn't find the html source", this.webDriver);
-    }
+	@Override
+	public void setParamMyElements(final boolean onlyMyElements) throws CCAPIException {
+		final WebElement webElement = Utils.findElement(this.webDriver, By.className("fs-checkbox-label"));
+		if (webElement.getAttribute("class").contains("fs-checkbox-checked") != onlyMyElements) {
+			webElement.click();
+		}
+	}
 
-    @NotNull
-    @Override
-    public WebElement button() {
-        return this.reportButton;
-    }
+
+	@Nullable
+	@Override
+	public String reportMessage() throws CCAPIException {
+		final WebElement reportMsg = Utils.findElement(this.webDriver, By.className("report-message"));
+		return reportMsg.isDisplayed() ? reportMsg.getText() : null;
+	}
+
+
+	@NotNull
+	@SuppressWarnings("null")
+	@Override
+	public WebElement html() throws CCAPIException {
+		if (ComponentUtils.hasElement(this.webDriver, By.className("fs-sidebar-content"))) {
+			return Utils.findElement(this.webDriver, By.className("fs-sidebar-content"));
+		}
+
+		throw new CCAPIException("coudn't find the html source", this.webDriver);
+	}
+
+
+	@NotNull
+	@Override
+	public WebElement button() {
+		return this.reportButton;
+	}
 }
