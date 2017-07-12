@@ -28,7 +28,6 @@ import de.espirit.firstspirit.webedit.test.ui.firstspirit.component.FSProjectImp
  * Implementation of the {@link FS FirstSpirit server adapter}.
  */
 public class FSImpl implements FS {
-
     private static final Logger LOGGER = Logger.getLogger(FSImpl.class);
 
     private final ServerConnection connection;
@@ -53,25 +52,17 @@ public class FSImpl implements FS {
 
     @Override
     public PageRef createPage(final String name, final String pageTemplateUid, final String targetPageFolder, final boolean createFolders) {
-        final SpecialistsBroker projectSpecialistBroker = this.connection
-            .getBroker()
-            .requireSpecialist(BrokerAgent.TYPE)
-            .getBrokerByProjectName(this.projectName);
+        final SpecialistsBroker projectSpecialistBroker = this.connection.getBroker().requireSpecialist(BrokerAgent.TYPE).getBrokerByProjectName(this.projectName);
 
-        final StoreElementAgent storeElementAgent = projectSpecialistBroker
-            .requireSpecialist(StoreElementAgent.TYPE);
-
-        final PageFolder existingPageFolder = (PageFolder) storeElementAgent
-            .loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false);
-
-        final PageTemplate pageTemplate = (PageTemplate) storeElementAgent
-            .loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false);
+        final StoreElementAgent storeElementAgent = projectSpecialistBroker.requireSpecialist(StoreElementAgent.TYPE);
+        final PageFolder existingPageFolder = (PageFolder) storeElementAgent.loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false);
+        final PageTemplate pageTemplate = (PageTemplate) storeElementAgent.loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false);
 
         if ((existingPageFolder != null) && (pageTemplate != null)) {
             try {
                 final PageFolder pageFolder;
 
-                if(createFolders) {
+                if (createFolders) {
                     pageFolder = existingPageFolder.createPageFolder(name);// @ToDo: 'name' parameter unchecked. Can be null or empty
                 } else {
                     pageFolder = existingPageFolder;
@@ -79,17 +70,15 @@ public class FSImpl implements FS {
 
                 final Page page = pageFolder.createPage(name, pageTemplate, true);
 
-                if(createFolders) {
-                    final SiteStoreFolder existingSiteStoreFolder = (SiteStoreFolder) storeElementAgent
-                        .loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false);
+                if (createFolders) {
+                    final SiteStoreFolder existingSiteStoreFolder = (SiteStoreFolder) storeElementAgent.loadStoreElement(targetPageFolder, SiteStoreFolder.UID_TYPE, false);
 
                     if (existingSiteStoreFolder != null) {
                         final PageRefFolder pageRefFolder = existingSiteStoreFolder.createPageRefFolder(name);
                         return pageRefFolder.createPageRef(name, page, true);
                     }
                 } else {
-                    final PageRefFolder existingPageRefFolder = (PageRefFolder) storeElementAgent
-                        .loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false);
+                    final PageRefFolder existingPageRefFolder = (PageRefFolder) storeElementAgent.loadStoreElement(targetPageFolder, PageRefFolder.UID_TYPE, false);
                     if (existingPageRefFolder != null) {
                         return existingPageRefFolder.createPageRef(name, page, true);
                     }

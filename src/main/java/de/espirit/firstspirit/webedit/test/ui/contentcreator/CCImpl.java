@@ -36,7 +36,7 @@ public class CCImpl implements CC {
         this(project, driver, url + "&login.ticket=" + ssoTicket);
     }
 
-    CCImpl(final Project project, final WebDriver driver, final String webEditUrl) {
+    private CCImpl(final Project project, final WebDriver driver, final String webEditUrl) {
         this.project = project;
         this.webDriver = driver;
         this.webDriver.get(webEditUrl);
@@ -88,22 +88,17 @@ public class CCImpl implements CC {
     @Override
     public long previewElementId() {
         waitForCC(webDriver);
-        Long id = (Long) ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement().getId()");
-
-        return id;
+        return (Long) ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API.Common.getPreviewElement().getId()");
     }
 
     @Override
     public void logout() {
         try {
             ((RemoteWebDriver) driver()).executeScript("location.href='logout.jsp';");
-            new WebDriverWait(webDriver, 20).until((ExpectedCondition<Boolean>) webDriver -> {
-                if(((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API == 'undefined'").equals(Boolean.TRUE))
-                    return true;
-                return false;
-            });
+            new WebDriverWait(webDriver, 20).until((ExpectedCondition<Boolean>) webDriver ->
+                    ((JavascriptExecutor) webDriver).executeScript("return typeof top.WE_API == 'undefined'").equals(Boolean.TRUE));
         } catch (final Exception e) {
-            LOGGER.warn("exception during logout", e);
+            LOGGER.warn("Exception during logout", e);
         }
     }
 }

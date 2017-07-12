@@ -55,6 +55,17 @@ public class CCMessageDialogImpl implements CCMessageDialog {
 		return ccInputButtons;
 	}
 
+	@Override
+	public CCInputButton buttonByName(@NotNull final String displayName) throws CCAPIException {
+		for (final CCInputButton button : this.buttons()) {
+			if (button.label().equals(displayName)) {
+				return button;
+			}
+		}
+
+		throw new CCAPIException("Can't find button with the displayname: '" + displayName + "'", this.webDriver);
+	}
+
 	@NotNull
 	@Override
 	public WebElement html() {
