@@ -50,15 +50,19 @@ public class FSImpl implements FS {
         return this.createPage(name, pageTemplateUid, targetPageFolder, true);
     }
 
+    @Nullable
     @Override
     public PageRef createPage(final String name, final String pageTemplateUid, final String targetPageFolder, final boolean createFolders) {
         final SpecialistsBroker projectSpecialistBroker = this.connection.getBroker().requireSpecialist(BrokerAgent.TYPE).getBrokerByProjectName(this.projectName);
-
         final StoreElementAgent storeElementAgent = projectSpecialistBroker.requireSpecialist(StoreElementAgent.TYPE);
-        final PageFolder existingPageFolder = (PageFolder) storeElementAgent.loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false);
         final PageTemplate pageTemplate = (PageTemplate) storeElementAgent.loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false);
+        if(pageTemplate == null) {
+            FSImpl.LOGGER.warn("PageTemplate with uid '" + pageTemplateUid + "' does not exist.");
+            return null;
+        }
+        final PageFolder existingPageFolder = (PageFolder) storeElementAgent.loadStoreElement(targetPageFolder, PageFolder.UID_TYPE, false);
 
-        if ((existingPageFolder != null) && (pageTemplate != null)) {
+        if (existingPageFolder != null) {
             try {
                 final PageFolder pageFolder;
 
