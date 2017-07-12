@@ -21,19 +21,16 @@ import static org.mockito.Mockito.*;
 public class FSImplTest {
     private static final String PROJECT_NAME = "Test Project";
 
-    private ServerConnection _connection;
     private FSImpl _fs;
-    private SpecialistsBroker _specialistsBroker;
-    private BrokerAgent _brokerAgent;
     private StoreElementAgent _storeElementAgent;
 
     @Before
     public void beforeEachTest() {
-        _connection = mock(ServerConnection.class, RETURNS_DEEP_STUBS);
+        ServerConnection _connection = mock(ServerConnection.class, RETURNS_DEEP_STUBS);
         _fs = new FSImpl(_connection, PROJECT_NAME);
 
-        _specialistsBroker = mock(SpecialistsBroker.class);
-        _brokerAgent = mock(BrokerAgent.class);
+        SpecialistsBroker _specialistsBroker = mock(SpecialistsBroker.class);
+        BrokerAgent _brokerAgent = mock(BrokerAgent.class);
         _storeElementAgent = mock(StoreElementAgent.class);
 
         when(_connection

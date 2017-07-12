@@ -53,3 +53,23 @@ Additionally test classes and methods can be parameterized with the following an
 * **@BrowserLocale("en")** - Specifies the locale to use within the test method/class (overwrites the environment variable)
 * **@ClassPattern("de.espirit.firstspirit.webedit.\*.UiTest\*")** - Defines which UI tests should be executed, by specifying a classname pattern
 * **@Classes(value = {Test1.class, Test2.class})** - Defines which UI tests should be executed, by specifying concrete classes
+
+## Example Test Class
+
+This is an example test class that uses the chrome driver and search functionality of the ContentCreator.
+```java
+@UiTestRunner.WebDriver({LocalChromeWebDriverFactory.class})
+public class ExampleTest extends AbstractUiTest {
+    private static final Logger LOGGER = Logger.getLogger(ExampleTest.class);
+
+    @Test
+    public void search() {
+        System.setProperty(Constants.PARAM_ERROR_FILE_PATH, "d:\\screenshots\\");
+        ExampleTest.LOGGER.info("Test 'search for solar' started");
+        this.cc().menu().search("solar");
+        Assert.assertTrue("search-results expected", this.cc().reports().search().getResultCount() > 0, this.cc().driver());
+
+        ExampleTest.LOGGER.info("Test 'search for solar' successful");
+    }
+}
+```
