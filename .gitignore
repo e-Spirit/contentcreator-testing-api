@@ -3,7 +3,7 @@
 
 *.iml
 
-## Directory-based projectName format:
+## Directory-based project format:
 .idea/
 # if you remove the above rule, at least ignore the following:
 
@@ -26,7 +26,7 @@
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
 
-## File-based projectName format:
+## File-based project format:
 *.ipr
 *.iws
 
@@ -69,7 +69,7 @@ local.properties
 .loadpath
 
 # Eclipse Core
-.projectName
+.project
 
 # External tool builders
 .externalToolBuilders/
@@ -98,5 +98,3 @@ local.properties
 # Created by .ignore support plugin (hsz.mobi)
 /target/
 /.eclipse-pmd
-
-/testing/

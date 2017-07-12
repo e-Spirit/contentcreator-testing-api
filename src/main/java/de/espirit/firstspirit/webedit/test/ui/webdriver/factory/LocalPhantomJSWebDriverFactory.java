@@ -1,25 +1,21 @@
 package de.espirit.firstspirit.webedit.test.ui.webdriver.factory;
 
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 import static de.espirit.firstspirit.webedit.test.ui.util.Utils.env;
 
-/**
- * Creates a local chrome instance.
- * <p>
- * The chrome executable can be configured with -D property {@code "webdriver.phantomjs.executable"}, default value {@link #DEFAULT_WEBDRIVER_EXECUTABLE}.
- */
 public class LocalPhantomJSWebDriverFactory implements WebDriverFactory {
-    
-    // TODO temporary changed
-//    private static final String DEFAULT_WEBDRIVER_EXECUTABLE = "C:\\phantomjs\\bin\\phantomjs.exe";
-    private static final String DEFAULT_WEBDRIVER_EXECUTABLE = "D:\\Development\\IntelliJ\\E-Spirit\\ContentCreatorTesting\\testing\\driver\\phantomjs\\bin\\phantomjs.exe";
+    private static final String DEFAULT_WEBDRIVER_EXECUTABLE = "D:\\Entwicklung\\phantomjs\\bin\\phantomjs.exe";
 
     @Override
     public RemoteWebDriver createWebDriver() throws IOException {
@@ -32,7 +28,12 @@ public class LocalPhantomJSWebDriverFactory implements WebDriverFactory {
         PhantomJSDriverService service = new PhantomJSDriverService.Builder().usingPhantomJSExecutable(new java.io.File(webdriverExecutable)).usingAnyFreePort().usingCommandLineArguments(phantomArgs).build();
         service.start();
 
-        return new PhantomJSDriver(service, DesiredCapabilities.chrome());
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        LoggingPreferences loggingPreferences = new LoggingPreferences();
+        loggingPreferences.enable(LogType.BROWSER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+
+        return new PhantomJSDriver(service, capabilities);
     }
 
     @Override

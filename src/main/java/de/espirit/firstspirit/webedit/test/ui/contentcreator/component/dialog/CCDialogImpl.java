@@ -1,17 +1,20 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.jetbrains.annotations.NotNull;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButton;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputButtonImpl;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.inputcomponent.CCInputComponent;
 import de.espirit.firstspirit.webedit.test.ui.exception.CCAPIException;
 import de.espirit.firstspirit.webedit.test.ui.util.ComponentUtils;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CCDialogImpl implements CCDialog {
 
@@ -76,6 +79,7 @@ public class CCDialogImpl implements CCDialog {
 
 		if (elements.size() > buttonIndex) {
 			elements.get(buttonIndex).click();
+			new WebDriverWait(webDriver, 20).until(ExpectedConditions.invisibilityOfElementLocated(By.className("fs-DialogBox")));
 		}
 	}
 

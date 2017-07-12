@@ -1,6 +1,6 @@
 # FirstSpirit ContentCreator UI-Testing Framework
 
-This is a testing framework for the FirstSpirit ContentCreator. It supports the Chrome and PhantomJS browsers.
+This is a testing framework for the FirstSpirit ContentCreator. It supports various browser engines (e.g. Chrome and PhantomJS).
 
 ## Environments variable
 
@@ -28,15 +28,12 @@ This is a testing framework for the FirstSpirit ContentCreator. It supports the 
     * default: *D:\Entwicklung\IEDriverServer\IEDriverServer.exe*
 * **webdriver.ie.bypassProtectionMode** - Force bypassing of IE protection mode
     * default: *false*
-* **useHttps** - Use https for connection to FS-Server
-    * default: *false*
-* **loginhook** - Full qualified classname of implemented LoginHook (optional, overrides annotation)
     
 ## Annotations
 
-In order to specify the webdriver which should be used, the *UiTestRunner.WebDriver* annoation has to be added to the test class.
+In order to specify the webdrivers which should be used, the *UiTestRunner.WebDriver* annotation has to be added to the test class.
 
-* **@UiTestRunner.WebDriver({...WebDriverFactory.class})**
+* **@UiTestRunner.WebDriver({ExampleWebDriverFactory.class,..})**
 
 These are the default webdriver factories that are provided by the ContentCreator UI-Testing Framework:
 
@@ -53,8 +50,6 @@ If you want to use your own webdriver factory just extend the *WebDriverFactory*
 
 Additionally test classes and methods can be parameterized with the following annotations.
 
-* **@UiTestRunner.WebDriver()** - Specifies which WebDrivers will be used
-* **@UiTestRunner.UseLoginHook()** - Specifies which LoginHook implementations will be used (optional, overrides by environment variable)
 * **@BrowserLocale("en")** - Specifies the locale to use within the test method/class (overwrites the environment variable)
 * **@ClassPattern("de.espirit.firstspirit.webedit.\*.UiTest\*")** - Defines which UI tests should be executed, by specifying a classname pattern
 * **@Classes(value = {Test1.class, Test2.class})** - Defines which UI tests should be executed, by specifying concrete classes
