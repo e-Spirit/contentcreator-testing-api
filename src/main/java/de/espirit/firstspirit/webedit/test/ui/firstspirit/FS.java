@@ -5,6 +5,8 @@ import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.component.FSProject;
 
+
+
 /**
  * Provides access to the appropriate FirstSpirit server, see {@link #connection()}.
  */
@@ -40,13 +42,18 @@ public interface FS {
      * @return FirstSpirit pageRef or null.
      */
     PageRef createPage(final String name, final String pageTemplateUid, final String targetPageFolder, final boolean createFolders);
-
+    
     /**
      * Returns a link to the FirstSpirit project.
-     *
      * @return FirstSpirit project.
      */
     FSProject project();
+    
+    /**
+     * Returns name of the FirstSpirit project.
+     * @return Project name.
+     */
+    String getProjectName();
 
     /**
      * Starts a deployment.

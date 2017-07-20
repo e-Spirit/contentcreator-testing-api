@@ -1,34 +1,33 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
-import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-
 import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.access.store.Previewable;
 import de.espirit.firstspirit.access.store.Store;
 import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.access.store.sitestore.SiteStoreFolder;
 import de.espirit.firstspirit.agency.ClientUrlAgent;
-import de.espirit.firstspirit.webedit.test.ui.contentcreator.CC;
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.ConnectedCC;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
 import de.espirit.firstspirit.webedit.test.ui.util.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
+import org.junit.runner.RunWith;
 
 /**
+ * HALLO WELT!
  * Abstract super class for <b>all</b> WebEdit UI tests. The {@link UiTestRunner UI test runner}
  * ensures that the connection to the FirstSpirit server {@link #fs()} and WebEdit client
  * {@link #cc()} are properly initialized.
  *
  * @see FS
- * @see CC
+ * @see ConnectedCC
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 @RunWith(UiTestRunner.class)
-public abstract class AbstractUiTest extends Assert {
+public abstract class AbstractUiTest extends AbstractSimplyUiTest {
 
   private FS fs;
-  private CC cc;
 
   private String locale;
 
@@ -49,11 +48,11 @@ public abstract class AbstractUiTest extends Assert {
   /**
    * Returns the connection to the WebEdit client.
    *
-   * @return CC
+   * @return ConnectedCC
    */
   @NotNull
-  public CC cc() {
-    return this.cc;
+  public ConnectedCC cc() {
+    return (ConnectedCC) super.cc();
   }
 
 
@@ -94,7 +93,7 @@ public abstract class AbstractUiTest extends Assert {
   public void navigateTo(@NotNull final PageRef pageRef) {
 
     String url = this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE)
-        .getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(this.cc.project()).element(pageRef)
+        .getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(this.cc().project()).element(pageRef)
         .createUrl();
     if (url.contains("&locale=")) {
       url = url.replaceAll("&locale=\\w+", "&locale=" + this.locale);
@@ -111,15 +110,4 @@ public abstract class AbstractUiTest extends Assert {
   void setFS(final FS fs) {
     this.fs = fs;
   }
-
-
-  void setCC(final CC CC) {
-    this.cc = CC;
-  }
-
-
-  public void setLocale(final String locale) {
-    this.locale = locale;
-  }
-
 }

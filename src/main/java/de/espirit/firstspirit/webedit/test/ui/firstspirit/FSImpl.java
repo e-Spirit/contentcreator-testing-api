@@ -99,6 +99,12 @@ public class FSImpl implements FS {
     public FSProject project() {
         return new FSProjectImpl(this.connection.getProjectByName(this.projectName));
     }
+    
+    
+    @Override
+    public String getProjectName() {
+        return projectName;
+    }
 
     @Nullable
     @Override
