@@ -30,7 +30,7 @@ public class CCImpl implements CC {
     private static final Logger LOGGER = Logger.getLogger(CCImpl.class);
 
     private final org.openqa.selenium.WebDriver webDriver;
-    private final Project project;
+    private Project project;
 
     public CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket) {
         this(project, driver, url + "&login.ticket=" + ssoTicket);
@@ -100,5 +100,9 @@ public class CCImpl implements CC {
         } catch (final Exception e) {
             LOGGER.warn("Exception during logout", e);
         }
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

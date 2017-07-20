@@ -1,5 +1,7 @@
 package de.espirit.firstspirit.webedit.test.ui;
 
+import de.espirit.firstspirit.webedit.test.ui.contentcreator.CCImpl;
+import de.espirit.firstspirit.webedit.test.ui.firstspirit.FSImpl;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -96,6 +98,28 @@ public abstract class AbstractUiTest extends Assert {
     String url = this.fs.connection().getBroker().requireSpecialist(ClientUrlAgent.TYPE)
         .getBuilder(ClientUrlAgent.ClientType.WEBEDIT).project(this.cc.project()).element(pageRef)
         .createUrl();
+    if (url.contains("&locale=")) {
+      url = url.replaceAll("&locale=\\w+", "&locale=" + this.locale);
+    } else {
+      url += "&locale=" + this.locale;
+    }
+    this.cc().driver().get(url);
+    Utils.waitForCC(this.cc().driver());
+  }
+
+  public void switchProject(@NotNull final String projectName) {
+    FSImpl fsImpl = (FSImpl) fs;
+    CCImpl ccImpl = (CCImpl) cc;
+
+    fsImpl.setProjectName(projectName);
+    final Project project = fs.project().get();
+    ccImpl.setProject(project);
+
+    String url = this.fs.connection().getBroker()
+            .requireSpecialist(ClientUrlAgent.TYPE)
+            .getBuilder(ClientUrlAgent.ClientType.WEBEDIT)
+            .project(project)
+            .createUrl();
     if (url.contains("&locale=")) {
       url = url.replaceAll("&locale=\\w+", "&locale=" + this.locale);
     } else {

@@ -31,7 +31,7 @@ public class FSImpl implements FS {
     private static final Logger LOGGER = Logger.getLogger(FSImpl.class);
 
     private final ServerConnection connection;
-    private final String projectName;
+    private String projectName;
 
     public FSImpl(final ServerConnection connection, final String projectName) {
         this.connection = connection;
@@ -119,5 +119,9 @@ public class FSImpl implements FS {
         } else {
             throw new IllegalArgumentException("Unknown schedule entry '" + scheduleEntryName + "'.");
         }
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }
