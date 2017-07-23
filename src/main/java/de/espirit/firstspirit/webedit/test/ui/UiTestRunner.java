@@ -467,19 +467,9 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                                 locale = System.getenv(Constants.PARAM_LOCALE);
                             }
 
-                            /*String url = BrowserRunner.this.cc.driver().getCurrentUrl();
-                            if (url.contains("&locale=")) {
-                                url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
-                            } else {
-                                url += "&locale=" + locale;
-                            }*/
-
                             ((AbstractUiTest) test).setLocale(locale);
                             ((AbstractUiTest) test).switchProject(Utils.env(PARAM_PROJECT, DEFAULT_PROJECT_NAME));
 
-
-                            /*BrowserRunner.this.cc.driver().navigate().to(url);
-                            Utils.waitForCC(BrowserRunner.this.cc.driver());*/
                             s.evaluate(); // execute test method
                         } catch (final Throwable throwable) {
                             throw throwable;
