@@ -26,18 +26,18 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.waitForCC;
 /**
  * Implementation of the {@link CC WebEdit-UI-adapter} and all it's depending interfaces.
  */
-public class CCImpl implements CC {
-    private static final Logger LOGGER = Logger.getLogger(CCImpl.class);
+public class SimplyCC implements CC {
+    private static final Logger LOGGER = Logger.getLogger(SimplyCC.class);
 
-    private final org.openqa.selenium.WebDriver webDriver;
-    private final Project project;
 
-    public CCImpl(final Project project, final org.openqa.selenium.WebDriver driver, final String url, final String ssoTicket) {
-        this(project, driver, url + "&login.ticket=" + ssoTicket);
+    private final WebDriver webDriver;
+    private Project project;
+
+    public SimplyCC(final WebDriver driver, final String url, final String ssoTicket) {
+        this(driver, url + "&login.ticket=" + ssoTicket);
     }
 
-    private CCImpl(final Project project, final WebDriver driver, final String webEditUrl) {
-        this.project = project;
+    public SimplyCC(final WebDriver driver, final String webEditUrl) {
         this.webDriver = driver;
         this.webDriver.get(webEditUrl);
     }
@@ -71,13 +71,8 @@ public class CCImpl implements CC {
     }
 
     @Override
-    public org.openqa.selenium.WebDriver driver() {
+    public WebDriver driver() {
         return webDriver;
-    }
-
-    @Override
-    public Project project() {
-        return project;
     }
 
     @Override
@@ -100,5 +95,9 @@ public class CCImpl implements CC {
         } catch (final Exception e) {
             LOGGER.warn("Exception during logout", e);
         }
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }
