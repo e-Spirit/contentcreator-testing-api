@@ -31,7 +31,7 @@ public class FSImpl implements FS {
     private static final Logger LOGGER = Logger.getLogger(FSImpl.class);
 
     private final ServerConnection connection;
-    private final String projectName;
+    private String projectName;
 
     public FSImpl(final ServerConnection connection, final String projectName) {
         this.connection = connection;
@@ -56,7 +56,7 @@ public class FSImpl implements FS {
         final SpecialistsBroker projectSpecialistBroker = this.connection.getBroker().requireSpecialist(BrokerAgent.TYPE).getBrokerByProjectName(this.projectName);
         final StoreElementAgent storeElementAgent = projectSpecialistBroker.requireSpecialist(StoreElementAgent.TYPE);
         final PageTemplate pageTemplate = (PageTemplate) storeElementAgent.loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false);
-        if(pageTemplate == null) {
+        if (pageTemplate == null) {
             FSImpl.LOGGER.warn("PageTemplate with uid '" + pageTemplateUid + "' does not exist.");
             return null;
         }
@@ -99,8 +99,7 @@ public class FSImpl implements FS {
     public FSProject project() {
         return new FSProjectImpl(this.connection.getProjectByName(this.projectName));
     }
-    
-    
+
     @Override
     public String getProjectName() {
         return projectName;
@@ -125,5 +124,9 @@ public class FSImpl implements FS {
         } else {
             throw new IllegalArgumentException("Unknown schedule entry '" + scheduleEntryName + "'.");
         }
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

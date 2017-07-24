@@ -89,3 +89,31 @@ public class ExampleTest extends AbstractUiTest {
     }
 }
 ```
+
+This is an example test to switch a project. The project name(s) to switch to can be configured in the environment variables.
+    
+    @Test
+    public void test_switchProject() {
+        final String project1 = Utils.env("project1", "Projekt");
+        final String project2 = Utils.env("project2", "Projekt");
+
+        testThis();
+
+        this.switchProject(project1);
+        LOGGER.info("Switch to project: " + project1);
+        
+        testThis();
+
+        this.switchProject(project2);
+        LOGGER.info("Switch to project: " + project2);
+        
+        testThis();
+    }
+
+    private void testThis() {
+        ExampleTest.LOGGER.info("Test 'search for solar' started");
+        this.cc().menu().search("solar");
+        Assert.assertTrue("search-results expected", this.cc().reports().search().getResultCount() > 0, this.cc().driver());
+
+        ExampleTest.LOGGER.info("Test 'search for solar' successful");
+    }

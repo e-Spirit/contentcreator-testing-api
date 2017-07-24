@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
+import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogsImpl;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
@@ -28,12 +29,14 @@ import static de.espirit.firstspirit.webedit.test.ui.util.Utils.waitForCC;
 public class SimplyCC implements CC {
     private static final Logger LOGGER = Logger.getLogger(SimplyCC.class);
 
+
     private final WebDriver webDriver;
+    private Project project;
 
     public SimplyCC(final WebDriver driver, final String url, final String ssoTicket) {
         this(driver, url + "&login.ticket=" + ssoTicket);
     }
-    
+
     public SimplyCC(final WebDriver driver, final String webEditUrl) {
         this.webDriver = driver;
         this.webDriver.get(webEditUrl);
@@ -92,5 +95,9 @@ public class SimplyCC implements CC {
         } catch (final Exception e) {
             LOGGER.warn("Exception during logout", e);
         }
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

@@ -5,8 +5,6 @@ import de.espirit.firstspirit.access.store.sitestore.PageRef;
 import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.component.FSProject;
 
-
-
 /**
  * Provides access to the appropriate FirstSpirit server, see {@link #connection()}.
  */

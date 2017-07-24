@@ -73,7 +73,7 @@ import java.util.regex.Pattern;
  * @see WebDriver WebDriver
  */
 public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
-    
+
     // --- -D parameter names ---//
     private static final String PARAM_PROJECT = "project";
     private static final String PARAM_HOST = "host";
@@ -81,7 +81,7 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private static final String PARAM_USER = "user";
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_LOGINHOOK_CLASSNAME = "loginhook";
-    
+
     // --- default values ---//
     private static final String DEFAULT_PROJECT_NAME = "Mithras Energy";
     private static final String DEFAULT_HOST = "localhost";
@@ -93,9 +93,9 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     private static final Logger LOGGER = Logger.getLogger(UiTestRunner.class);
 
     private final Class<?> _parentClass;
-    
+
     private LoginHook _loginHook;
-    private FS        _fs;
+    private FS _fs;
 
     /**
      * The annotation defines which UI tests should be executed, by specifying a classname
@@ -140,18 +140,18 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
         @NotNull String value();
     }
-	
-	
-	/**
-	 * The annotation defines which {@link LoginHook} should be used for connection to FirstSpirit, by specifying concrete classes.
-	 */
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	@Target(ElementType.TYPE)
-	public @interface UseLoginHook {
-		
-		Class<? extends LoginHook> value() default ConnectedCCLoginHook.class;
-	}
+
+
+    /**
+     * The annotation defines which {@link LoginHook} should be used for connection to FirstSpirit, by specifying concrete classes.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Inherited
+    @Target(ElementType.TYPE)
+    public @interface UseLoginHook {
+
+        Class<? extends LoginHook> value() default ConnectedCCLoginHook.class;
+    }
 
     @SuppressWarnings("UnusedDeclaration")
     public UiTestRunner(final Class<?> parentClass) throws InitializationError {
@@ -258,74 +258,74 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
     protected Description describeChild(final BrowserRunner runner) {
         return runner.getDescription();
     }
-	
-	
-	@Override
-	protected void runChild(final BrowserRunner runner, final RunNotifier runNotifier) {
-		this.getLoginHook(runner);
-		runner.run(runNotifier);
-	}
+
+
+    @Override
+    protected void runChild(final BrowserRunner runner, final RunNotifier runNotifier) {
+        this.getLoginHook(runner);
+        runner.run(runNotifier);
+    }
 
     // --- private methods ---//
-	
-	
-	/**
-	 * Create and return a LoginHook for later establishment of a connection to FirstSpirit.
-	 *
-	 * @param runner
-	 */
-	private void getLoginHook(final BrowserRunner runner) {
-		try {
-			Class<?> annotatedLoginHookClass = null;
-			String   loginHookClassName;
-			
-			for (Class<?> testClass : runner._testClasses) {
-				if (testClass.isAnnotationPresent(UseLoginHook.class)) {
-					if (annotatedLoginHookClass == null) {
-						annotatedLoginHookClass = testClass.getAnnotation(UseLoginHook.class).value();
-					} else if (!annotatedLoginHookClass.equals(testClass.getAnnotation(UseLoginHook.class).value())) {
-						UiTestRunner.LOGGER.warn("Found different LoginHooks in several test classes. Annotation will be ignored and default used.");
-						annotatedLoginHookClass = null;
-						break;
-					}
-				}
-			}
-			
-			if (annotatedLoginHookClass == null) {
-				loginHookClassName = Utils.env(UiTestRunner.PARAM_LOGINHOOK_CLASSNAME, DEFAULT_LOGINHOOK_CLASSNAME);
-				_loginHook = (LoginHook) UiTestRunner.class.getClassLoader().loadClass(loginHookClassName).newInstance();
-				UiTestRunner.LOGGER.info("Use LoginHook set by environment variable: " + loginHookClassName);
-			} else {
-				loginHookClassName = Utils.env(UiTestRunner.PARAM_LOGINHOOK_CLASSNAME, annotatedLoginHookClass.getCanonicalName());
-				
-				if (loginHookClassName.equals(annotatedLoginHookClass.getCanonicalName())) {
-					_loginHook = (LoginHook) annotatedLoginHookClass.newInstance();
-					UiTestRunner.LOGGER.info("Use UseLoginHook set by annotation: " + loginHookClassName);
-				} else {
-					UiTestRunner.LOGGER.warn("Annotated LoginHook will be overridden by environment variable.");
-					_loginHook = (LoginHook) UiTestRunner.class.getClassLoader().loadClass(loginHookClassName).newInstance();
-					UiTestRunner.LOGGER.info("Use LoginHook set by environment variable: " + loginHookClassName);
-				}
-			}
-		} catch (Exception e) {
-			throw new RuntimeException("Unable to instantiate a LoginHook and connect to FirstSpirit.", e);
-		}
-	}
+
+
+    /**
+     * Create and return a LoginHook for later establishment of a connection to FirstSpirit.
+     *
+     * @param runner
+     */
+    private void getLoginHook(final BrowserRunner runner) {
+        try {
+            Class<?> annotatedLoginHookClass = null;
+            String loginHookClassName;
+
+            for (Class<?> testClass : runner._testClasses) {
+                if (testClass.isAnnotationPresent(UseLoginHook.class)) {
+                    if (annotatedLoginHookClass == null) {
+                        annotatedLoginHookClass = testClass.getAnnotation(UseLoginHook.class).value();
+                    } else if (!annotatedLoginHookClass.equals(testClass.getAnnotation(UseLoginHook.class).value())) {
+                        UiTestRunner.LOGGER.warn("Found different LoginHooks in several test classes. Annotation will be ignored and default used.");
+                        annotatedLoginHookClass = null;
+                        break;
+                    }
+                }
+            }
+
+            if (annotatedLoginHookClass == null) {
+                loginHookClassName = Utils.env(UiTestRunner.PARAM_LOGINHOOK_CLASSNAME, DEFAULT_LOGINHOOK_CLASSNAME);
+                _loginHook = (LoginHook) UiTestRunner.class.getClassLoader().loadClass(loginHookClassName).newInstance();
+                UiTestRunner.LOGGER.info("Use LoginHook set by environment variable: " + loginHookClassName);
+            } else {
+                loginHookClassName = Utils.env(UiTestRunner.PARAM_LOGINHOOK_CLASSNAME, annotatedLoginHookClass.getCanonicalName());
+
+                if (loginHookClassName.equals(annotatedLoginHookClass.getCanonicalName())) {
+                    _loginHook = (LoginHook) annotatedLoginHookClass.newInstance();
+                    UiTestRunner.LOGGER.info("Use UseLoginHook set by annotation: " + loginHookClassName);
+                } else {
+                    UiTestRunner.LOGGER.warn("Annotated LoginHook will be overridden by environment variable.");
+                    _loginHook = (LoginHook) UiTestRunner.class.getClassLoader().loadClass(loginHookClassName).newInstance();
+                    UiTestRunner.LOGGER.info("Use LoginHook set by environment variable: " + loginHookClassName);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to instantiate a LoginHook and connect to FirstSpirit.", e);
+        }
+    }
 
     /**
      * JUnit4 {@link Runner} for WebEdit UI tests that run inside a single browser instance.
      * <p>
      * {@link #withBeforeClasses(Statement) Before} and {@link #withAfterClasses(Statement) after} a
      * test class the browser will be {@link #setUpBrowser() opened}. For every test method the
-	 * {@link SingleUiTestRunner SingleUiTestRunner} is used.
+     * {@link SingleUiTestRunner SingleUiTestRunner} is used.
      */
     public class BrowserRunner extends ParentRunner<UiTestRunner.BrowserRunner.SingleUiTestRunner> {
 
         private final WebDriverFactory _browser;
         private final Class<?>[] _testClasses;
 
-        private CC                            _cc;
-		private org.openqa.selenium.WebDriver _webDriver;
+        private CC _cc;
+        private org.openqa.selenium.WebDriver _webDriver;
 
         private BrowserRunner(final WebDriverFactory browser, final Class<?>[] testClasses) throws InitializationError {
             super(browser.getClass());
@@ -335,50 +335,51 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
 
         @Override
         public void run(final RunNotifier notifier) {
-			try {
-				this.setUpBrowser();
-				super.run(notifier);
-			} finally {
-				_loginHook.tearDownCC();
-				_loginHook.tearDownFS();
-				try {
-					_webDriver.quit();
-				} catch (Exception e) {}
-			}
+            try {
+                this.setUpBrowser();
+                super.run(notifier);
+            } finally {
+                _loginHook.tearDownCC();
+                _loginHook.tearDownFS();
+                try {
+                    _webDriver.quit();
+                } catch (Exception e) {
+                }
+            }
         }
 
         /**
          * Creates the specified {@link org.openqa.selenium.WebDriver WebDriver} instance.
          */
         private void setUpBrowser() {
-			UiTestRunner.LOGGER.info("Connection established");
-	
-			try {
-				_webDriver = this._browser.createWebDriver();
-			} catch (final IOException e) {
-				throw new RuntimeException("IO error occurred!", e);
-			}
-	
-			_webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-			_webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-			_webDriver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
-			
-			try {
-				_webDriver.manage().window().setSize(new Dimension(1200, 800));
-			} catch (Exception e) {
-				UiTestRunner.LOGGER.warn("Could not resize browser window.", e);
-			}
-	
-			_fs = _loginHook.createFS(UiTestRunner.this, this);
-			_cc = _loginHook.createCC(UiTestRunner.this, this);
-	
-			UiTestRunner.LOGGER.info("ContentCreator loaded");
+            UiTestRunner.LOGGER.info("Connection established");
+
+            try {
+                _webDriver = this._browser.createWebDriver();
+            } catch (final IOException e) {
+                throw new RuntimeException("IO error occurred!", e);
+            }
+
+            _webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+            _webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+            _webDriver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+
+            try {
+                _webDriver.manage().window().setSize(new Dimension(1200, 800));
+            } catch (Exception e) {
+                UiTestRunner.LOGGER.warn("Could not resize browser window.", e);
+            }
+
+            _fs = _loginHook.createFS(UiTestRunner.this, this);
+            _cc = _loginHook.createCC(UiTestRunner.this, this);
+
+            UiTestRunner.LOGGER.info("ContentCreator loaded");
         }
-	
-	
-		public CC getCC() {
-			return _cc;
-		}
+
+
+        public CC getCC() {
+            return _cc;
+        }
 
         @Override
         protected List<SingleUiTestRunner> getChildren() {
@@ -406,11 +407,11 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
         protected Description describeChild(final SingleUiTestRunner runner) {
             return runner.getDescription();
         }
-	
-	
-		public org.openqa.selenium.WebDriver getWebDriver() {
-			return _webDriver;
-		}
+
+
+        public org.openqa.selenium.WebDriver getWebDriver() {
+            return _webDriver;
+        }
 
         @Override
         protected void runChild(final SingleUiTestRunner runner, final RunNotifier runNotifier) {
@@ -431,16 +432,16 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
             }
 
             @Override
-			protected Object createTest() throws Exception {
-				final Object test = super.createTest();
-				if (test instanceof AbstractSimplyUiTest) {
-					((AbstractSimplyUiTest) test).setCC(BrowserRunner.this._cc);
-				}
-				if (test instanceof AbstractUiTest) {
-					((AbstractUiTest) test).setFS(UiTestRunner.this._fs);
-				}
-				return test;
-			}
+            protected Object createTest() throws Exception {
+                final Object test = super.createTest();
+                if (test instanceof AbstractSimplyUiTest) {
+                    ((AbstractSimplyUiTest) test).setCC(BrowserRunner.this._cc);
+                }
+                if (test instanceof AbstractUiTest) {
+                    ((AbstractUiTest) test).setFS(UiTestRunner.this._fs);
+                }
+                return test;
+            }
 
             /**
              * Reloads the browser url, saves a screenshot if an exception occurs during the test and
@@ -464,15 +465,9 @@ public class UiTestRunner extends ParentRunner<UiTestRunner.BrowserRunner> {
                                 locale = System.getenv(Constants.PARAM_LOCALE);
                             }
 
-                            String url = BrowserRunner.this._cc.driver().getCurrentUrl();
-                            if (url.contains("&locale=")) {
-                                url = url.replaceAll("&locale=\\w+", "&locale=" + locale);
-                            } else {
-                                url += "&locale=" + locale;
-                            }
-                            ((AbstractSimplyUiTest) test).setLocale(locale);
-                            BrowserRunner.this._cc.driver().navigate().to(url);
-                            Utils.waitForCC(BrowserRunner.this._cc.driver());
+                            ((AbstractUiTest) test).setLocale(locale);
+                            ((AbstractUiTest) test).switchProject(Utils.env(PARAM_PROJECT, DEFAULT_PROJECT_NAME));
+
                             s.evaluate(); // execute test method
                         } catch (final Throwable throwable) {
                             throw throwable;
