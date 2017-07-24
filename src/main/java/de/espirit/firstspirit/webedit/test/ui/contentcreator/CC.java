@@ -1,6 +1,5 @@
 package de.espirit.firstspirit.webedit.test.ui.contentcreator;
 
-import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.dialog.CCDialogs;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.menu.MenuBar;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.component.preview.Preview;
@@ -52,13 +51,6 @@ public interface CC extends Web {
      * @return {@code WebDriver} that controls the WebEdit instance.
      */
     WebDriver driver();
-
-    /**
-     * Returns the initial project.
-     *
-     * @return initial project.
-     */
-    Project project();
 
     /**
      * Returns the current dialogs

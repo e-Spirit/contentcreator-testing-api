@@ -2,7 +2,7 @@
 
 This is a testing framework for the FirstSpirit ContentCreator. It supports various browser engines (e.g. Chrome and PhantomJS).
 
-## Environments variable
+## Environment variables
 
 * **locale** - The locale to use
     * default: en
@@ -28,9 +28,12 @@ This is a testing framework for the FirstSpirit ContentCreator. It supports vari
     * default: *D:\Entwicklung\IEDriverServer\IEDriverServer.exe*
 * **webdriver.ie.bypassProtectionMode** - Force bypassing of IE protection mode
     * default: *false*
+* **loginhook** - Full qualified classname of implemented LoginHook (optional, overrides annotation)
+    * default: *ConnectedCCLoginHook*
     
-## Annotations
+## Configuration
 
+### WebDriver
 In order to specify the webdrivers which should be used, the *UiTestRunner.WebDriver* annotation has to be added to the test class.
 
 * **@UiTestRunner.WebDriver({ExampleWebDriverFactory.class,..})**
@@ -48,15 +51,28 @@ These are the default webdriver factories that are provided by the ContentCreato
 
 If you want to use your own webdriver factory just extend the *WebDriverFactory* class and implement the factory method.
 
+### LoginHook
+
+Whenever you need an alternative login method you can specify a loginhook via the **@UiTestRunner.UseLoginHook()** annotation or the environment variable **loginhook**. There are two built-in login hooks which you can use:
+
+* *ConnectedCCLoginHook* - A login hook that uses a FirstSpirit server connection
+* *SimplyCCLoginHook* - A login hook that uses the ContentCreator login web-application for authentification 
+
+When using the **ConnectedCCLoginHook** make sure to let your test classes extend the **AbstractUiTest**.
+When using the **SimplyCCLoginHook** make sure to let your test classes extend the **AbstractSimplyUiTest**.
+
+### Annotations
+
 Additionally test classes and methods can be parameterized with the following annotations.
 
+* **@UiTestRunner.UseLoginHook(ExampleLoginHook.class)** - Specifies which LoginHook implementation will be used (optional)
 * **@BrowserLocale("en")** - Specifies the locale to use within the test method/class (overwrites the environment variable)
 * **@ClassPattern("de.espirit.firstspirit.webedit.\*.UiTest\*")** - Defines which UI tests should be executed, by specifying a classname pattern
 * **@Classes(value = {Test1.class, Test2.class})** - Defines which UI tests should be executed, by specifying concrete classes
 
 ## Example Test Class
 
-This is an example test class that uses the chrome driver and search functionality of the ContentCreator.
+This is an example test class that uses the chrome driver and search functionality of the ContentCreator (using the default login hook ConnectedCCLoginHook).
 ```java
 @UiTestRunner.WebDriver({LocalChromeWebDriverFactory.class})
 public class ExampleTest extends AbstractUiTest {

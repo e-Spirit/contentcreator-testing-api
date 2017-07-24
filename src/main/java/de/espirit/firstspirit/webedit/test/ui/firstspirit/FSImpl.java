@@ -56,7 +56,7 @@ public class FSImpl implements FS {
         final SpecialistsBroker projectSpecialistBroker = this.connection.getBroker().requireSpecialist(BrokerAgent.TYPE).getBrokerByProjectName(this.projectName);
         final StoreElementAgent storeElementAgent = projectSpecialistBroker.requireSpecialist(StoreElementAgent.TYPE);
         final PageTemplate pageTemplate = (PageTemplate) storeElementAgent.loadStoreElement(pageTemplateUid, PageTemplate.UID_TYPE, false);
-        if(pageTemplate == null) {
+        if (pageTemplate == null) {
             FSImpl.LOGGER.warn("PageTemplate with uid '" + pageTemplateUid + "' does not exist.");
             return null;
         }
@@ -98,6 +98,11 @@ public class FSImpl implements FS {
     @Override
     public FSProject project() {
         return new FSProjectImpl(this.connection.getProjectByName(this.projectName));
+    }
+
+    @Override
+    public String getProjectName() {
+        return projectName;
     }
 
     @Nullable
