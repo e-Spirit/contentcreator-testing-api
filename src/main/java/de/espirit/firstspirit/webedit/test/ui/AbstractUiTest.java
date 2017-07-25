@@ -28,8 +28,6 @@ import de.espirit.firstspirit.webedit.test.ui.util.Utils;
 @RunWith(UiTestRunner.class)
 public abstract class AbstractUiTest extends AbstractSimplyUiTest {
     private FS fs;
-    private String locale;
-
 
     // --- public methods ---//
 
