@@ -21,7 +21,7 @@ public abstract class AbstractSimplyUiTest extends Assert {
 	
 	private CC cc;
 	
-	private String locale;
+	String locale;
 	
 	
 	// --- public methods ---//
