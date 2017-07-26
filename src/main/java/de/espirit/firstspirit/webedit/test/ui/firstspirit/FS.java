@@ -1,8 +1,9 @@
 package de.espirit.firstspirit.webedit.test.ui.firstspirit;
 
+import de.espirit.firstspirit.access.Connection;
 import de.espirit.firstspirit.access.schedule.ScheduleEntryState;
 import de.espirit.firstspirit.access.store.sitestore.PageRef;
-import de.espirit.firstspirit.io.ServerConnection;
+import de.espirit.firstspirit.agency.SpecialistsBroker;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.component.FSProject;
 
 /**
@@ -15,7 +16,7 @@ public interface FS {
      *
      * @return FirstSpirit connection.
      */
-    ServerConnection connection();
+    Connection connection();
 
     /**
      * Creates a page and a pageFolder with the same name as parent.
@@ -60,4 +61,11 @@ public interface FS {
      * @return FirstSpirit scheduleEntryState.
      */
     ScheduleEntryState deploy(final String deployment);
+
+    /**
+     * Returns a project specific broker.
+     *
+     * @return specialist broker.
+     */
+    SpecialistsBroker getProjectBroker();
 }
