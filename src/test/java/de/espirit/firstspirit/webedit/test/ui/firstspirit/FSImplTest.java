@@ -1,5 +1,6 @@
 package de.espirit.firstspirit.webedit.test.ui.firstspirit;
 
+import de.espirit.firstspirit.access.Connection;
 import de.espirit.firstspirit.access.store.ElementDeletedException;
 import de.espirit.firstspirit.access.store.LockException;
 import de.espirit.firstspirit.access.store.pagestore.Page;
@@ -11,11 +12,11 @@ import de.espirit.firstspirit.access.store.templatestore.PageTemplate;
 import de.espirit.firstspirit.agency.BrokerAgent;
 import de.espirit.firstspirit.agency.SpecialistsBroker;
 import de.espirit.firstspirit.agency.StoreElementAgent;
-import de.espirit.firstspirit.io.ServerConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 public class FSImplTest {
@@ -26,7 +27,7 @@ public class FSImplTest {
 
     @Before
     public void beforeEachTest() {
-        ServerConnection _connection = mock(ServerConnection.class, RETURNS_DEEP_STUBS);
+        Connection _connection = mock(Connection.class, RETURNS_DEEP_STUBS);
         _fs = new FSImpl(_connection, PROJECT_NAME);
 
         SpecialistsBroker _specialistsBroker = mock(SpecialistsBroker.class);

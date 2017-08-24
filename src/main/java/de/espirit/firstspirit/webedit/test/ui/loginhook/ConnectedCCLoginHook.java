@@ -2,11 +2,11 @@ package de.espirit.firstspirit.webedit.test.ui.loginhook;
 
 
 import de.espirit.firstspirit.access.AdminService;
+import de.espirit.firstspirit.access.Connection;
 import de.espirit.firstspirit.access.ConnectionManager;
 import de.espirit.firstspirit.access.admin.ProjectStorage;
 import de.espirit.firstspirit.access.project.Project;
 import de.espirit.firstspirit.agency.ClientUrlAgent;
-import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.webedit.test.ui.UiTestRunner;
 import de.espirit.firstspirit.webedit.test.ui.contentcreator.ConnectedCC;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.FS;
@@ -50,7 +50,7 @@ public class ConnectedCCLoginHook extends AbstractLoginHook {
 		super.LOGGER.info("Connecting to host '" + super._host + "', port '" + super._port + "' with user '" + super._username + '\'');
 		
 		try {
-			ServerConnection connection = (ServerConnection) ConnectionManager.getConnection(super._host, Integer.parseInt(super._port), ConnectionManager.HTTP_MODE, super._username, super._password);
+			Connection connection = ConnectionManager.getConnection(super._host, Integer.parseInt(super._port), ConnectionManager.HTTP_MODE, super._username, super._password);
 			connection.connect();
 			
 			super._fs = new FSImpl(connection, super._project);

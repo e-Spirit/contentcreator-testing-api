@@ -1,14 +1,8 @@
 package de.espirit.firstspirit.webedit.test.ui.firstspirit;
 
-import org.apache.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
-
 import de.espirit.firstspirit.access.AdminService;
-import de.espirit.firstspirit.access.schedule.ScheduleEntry;
-import de.espirit.firstspirit.access.schedule.ScheduleEntryControl;
-import de.espirit.firstspirit.access.schedule.ScheduleEntryRunningException;
-import de.espirit.firstspirit.access.schedule.ScheduleEntryState;
-import de.espirit.firstspirit.access.schedule.ScheduleStorage;
+import de.espirit.firstspirit.access.Connection;
+import de.espirit.firstspirit.access.schedule.*;
 import de.espirit.firstspirit.access.store.ElementDeletedException;
 import de.espirit.firstspirit.access.store.LockException;
 import de.espirit.firstspirit.access.store.pagestore.Page;
@@ -20,9 +14,10 @@ import de.espirit.firstspirit.access.store.templatestore.PageTemplate;
 import de.espirit.firstspirit.agency.BrokerAgent;
 import de.espirit.firstspirit.agency.SpecialistsBroker;
 import de.espirit.firstspirit.agency.StoreElementAgent;
-import de.espirit.firstspirit.io.ServerConnection;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.component.FSProject;
 import de.espirit.firstspirit.webedit.test.ui.firstspirit.component.FSProjectImpl;
+import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implementation of the {@link FS FirstSpirit server adapter}.
@@ -30,16 +25,16 @@ import de.espirit.firstspirit.webedit.test.ui.firstspirit.component.FSProjectImp
 public class FSImpl implements FS {
     private static final Logger LOGGER = Logger.getLogger(FSImpl.class);
 
-    private final ServerConnection connection;
+    private final Connection connection;
     private String projectName;
 
-    public FSImpl(final ServerConnection connection, final String projectName) {
+    public FSImpl(final Connection connection, final String projectName) {
         this.connection = connection;
         this.projectName = projectName;
     }
 
     @Override
-    public ServerConnection connection() {
+    public Connection connection() {
         return this.connection;
     }
 
@@ -124,6 +119,11 @@ public class FSImpl implements FS {
         } else {
             throw new IllegalArgumentException("Unknown schedule entry '" + scheduleEntryName + "'.");
         }
+    }
+
+    @Override
+    public SpecialistsBroker getProjectBroker() {
+        return connection.getBroker().requestSpecialist(BrokerAgent.TYPE).getBrokerByProjectName(projectName);
     }
 
     public void setProjectName(String projectName) {
