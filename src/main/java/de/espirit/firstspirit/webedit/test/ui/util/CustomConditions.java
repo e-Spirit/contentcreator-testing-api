@@ -4,6 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 public class CustomConditions {
 
@@ -11,7 +14,8 @@ public class CustomConditions {
 		return driver -> {
 			if (driver != null) {
 				final boolean weApiAvailable = ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
-
+				WebDriverWait wait = new WebDriverWait(driver, 15);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("previewContent")));
 				if (weApiAvailable && ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API.Common.getPreviewElement() !== 'undefined'").equals(Boolean.TRUE)) {
 					final WebElement previewFrame = driver.findElement(By.id("previewContent"));
 					driver.switchTo().frame(previewFrame);
