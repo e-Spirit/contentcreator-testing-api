@@ -14,8 +14,6 @@ public class CustomConditions {
 		return driver -> {
 			if (driver != null) {
 				final boolean weApiAvailable = ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API !== 'undefined'").equals(Boolean.TRUE);
-				WebDriverWait wait = new WebDriverWait(driver, 15);
-				wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("previewContent")));
 				if (weApiAvailable && ((JavascriptExecutor) driver).executeScript("return typeof top.WE_API.Common.getPreviewElement() !== 'undefined'").equals(Boolean.TRUE)) {
 					final WebElement previewFrame = driver.findElement(By.id("previewContent"));
 					driver.switchTo().frame(previewFrame);

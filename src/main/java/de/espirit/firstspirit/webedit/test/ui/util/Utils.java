@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -150,7 +151,9 @@ public class Utils {
      */
     public static void waitForCC(final WebDriver webDriver) {
         Utils.idle();
-        new WebDriverWait(webDriver, 20).until(CustomConditions.waitForCC());
+        WebDriverWait wait = new WebDriverWait(webDriver, 20);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("previewContent")));
+        wait.until(CustomConditions.waitForCC());
     }
 
     /**
